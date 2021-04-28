@@ -2,92 +2,93 @@ package de.nrw.hspv.util;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
-@SuppressWarnings("serial")
-public class User implements Serializable{
+public class User implements Serializable {
+
 	
-	/**
-	 * Objektvariablen
-	 * id, name, telefon, usw...
-	 * 
-	 */
+	// Ale Datenbanken laden, und benötigte Datenbank holen
+
 	private int id;
-	
-	
-	/** 
-	 * Konstruktor 
-	 * hier festlegen, wie ein user-objekt erzeugt werden soll
-	 */
+	private String firstName;
+	private String lastName;
+	private int age;
+	private int phoneNumber;
+	//private boolean sachbearbeiter;
+	private String email;
+
+	// Konstruktor
 	public User() {
 		
 	}
+	public User(int id, String firstName, String lastName, int age, int phoneNumber,String email) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.age = age;
+		this.phoneNumber = phoneNumber;
 		
-	/** 
-	 * Main-Methode zum Erzeugen und Speichern von Objekten
-	 * während der Entwicklung
-	 *  
-	 * @param args
-	 * @throws IllegalArgumentException
-	 * @throws IOException
-	 */
-	public static void main(String[] args) throws IllegalArgumentException, IOException {
-		
-		
-//		/** Löschen */
-////		try {
-////			database.remove(2);
-////		} catch (IOException e) {
-////			System.err.println(Tools.getCurrentDateAndTime() + ": Das Objekt existiert nicht -> Löschen nicht möglich!");
-////		}
-//		
-//		/** Anliegen erzeugen und hinzufügen */
-//		User user = new User(...Parameter...);
-//		database.store(user);
-//				
-//		/** Zieht ein Objekt mittels ID aus der Datenbank */
-//		User user2 = (User) database.get(2);
-//		
-//		/** Holt alle Objekte aus der DB ab */
-//		ArrayList<User> allUsers = database.getAllAsArrayList();
-//		
-//		for(User i : allUsers) {
-////			Hier kann dann eine Operation für alle Objekte ausgeführt werden
-////			z.B. testweise Ausgabe der Objekte:
-////			System.out.println(i.toString());
-//		}
-//			
-//		/** Zeigt den Namen der DB-Datei sowie alle Objekte auf der Konsole an */
-//		System.out.println(database.toString());
-		
+		this.email = email;
 	}
-	
-	/** 
-	 * Überladene toString-Methode, um ein Objekt 
-	 * testweise ausgeben zu können
-	 */
-	@Override
-	public String toString() {
-		return String.format("...");
-	}
-	
-	/**
-	 * Ab hier nur noch Getter und Setter
-	 * der Objektvariablen
-	 */
-	
-	/**
-	 * @return the id
-	 */
+	// Getter und Setter
 	public int getId() {
-		return this.id;
+		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(int phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+//	public boolean getSachbearbeiter() {
+//		return sachbearbeiter;
+//	}
+//
+//	public void setSachbearbeiter(boolean sachbearbeiter) {
+//		sachbearbeiter = sachbearbeiter;
+//	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public static void main(String[]args) {
+		User user = new User();
+	}
+	
 }

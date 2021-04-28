@@ -164,6 +164,16 @@ public class AppointmentApp extends JFrame{
 // 				iconIssue.setBackground(Color.RED);
 			}
 		});
+		iconUser.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+				lblNorth.setText("User");
+				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user.png")));
+				centerPanel = new UserPanel();
+				mainPanel.add(centerPanel, BorderLayout.CENTER);
+			}
+		});
 		
 		iconExit.addMouseListener(new MouseAdapter() {
 			@Override
