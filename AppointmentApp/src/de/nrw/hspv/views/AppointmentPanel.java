@@ -29,6 +29,8 @@ import de.nrw.hspv.util.Issue;
 @SuppressWarnings("serial")
 public class AppointmentPanel extends JPanel {
 	
+	/* Just a Test */ 
+	
 	Vector<Issue> vecIssues = new Vector<Issue>();
 	
 	public AppointmentPanel(){
@@ -38,7 +40,7 @@ public class AppointmentPanel extends JPanel {
 	
 	private void initComponents() {
 	
-		// TODO Speicher für alle Panels, kann noch nützlich sein
+		// TODO Speicher fï¿½r alle Panels, kann noch nï¿½tzlich sein
 		HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
 		panels.put("main", new JPanel());
 			
@@ -46,7 +48,7 @@ public class AppointmentPanel extends JPanel {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 				
-		/* oberes Panel (Menüleiste) */
+		/* oberes Panel (Menï¿½leiste) */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
