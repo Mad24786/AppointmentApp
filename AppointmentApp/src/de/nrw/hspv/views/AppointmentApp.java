@@ -81,7 +81,7 @@ public class AppointmentApp extends JFrame{
 		navigation.add(iconDashboard);
 		iconAppointment = new IconPanel("calendar", true);
 		navigation.add(iconAppointment);
-		iconUser = new IconPanel("user", false);
+		iconUser = new IconPanel("user", true);
 		navigation.add(iconUser);
 		iconIssue = new IconPanel("issue", true);
 		navigation.add(iconIssue);
@@ -169,7 +169,7 @@ public class AppointmentApp extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
 				lblNorth.setText("User");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user.png")));
+				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
 				centerPanel = new UserPanel();
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
 			}
