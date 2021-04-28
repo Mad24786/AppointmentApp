@@ -1,5 +1,6 @@
 package de.nrw.hspv.database;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -15,11 +16,11 @@ public class Get implements Serializable {
 	public static FileDatabase<Issue> issues;
 	public static FileDatabase<User> users;
 	
-	public Get() {	
+	public Get() {
 		try {
-			issues = new FileDatabase<Issue>("src\\de\\nrw\\hspv\\database\\issues.dat");
-			users = new FileDatabase<User>("src\\de\\nrw\\hspv\\database\\users.dat");
-			appointments = new FileDatabase<Appointment>("src\\de\\nrw\\hspv\\database\\appointments.dat");
+			issues = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
+			users = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
+			appointments = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

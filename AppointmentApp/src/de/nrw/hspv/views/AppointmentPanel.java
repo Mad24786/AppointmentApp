@@ -29,8 +29,6 @@ import de.nrw.hspv.util.Issue;
 @SuppressWarnings("serial")
 public class AppointmentPanel extends JPanel {
 	
-	/* Just a Test */ 
-	
 	Vector<Issue> vecIssues = new Vector<Issue>();
 	
 	public AppointmentPanel(){
@@ -40,7 +38,7 @@ public class AppointmentPanel extends JPanel {
 	
 	private void initComponents() {
 	
-		// TODO Speicher fï¿½r alle Panels, kann noch nï¿½tzlich sein
+		// TODO Speicher für alle Panels, kann noch nützlich sein
 		HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
 		panels.put("main", new JPanel());
 			
@@ -48,7 +46,7 @@ public class AppointmentPanel extends JPanel {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 				
-		/* oberes Panel (Menï¿½leiste) */
+		/* oberes Panel (Menüleiste) */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -60,31 +58,29 @@ public class AppointmentPanel extends JPanel {
 		northPanel.add(editIcon);
 		JPanel deleteIcon = new CreateIcon("delete", false);
 		northPanel.add(deleteIcon);
+		add(northPanel, BorderLayout.NORTH);
 		
 		/* rechtes Panel */
 		JPanel eastPanel = new JPanel();
 		eastPanel.setBackground(Color.WHITE);
+		add(eastPanel, BorderLayout.EAST);
 		
-		/* unteres Panel */
-		JPanel southPanel = new JPanel();
-		southPanel.setBackground(Color.WHITE);
+		/* unteres Panel (derzeit nicht benötigt) */
+//		JPanel southPanel = new JPanel();
+//		southPanel.setBackground(Color.WHITE);
+//		add(southPanel, BorderLayout.SOUTH);
 		
-		/* linkes Panel */
-		JPanel westPanel = new JPanel();
-		westPanel.setBackground(Color.WHITE);
+		/* linkes Panel (derzeit nicht benötigt) */
+//		JPanel westPanel = new JPanel();
+//		westPanel.setBackground(Color.WHITE);
+//		add(westPanel, BorderLayout.WEST);
 		
 		/* mittleres Panel */
 		JPanel centerPanel = new CreateCenterAdd();
 		centerPanel.setBackground(Color.WHITE);
-		
-		
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(eastPanel, BorderLayout.EAST);
-		add(southPanel, BorderLayout.SOUTH);
-		add(westPanel, BorderLayout.WEST);
 		add(centerPanel, BorderLayout.CENTER);
 		
+				
 	}
 	
 	private static void createEvents() {
@@ -127,6 +123,7 @@ public class AppointmentPanel extends JPanel {
 
 			GridBagLayout gb = new GridBagLayout();
 			setLayout(gb);
+			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			
 			JLabel lblId = new JLabel("ID:");
 			addComp(gb, lblId, 0, 0, 1, 1);
