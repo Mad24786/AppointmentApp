@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -17,11 +19,13 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
@@ -29,7 +33,17 @@ import de.nrw.hspv.util.Issue;
 @SuppressWarnings("serial")
 public class AppointmentPanel extends JPanel {
 	
-	Vector<Issue> vecIssues = new Vector<Issue>();
+	public static BorderLayout mainLayout = new BorderLayout();
+	public static JPanel mainPanel = new JPanel(mainLayout);
+	
+	
+	
+	public static JPanel centerPanel;
+	
+	public static JButton btnOk = new JButton("OK");
+	public static JButton btnCancel = new JButton("Abbrechen");
+	
+	public static Vector<Issue> vecIssues = new Vector<Issue>();
 	
 	public AppointmentPanel(){
 		initComponents();
@@ -41,10 +55,9 @@ public class AppointmentPanel extends JPanel {
 		// TODO Speicher für alle Panels, kann noch nützlich sein
 		HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
 		panels.put("main", new JPanel());
-			
+				
 		/* this Panel */
-		setBackground(Color.WHITE);
-		setLayout(new BorderLayout());
+		mainPanel.setBackground(Color.WHITE);
 				
 		/* oberes Panel (Menüleiste) */
 		JPanel northPanel = new JPanel();
@@ -58,17 +71,20 @@ public class AppointmentPanel extends JPanel {
 		northPanel.add(editIcon);
 		JPanel deleteIcon = new CreateIcon("delete", false);
 		northPanel.add(deleteIcon);
-		add(northPanel, BorderLayout.NORTH);
+		mainPanel.add(northPanel, BorderLayout.NORTH);
 		
 		/* rechtes Panel */
 		JPanel eastPanel = new JPanel();
 		eastPanel.setBackground(Color.WHITE);
-		add(eastPanel, BorderLayout.EAST);
+		mainPanel.add(eastPanel, BorderLayout.EAST);
 		
-		/* unteres Panel (derzeit nicht benötigt) */
-//		JPanel southPanel = new JPanel();
-//		southPanel.setBackground(Color.WHITE);
-//		add(southPanel, BorderLayout.SOUTH);
+		/* unteres Panel */
+		JPanel southPanel = new JPanel();
+		southPanel.setBackground(Color.WHITE);
+		southPanel.setLayout(new FlowLayout(SwingConstants.RIGHT));
+		southPanel.add(btnCancel);
+		southPanel.add(btnOk);
+		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
 		/* linkes Panel (derzeit nicht benötigt) */
 //		JPanel westPanel = new JPanel();
@@ -76,14 +92,23 @@ public class AppointmentPanel extends JPanel {
 //		add(westPanel, BorderLayout.WEST);
 		
 		/* mittleres Panel */
-		JPanel centerPanel = new CreateCenterAdd();
+		centerPanel = new CreateCenterAdd();
 		centerPanel.setBackground(Color.WHITE);
-		add(centerPanel, BorderLayout.CENTER);
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
+		add(mainPanel);
 				
 	}
 	
-	private static void createEvents() {
+	public static void createEvents() {
+		
+		btnCancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Cancel");
+			}
+		});
 		
 	}
 	
@@ -117,7 +142,7 @@ public class AppointmentPanel extends JPanel {
 
 	}
 	
-	public class CreateCenterAdd extends JPanel{
+	public static class CreateCenterAdd extends JPanel{
 		
 		public CreateCenterAdd() {
 
