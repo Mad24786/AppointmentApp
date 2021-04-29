@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 public class User implements Serializable {
 
+	/**
+	 * 
+	 */
+	
 	// Ale Datenbanken laden, und benötigte Datenbank holen
 
 	private int id;
@@ -91,10 +95,6 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public static void main(String[] args) {
-		User user = new User();
-	}
-
 	public boolean isCanRead() {
 		return canRead;
 	}
@@ -111,4 +111,9 @@ public class User implements Serializable {
 		this.canWrite = canWrite;
 	}
 
+	public static void main(String[] args) {
+		User user = new User();
+	}
+
+	
 }

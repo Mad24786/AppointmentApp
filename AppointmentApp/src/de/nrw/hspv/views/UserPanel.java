@@ -23,6 +23,7 @@ import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
+
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -141,7 +142,7 @@ public class UserPanel extends JPanel {
 
 				int id, age, number;
 				boolean read, write;
-				User user = new User();
+				//User user = new User();
 
 				try {
 					id = Integer.parseInt(textId.getText());
@@ -205,11 +206,11 @@ public class UserPanel extends JPanel {
 					return;
 				}
 				if (textCanRead.getText().trim().equals("ja")) {
-					read = user.isCanRead();
+					//read = user.isCanRead();
 					read = true;
 
 				} else if (textCanRead.getText().trim().equals("nein")) {
-					read = user.isCanRead();
+					//read = user.isCanRead();
 					read = false;
 				} else {
 					textCanRead.setText("falsch eingeben");
@@ -217,11 +218,11 @@ public class UserPanel extends JPanel {
 				}
 
 				if (textCanWrite.getText().trim().equals("ja")) {
-					write = user.isCanWrite();
+					//write = user.isCanWrite();
 					write = true;
 
 				} else if (textCanWrite.getText().trim().equals("nein")) {
-					write = user.isCanWrite();
+					//write = user.isCanWrite();
 					write = false;
 				} else {
 					textCanWrite.setText("falsch eingegeben");
@@ -231,7 +232,7 @@ public class UserPanel extends JPanel {
 
 				System.out.println(textId.getText() + " " + textFirstName.getText() + " " + textLastName.getText() + " "
 						+ textAge.getText() + " " + textPhoneNumber.getText() + " " + textEmail.getText());
-				User user1 = new User(Integer.parseInt(textId.getText()), textFirstName.getText(),
+				User user = new User(Integer.parseInt(textId.getText()), textFirstName.getText(),
 						textLastName.getText(), Integer.parseInt(textAge.getText()),
 						Integer.parseInt(textPhoneNumber.getText()), textEmail.getText(), read, write);
 				try {
