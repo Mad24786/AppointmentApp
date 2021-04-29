@@ -18,11 +18,11 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JCheckBox;
 
 import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
-
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -42,8 +42,10 @@ public class UserPanel extends JPanel {
 	JLabel labelAge;
 	JLabel labelPhoneNumber;
 	JLabel labelEmail;
-	JLabel labelCanRead;
-	JLabel labelCanWrite;
+	JLabel labelCanReadAppointments;
+	JLabel labelCanWriteAppointments;
+	JLabel labelCanReadIssues;
+	JLabel labelCanWriteIssues;
 
 	JTextField textId;
 	JTextField textFirstName;
@@ -51,8 +53,10 @@ public class UserPanel extends JPanel {
 	JTextField textAge;
 	JTextField textPhoneNumber;
 	JTextField textEmail;
-	JTextField textCanRead;
-	JTextField textCanWrite;
+	JCheckBox CheckCanReadAppointments;
+	JCheckBox CheckCanWriteAppointments;
+	JCheckBox CheckCanReadIssues;
+	JCheckBox CheckCanWriteIssues;
 
 	public UserPanel() {
 		initComponents();
@@ -109,14 +113,22 @@ public class UserPanel extends JPanel {
 		add(labelEmail);
 		textEmail = new JTextField();
 		add(textEmail);
-		labelCanRead = new JLabel("Berechtigung Lesen");
-		add(labelCanRead);
-		textCanRead = new JTextField();
-		add(textCanRead);
-		labelCanWrite = new JLabel("Berechtigung Bearbeiten");
-		add(labelCanWrite);
-		textCanWrite = new JTextField();
-		add(textCanWrite);
+		labelCanReadAppointments = new JLabel("Berechtigung Termine lesen");
+		add(labelCanReadAppointments);
+		CheckCanReadAppointments = new JCheckBox();
+		add(CheckCanReadAppointments);
+		labelCanWriteAppointments = new JLabel("Berechtigung Bearbeiten von Terminen");
+		add(labelCanWriteAppointments);
+		CheckCanWriteAppointments = new JCheckBox();
+		add(CheckCanWriteAppointments);
+		labelCanReadIssues = new JLabel("Berechtigung Anliegen lesen");
+		add(labelCanReadIssues);
+		CheckCanReadIssues = new JCheckBox();
+		add(CheckCanReadIssues);
+		labelCanWriteIssues = new JLabel("Berechtigung Bearbeiten von Anliegen");
+		add(labelCanWriteIssues);
+		CheckCanWriteIssues = new JCheckBox();
+		add(CheckCanWriteIssues);
 
 		buttonCancel = new JButton("Abbruch");
 		buttonCancel.setSize(20, 30);
@@ -137,12 +149,14 @@ public class UserPanel extends JPanel {
 		});
 
 		buttonOk.addActionListener(new ActionListener() {
+			int id, age, number;
+			boolean readA, writeA, readI, writeI;
+
 			@Override
+
 			public void actionPerformed(ActionEvent e) {
 
-				int id, age, number;
-				boolean read, write;
-				//User user = new User();
+				// User user = new User();
 
 				try {
 					id = Integer.parseInt(textId.getText());
@@ -205,36 +219,43 @@ public class UserPanel extends JPanel {
 
 					return;
 				}
-				if (textCanRead.getText().trim().equals("ja")) {
-					//read = user.isCanRead();
-					read = true;
-
-				} else if (textCanRead.getText().trim().equals("nein")) {
-					//read = user.isCanRead();
-					read = false;
-				} else {
-					textCanRead.setText("falsch eingeben");
-					return;
+				if (e.getSource() == CheckCanReadAppointments) {
+					if (CheckCanReadAppointments.isSelected()) {
+						readA = true;
+					} else {
+						readA = false;
+					}
+				}
+				if (e.getSource() == CheckCanWriteAppointments) {
+					if (CheckCanWriteAppointments.isSelected()) {
+						writeA = true;
+					} else {
+						writeA = false;
+					}
+				}
+				if (e.getSource() == CheckCanReadIssues) {
+					if (CheckCanReadIssues.isSelected()) {
+						readI = true;
+					} else {
+						readI = false;
+					}
+				}
+				if (e.getSource() == CheckCanWriteIssues) {
+					if (CheckCanWriteIssues.isSelected()) {
+						writeI = true;
+					} else {
+						writeI = false;
+					}
 				}
 
-				if (textCanWrite.getText().trim().equals("ja")) {
-					//write = user.isCanWrite();
-					write = true;
-
-				} else if (textCanWrite.getText().trim().equals("nein")) {
-					//write = user.isCanWrite();
-					write = false;
-				} else {
-					textCanWrite.setText("falsch eingegeben");
-
-					return;
-				}
-
-				System.out.println(textId.getText() + " " + textFirstName.getText() + " " + textLastName.getText() + " "
-						+ textAge.getText() + " " + textPhoneNumber.getText() + " " + textEmail.getText());
+				// User user = new User(Integer.parseInt(textId.getText()),
+				// textFirstName.getText(),textLastName.getText(),
+				// Integer.parseInt(textAge.getText()),Integer.parseInt(textPhoneNumber.getText()),
+				// textEmail.getText(), readA, writeA,readI,writeI);
+				//
 				User user = new User(Integer.parseInt(textId.getText()), textFirstName.getText(),
 						textLastName.getText(), Integer.parseInt(textAge.getText()),
-						Integer.parseInt(textPhoneNumber.getText()), textEmail.getText(), read, write);
+						Integer.parseInt(textPhoneNumber.getText()), textEmail.getText(), readA, writeA, readI, readA);
 				try {
 					Get.users.store(user);
 				} catch (IOException e1) {

@@ -19,23 +19,27 @@ public class User implements Serializable {
 	private int phoneNumber;
 	// private boolean sachbearbeiter;
 	private String email;
-	private boolean canRead = false;
-	private boolean canWrite = true;
+	private boolean canReadAppointments = false;
+	private boolean canWriteAppointments = false;
+	private boolean canReadIssues = false;
+	private boolean canWriteIssues = false;
 
 	// Konstruktor
 	public User() {
 
 	}
 
-	public User(int id, String firstName, String lastName, int age, int phoneNumber, String email, boolean canRead, boolean canWrite) {
+	public User(int id, String firstName, String lastName, int age, int phoneNumber, String email, boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues ) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.canRead = canRead;
-		this.canWrite = canWrite;
+		this.canReadAppointments = canReadAppointments;
+		this.canWriteAppointments = canWriteAppointments;
+		this.canReadIssues = canReadIssues;
+		this.canWriteIssues = canWriteIssues;
 	}
 
 	// Getter und Setter
@@ -95,20 +99,36 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public boolean isCanRead() {
-		return canRead;
+	public boolean isCanReadAppointments() {
+		return canReadAppointments;
 	}
 
-	public void setCanRead(boolean canRead) {
-		this.canRead = canRead;
+	public void setCanReadAppointments(boolean canRead) {
+		this.canReadAppointments = canReadAppointments;
 	}
 
-	public boolean isCanWrite() {
-		return canWrite;
+	public boolean isCanWriteAppointments() {
+		return canWriteAppointments;
 	}
 
-	public void setCanWrite(boolean canWrite) {
-		this.canWrite = canWrite;
+	public void setCanWriteAppointments(boolean canWrite) {
+		this.canWriteAppointments = canWriteAppointments;
+	}
+
+	public boolean isCanReadIssues() {
+		return canReadIssues;
+	}
+
+	public void setCanReadIssues(boolean canReadIssues) {
+		this.canReadIssues = canReadIssues;
+	}
+
+	public boolean isCanWriteIssues() {
+		return canWriteIssues;
+	}
+
+	public void setCanWriteIssues(boolean canWriteIssues) {
+		this.canWriteIssues = canWriteIssues;
 	}
 
 	public static void main(String[] args) {
