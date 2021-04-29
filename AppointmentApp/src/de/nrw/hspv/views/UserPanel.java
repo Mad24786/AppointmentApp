@@ -41,6 +41,8 @@ public class UserPanel extends JPanel {
 	JLabel labelAge;
 	JLabel labelPhoneNumber;
 	JLabel labelEmail;
+	JLabel labelCanRead;
+	JLabel labelCanWrite;
 
 	JTextField textId;
 	JTextField textFirstName;
@@ -48,8 +50,8 @@ public class UserPanel extends JPanel {
 	JTextField textAge;
 	JTextField textPhoneNumber;
 	JTextField textEmail;
-
-
+	JTextField textCanRead;
+	JTextField textCanWrite;
 
 	public UserPanel() {
 		initComponents();
@@ -61,7 +63,7 @@ public class UserPanel extends JPanel {
 		setBackground(Color.WHITE);
 
 		Vector<User> vec = new Vector<User>();
-		
+
 		ArrayList<User> allUsers = Get.users.getAllAsArrayList();
 		for (User i : allUsers) {
 			vec.add(i);
@@ -82,7 +84,7 @@ public class UserPanel extends JPanel {
 		centerPanel.setLayout(centerLayout);
 
 		labelId = new JLabel("ID:");
-		//labelId.setPreferredSize(new Dimension(50, 24));
+		// labelId.setPreferredSize(new Dimension(50, 24));
 		add(labelId);
 		textId = new JTextField();
 		add(textId);
@@ -106,6 +108,15 @@ public class UserPanel extends JPanel {
 		add(labelEmail);
 		textEmail = new JTextField();
 		add(textEmail);
+		labelCanRead = new JLabel("Berechtigung Lesen");
+		add(labelCanRead);
+		textCanRead = new JTextField();
+		add(textCanRead);
+		labelCanWrite = new JLabel("Berechtigung Bearbeiten");
+		add(labelCanWrite);
+		textCanWrite = new JTextField();
+		add(textCanWrite);
+
 		buttonCancel = new JButton("Abbruch");
 		buttonCancel.setSize(20, 30);
 		add(buttonCancel);
@@ -120,7 +131,6 @@ public class UserPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				log.info("Aktion abgebrochen.");
-				
 
 			}
 		});
@@ -130,6 +140,8 @@ public class UserPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				int id, age, number;
+				boolean read, write;
+				User user = new User();
 
 				try {
 					id = Integer.parseInt(textId.getText());
@@ -192,11 +204,36 @@ public class UserPanel extends JPanel {
 
 					return;
 				}
+				if (textCanRead.getText().trim().equals("ja")) {
+					read = user.isCanRead();
+					read = true;
+
+				} else if (textCanRead.getText().trim().equals("nein")) {
+					read = user.isCanRead();
+					read = false;
+				} else {
+					textCanRead.setText("falsch eingeben");
+					return;
+				}
+
+				if (textCanWrite.getText().trim().equals("ja")) {
+					write = user.isCanWrite();
+					write = true;
+
+				} else if (textCanWrite.getText().trim().equals("nein")) {
+					write = user.isCanWrite();
+					write = false;
+				} else {
+					textCanWrite.setText("falsch eingegeben");
+
+					return;
+				}
+
 				System.out.println(textId.getText() + " " + textFirstName.getText() + " " + textLastName.getText() + " "
 						+ textAge.getText() + " " + textPhoneNumber.getText() + " " + textEmail.getText());
-				User user = new User(Integer.parseInt(textId.getText()), textFirstName.getText(),
+				User user1 = new User(Integer.parseInt(textId.getText()), textFirstName.getText(),
 						textLastName.getText(), Integer.parseInt(textAge.getText()),
-						Integer.parseInt(textPhoneNumber.getText()), textEmail.getText());
+						Integer.parseInt(textPhoneNumber.getText()), textEmail.getText(), read, write);
 				try {
 					Get.users.store(user);
 				} catch (IOException e1) {
@@ -209,13 +246,11 @@ public class UserPanel extends JPanel {
 				labelAge.setForeground(Color.BLACK);
 				labelPhoneNumber.setForeground(Color.BLACK);
 				labelEmail.setForeground(Color.BLACK);
-				
-				
+
 			}
 		});
 
 	}
-	
 
 	public static void main(String[] args) {
 

@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
 public class User implements Serializable {
 
-	
 	// Ale Datenbanken laden, und benötigte Datenbank holen
 
 	private int id;
@@ -15,22 +13,27 @@ public class User implements Serializable {
 	private String lastName;
 	private int age;
 	private int phoneNumber;
-	//private boolean sachbearbeiter;
+	// private boolean sachbearbeiter;
 	private String email;
+	private boolean canRead = false;
+	private boolean canWrite = true;
 
 	// Konstruktor
 	public User() {
-		
+
 	}
-	public User(int id, String firstName, String lastName, int age, int phoneNumber,String email) {
+
+	public User(int id, String firstName, String lastName, int age, int phoneNumber, String email, boolean canRead, boolean canWrite) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
-		
 		this.email = email;
+		this.canRead = canRead;
+		this.canWrite = canWrite;
 	}
+
 	// Getter und Setter
 	public int getId() {
 		return id;
@@ -87,8 +90,25 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public static void main(String[]args) {
+
+	public static void main(String[] args) {
 		User user = new User();
 	}
-	
+
+	public boolean isCanRead() {
+		return canRead;
+	}
+
+	public void setCanRead(boolean canRead) {
+		this.canRead = canRead;
+	}
+
+	public boolean isCanWrite() {
+		return canWrite;
+	}
+
+	public void setCanWrite(boolean canWrite) {
+		this.canWrite = canWrite;
+	}
+
 }
