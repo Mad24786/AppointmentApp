@@ -82,7 +82,7 @@ public class UserPanel extends JPanel {
 		centerPanel.setLayout(centerLayout);
 
 		labelId = new JLabel("ID:");
-		labelId.setPreferredSize(new Dimension(50, 24));
+		//labelId.setPreferredSize(new Dimension(50, 24));
 		add(labelId);
 		textId = new JTextField();
 		add(textId);
