@@ -6,15 +6,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @SuppressWarnings("serial")
-public class Appointment implements Serializable {
+public class Appointment implements Serializable, Comparable<Appointment> {
 		
-	int id, employeeId, customerId, issueId;
-	long dateAndTime;
+	int id, employeeId, customerId;
+	Issue issue;
+	Date dateAndTime;
 	String customerMessage;
 	
-	public Appointment(int cId, int iId, int[] d, String cMsg){
-		setCustomerId(cId);
-		setIssueId(iId);
+	public Appointment(int eId, Issue i, Date d, String cMsg){
+		setCustomerId(eId);
+		setIssue(i);
 		setDateAndTime(d);
 		setCustomerMessage(cMsg);	
 	}
@@ -41,32 +42,37 @@ public class Appointment implements Serializable {
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	public int getIssueId() {
-		return issueId;
+	
+	public Issue getIssue() {
+		return issue;
 	}
-	public void setIssueId(int issueId) {
-		this.issueId = issueId;
+
+	public void setIssue(Issue issue) {
+		this.issue = issue;
 	}
-	public long getDateAndTime() {
+
+	public Date getDateAndTime() {
 		return dateAndTime;
 	}
-	public void setDateAndTime(int[] d) {
-		String myDate = String.format("%d/%d/%d %d:%d", d[0], d[1], d[2], d[3], d[4]);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date date = null;
-		try {
-			date = sdf.parse(myDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.dateAndTime = date.getTime();
+	public void setDateAndTime(Date d) {
+		this.dateAndTime = d;
 	}
 	public String getCustomerMessage() {
 		return customerMessage;
 	}
 	public void setCustomerMessage(String customerMessage) {
 		this.customerMessage = customerMessage;
+	}
+
+	@Override
+	public int compareTo(Appointment o) {
+		if(this.getDateAndTime().after(o.getDateAndTime())) {
+			return 1;
+		}
+		else if(this.getDateAndTime().before(o.getDateAndTime())) {
+			return -1;
+		}
+		else return 0;
 	}
 
 }

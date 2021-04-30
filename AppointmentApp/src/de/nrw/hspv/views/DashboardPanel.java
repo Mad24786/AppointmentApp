@@ -8,13 +8,19 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.nrw.hspv.database.Get;
+import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
+import de.nrw.hspv.util.Issue;
 
 @SuppressWarnings("serial")
 public class DashboardPanel extends JPanel {
@@ -85,10 +91,29 @@ public class DashboardPanel extends JPanel {
 		/** TEST ENDE **/
 
 		
-		JPanel eastPanel = new JPanel();
+		JPanel eastPanel = new JPanel(new FlowLayout());
 		JLabel lblEast = new JLabel("Termine heute");
 		eastPanel.setBackground(Color.WHITE);
 		eastPanel.add(lblEast);
+		
+		
+		ArrayList<Appointment> allAppointments = Get.appointments.getAllAsArrayList();
+		Date dt = new Date();
+		dt.setHours(0);
+		Calendar c = Calendar.getInstance();
+		c.setTime(dt);
+		c.add(Calendar.DATE, 1);
+		Date tomorrow = c.getTime();
+		
+		Collections.sort(allAppointments);
+		for(Appointment i : allAppointments) {
+			
+			if(i.getDateAndTime().after(dt) && i.getDateAndTime().before(tomorrow)) {
+				JLabel lblTestEast = new JLabel(i.getDateAndTime().toString());
+				eastPanel.add(lblTestEast);
+			}
+				
+		}
 		eastPanel.setPreferredSize(new Dimension(250, 0));
 //		eastPanel.setMinimumSize(new Dimension(500, 0));
 		add(centerPanel, BorderLayout.CENTER);

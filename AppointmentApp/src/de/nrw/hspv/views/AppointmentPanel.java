@@ -3,6 +3,7 @@ package de.nrw.hspv.views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -14,6 +15,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -21,12 +26,21 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JSpinner.DateEditor;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
+import de.nrw.hspv.database.Get;
+import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 
@@ -39,6 +53,11 @@ public class AppointmentPanel extends JPanel {
 	
 	
 	public static JPanel centerPanel;
+	
+	public static JTextField txtId;
+	public static JComboBox<Issue> cbIssue;
+	public static JSpinner spinner;
+	public static JTextArea txtText;
 	
 	public static JButton btnOk = new JButton("OK");
 	public static JButton btnCancel = new JButton("Abbrechen");
@@ -57,7 +76,8 @@ public class AppointmentPanel extends JPanel {
 		panels.put("main", new JPanel());
 				
 		/* this Panel */
-		mainPanel.setBackground(Color.WHITE);
+		setBackground(Color.WHITE);
+		setLayout(mainLayout);
 				
 		/* oberes Panel (Menüleiste) */
 		JPanel northPanel = new JPanel();
@@ -71,20 +91,20 @@ public class AppointmentPanel extends JPanel {
 		northPanel.add(editIcon);
 		JPanel deleteIcon = new CreateIcon("delete", false);
 		northPanel.add(deleteIcon);
-		mainPanel.add(northPanel, BorderLayout.NORTH);
+		add(northPanel, BorderLayout.NORTH);
 		
 		/* rechtes Panel */
 		JPanel eastPanel = new JPanel();
 		eastPanel.setBackground(Color.WHITE);
-		mainPanel.add(eastPanel, BorderLayout.EAST);
+		add(eastPanel, BorderLayout.EAST);
 		
 		/* unteres Panel */
 		JPanel southPanel = new JPanel();
 		southPanel.setBackground(Color.WHITE);
-		southPanel.setLayout(new FlowLayout(SwingConstants.RIGHT));
+		southPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		southPanel.add(btnCancel);
 		southPanel.add(btnOk);
-		mainPanel.add(southPanel, BorderLayout.SOUTH);
+		add(southPanel, BorderLayout.SOUTH);
 		
 		/* linkes Panel (derzeit nicht benötigt) */
 //		JPanel westPanel = new JPanel();
@@ -94,19 +114,25 @@ public class AppointmentPanel extends JPanel {
 		/* mittleres Panel */
 		centerPanel = new CreateCenterAdd();
 		centerPanel.setBackground(Color.WHITE);
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		add(centerPanel, BorderLayout.CENTER);
 		
-		add(mainPanel);
+//		add(mainPanel);
 				
 	}
 	
 	public static void createEvents() {
 		
-		btnCancel.addActionListener(new ActionListener() {
+		btnOk.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Cancel");
+				
+				Appointment a = new Appointment(Integer.parseInt(txtId.getText()), ((Issue) cbIssue.getSelectedItem()), ((Date) spinner.getValue()), txtText.getText());
+				try {
+					Get.appointments.store(a);
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
 			}
 		});
 		
@@ -148,11 +174,12 @@ public class AppointmentPanel extends JPanel {
 
 			GridBagLayout gb = new GridBagLayout();
 			setLayout(gb);
-			setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			
 			JLabel lblId = new JLabel("ID:");
 			addComp(gb, lblId, 0, 0, 1, 1);
-			JTextField txtId = new JTextField();
+			txtId = new JTextField();
+			txtId.setEnabled(false);
 			addComp(gb, txtId, 1, 0, 1, 1);
 			
 			JLabel lblIssue = new JLabel("Anliegen:");
@@ -160,10 +187,12 @@ public class AppointmentPanel extends JPanel {
 			
 			@SuppressWarnings("static-access")
 			ArrayList<Issue> allIssues = AppointmentApp.get.issues.getAllAsArrayList();
+			Collections.sort(allIssues);
 			for(Issue i : allIssues) {
 				vecIssues.add(i);
 			}
-	        JComboBox<Issue> cbIssue = new JComboBox<Issue>(vecIssues);
+			
+			cbIssue = new JComboBox<Issue>(vecIssues);
 	        cbIssue.addItemListener(new ItemListener() {
 				
 				@Override
@@ -176,12 +205,29 @@ public class AppointmentPanel extends JPanel {
 			
 			JLabel lblDate = new JLabel("Datum:");
 			addComp(gb, lblDate, 0, 2, 1, 1);
-			JTextField txtDate = new JTextField();
-			addComp(gb, txtDate, 1, 2, 1, 1);
+
+	        Calendar calendar = Calendar.getInstance();
+
+	        //Add the third label-spinner pair.
+//	        Date initDate = calendar.getTime();
+	        Date initDate = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 8, 0).getTime();
+	        calendar.add(Calendar.YEAR, -1);
+	        Date earliestDate = calendar.getTime();
+	        calendar.add(Calendar.YEAR, 200);
+	        Date latestDate = calendar.getTime();
+	        SpinnerModel dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
+	        
+	        spinner = new JSpinner(dateModel);
+	        spinner.setEditor(new JSpinner.DateEditor(spinner, "dd.MM.yyyy, HH:mm 'Uhr'"));
+			addComp(gb, spinner, 1, 2, 1, 1);
+	
+			
+			
 			
 			JLabel lblTime = new JLabel("Uhrzeit:");
 			addComp(gb, lblTime, 0, 3, 1, 1);
 			JTextField txtTime = new JTextField();
+			txtTime.setEnabled(false);
 			addComp(gb, txtTime, 1, 3, 1, 1);
 			
 			JLabel lblEmployee = new JLabel("Mitarbeiter:");
@@ -196,7 +242,7 @@ public class AppointmentPanel extends JPanel {
 			
 			JLabel lblText = new JLabel("Bemerkung:");
 			addComp(gb, lblText, 0, 6, 1, 1);
-			JTextArea txtText = new JTextArea();
+			txtText = new JTextArea();
 			txtText.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			addComp(gb, txtText, 1, 6, 1, 1);
 		
