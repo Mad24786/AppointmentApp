@@ -42,6 +42,7 @@ public class UserPanel extends JPanel {
 	JLabel labelAge;
 	JLabel labelPhoneNumber;
 	JLabel labelEmail;
+	JLabel labelPassword;
 	JLabel labelCanReadAppointments;
 	JLabel labelCanWriteAppointments;
 	JLabel labelCanReadIssues;
@@ -55,6 +56,7 @@ public class UserPanel extends JPanel {
 	JTextField textAge;
 	JTextField textPhoneNumber;
 	JTextField textEmail;
+	JTextField textPassword;
 	JCheckBox CheckCanReadAppointments;
 	JCheckBox CheckCanWriteAppointments;
 	JCheckBox CheckCanReadIssues;
@@ -117,6 +119,10 @@ public class UserPanel extends JPanel {
 		add(labelEmail);
 		textEmail = new JTextField();
 		add(textEmail);
+		labelPassword = new JLabel("Passwort:");
+		add(labelPassword);
+		textPassword = new JTextField();
+		add(textPassword);
 		labelCanReadAppointments = new JLabel("Berechtigung Termine lesen");
 		add(labelCanReadAppointments);
 		CheckCanReadAppointments = new JCheckBox();
@@ -232,6 +238,10 @@ public class UserPanel extends JPanel {
 
 					return;
 				}
+				if(textPassword.getText().trim().equals("")) {
+					textPassword.setForeground(Color.RED);
+					textPassword.setText("Pflichteingabe");
+				}
 
 				// User user = new User(Integer.parseInt(textId.getText()),
 				// textFirstName.getText(),textLastName.getText(),
@@ -240,7 +250,7 @@ public class UserPanel extends JPanel {
 				//
 				User user = new User(textFirstName.getText(), textLastName.getText(),
 						Integer.parseInt(textAge.getText()), Integer.parseInt(textPhoneNumber.getText()),
-						textEmail.getText(), CheckCanReadAppointments.isSelected(),
+						textEmail.getText(),textPassword.getText(), CheckCanReadAppointments.isSelected(),
 						CheckCanWriteAppointments.isSelected(), CheckCanReadIssues.isSelected(),
 						CheckCanWriteIssues.isSelected(),CheckCanReadUsers.isSelected(),CheckCanWriteUsers.isSelected());
 				try {
@@ -256,7 +266,7 @@ public class UserPanel extends JPanel {
 				textPhoneNumber.setForeground(Color.BLACK);
 				textEmail.setForeground(Color.BLACK);
 				
-				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist: username");
+				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
 
 			}
 		});

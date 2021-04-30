@@ -26,27 +26,29 @@ public class User implements Serializable {
 	private boolean canWriteIssues = false;
 	private boolean canReadUsers = false;
 	private boolean canWriteUsers = false;
+	private String password;
 
 	// Konstruktor
 	public User() {
 
 	}
 
-	public User(String firstName, String lastName, int age, int phoneNumber, String email, boolean canReadAppointments,
-			boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues, boolean canReadUsers,
-			boolean canWriteUsers) {
+	public User(String firstName, String lastName, int age, int phoneNumber, String email, String password,
+			boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues,
+			boolean canReadUsers, boolean canWriteUsers) {
 		this.id = Get.users.getNextId();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.password = password;
 		this.canReadAppointments = canReadAppointments;
 		this.canWriteAppointments = canWriteAppointments;
 		this.canReadIssues = canReadIssues;
 		this.canWriteIssues = canWriteIssues;
-		this.setCanReadUsers(canReadUsers);
-		this.setCanWriteUsers(canWriteUsers);
+		this.canReadUsers = canReadUsers;
+		this.canWriteUsers = canWriteUsers;
 	}
 
 	// Getter und Setter
@@ -104,6 +106,14 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public boolean isCanReadAppointments() {
