@@ -3,13 +3,14 @@ package de.nrw.hspv.util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import de.nrw.hspv.database.Get;
 
 public class User implements Serializable {
 
 	/**
 	 * 
 	 */
-	
+
 	// Ale Datenbanken laden, und benötigte Datenbank holen
 
 	private int id;
@@ -23,14 +24,18 @@ public class User implements Serializable {
 	private boolean canWriteAppointments = false;
 	private boolean canReadIssues = false;
 	private boolean canWriteIssues = false;
+	private boolean canReadUsers = false;
+	private boolean canWriteUsers = false;
 
 	// Konstruktor
 	public User() {
 
 	}
 
-	public User(int id, String firstName, String lastName, int age, int phoneNumber, String email, boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues ) {
-		this.id = id;
+	public User(String firstName, String lastName, int age, int phoneNumber, String email, boolean canReadAppointments,
+			boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues, boolean canReadUsers,
+			boolean canWriteUsers) {
+		this.id = Get.users.getNextId();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
@@ -40,6 +45,8 @@ public class User implements Serializable {
 		this.canWriteAppointments = canWriteAppointments;
 		this.canReadIssues = canReadIssues;
 		this.canWriteIssues = canWriteIssues;
+		this.setCanReadUsers(canReadUsers);
+		this.setCanWriteUsers(canWriteUsers);
 	}
 
 	// Getter und Setter
@@ -48,7 +55,7 @@ public class User implements Serializable {
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.id = Get.users.getNextId();
 	}
 
 	public String getFirstName() {
@@ -131,9 +138,24 @@ public class User implements Serializable {
 		this.canWriteIssues = canWriteIssues;
 	}
 
+	public boolean isCanReadUsers() {
+		return canReadUsers;
+	}
+
+	public void setCanReadUsers(boolean canReadUsers) {
+		this.canReadUsers = canReadUsers;
+	}
+
+	public boolean isCanWriteUsers() {
+		return canWriteUsers;
+	}
+
+	public void setCanWriteUsers(boolean canWriteUsers) {
+		this.canWriteUsers = canWriteUsers;
+	}
+
 	public static void main(String[] args) {
 		User user = new User();
 	}
 
-	
 }
