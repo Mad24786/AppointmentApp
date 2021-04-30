@@ -11,6 +11,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import de.nrw.hspv.exception.DatabaseException;
 
@@ -65,8 +68,7 @@ public class FileDatabase<O> implements Serializable {
 	}
 	
 	public void store(O o) throws IOException{
-		int key = getSmallestId();
-		store(key, o);
+		store(getNextId(), o);
 	}
 
 	public void store(int key, O o) throws IOException {
@@ -82,18 +84,14 @@ public class FileDatabase<O> implements Serializable {
 		return storageMap.get(key);
 	}
 	
-	public int getSmallestId() {
-		int smallestId = 0;
-		
-		if (getSize() == 0)
-			return smallestId;
-		
-		for (int i = 1; i <= getSize(); i++) {
-			if(get(i) == null)
-				return i;
-			else smallestId = i+1;
-		}
-		return smallestId;
+	public int getNextId() {
+		int nextId = 0;
+		Iterator<Entry<Integer, O>> it = storageMap.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	Map.Entry<Integer, O> pair = (Map.Entry<Integer, O>)it.next();
+	        nextId = (pair.getKey()+1);
+	    }
+		return nextId;
 	}
 
 	public ArrayList<O> getAllAsArrayList() {
