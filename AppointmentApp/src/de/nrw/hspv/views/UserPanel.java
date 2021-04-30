@@ -36,27 +36,33 @@ public class UserPanel extends JPanel {
 	JButton buttonOk;
 	JButton buttonCancel;
 
-	JLabel labelId;
+	//JLabel labelId;
 	JLabel labelFirstName;
 	JLabel labelLastName;
 	JLabel labelAge;
 	JLabel labelPhoneNumber;
 	JLabel labelEmail;
+	JLabel labelPassword;
 	JLabel labelCanReadAppointments;
 	JLabel labelCanWriteAppointments;
 	JLabel labelCanReadIssues;
 	JLabel labelCanWriteIssues;
+	JLabel labelCanReadUsers;
+	JLabel labelCanWriteUsers;
 
-	JTextField textId;
+	//JTextField textId;
 	JTextField textFirstName;
 	JTextField textLastName;
 	JTextField textAge;
 	JTextField textPhoneNumber;
 	JTextField textEmail;
+	JTextField textPassword;
 	JCheckBox CheckCanReadAppointments;
 	JCheckBox CheckCanWriteAppointments;
 	JCheckBox CheckCanReadIssues;
 	JCheckBox CheckCanWriteIssues;
+	JCheckBox CheckCanReadUsers;
+	JCheckBox CheckCanWriteUsers;
 
 	public UserPanel() {
 		initComponents();
@@ -72,27 +78,27 @@ public class UserPanel extends JPanel {
 		ArrayList<User> allUsers = Get.users.getAllAsArrayList();
 		for (User i : allUsers) {
 			vec.add(i);
-		}
-		JComboBox<User> highscoreCombo = new JComboBox<User>(vec);
-		highscoreCombo.addItemListener(new ItemListener() {
+//		}
+//		JComboBox<User> highscoreCombo = new JComboBox<User>(vec);
+//		highscoreCombo.addItemListener(new ItemListener() {
 
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				User i = (User) e.getItem();
-				textId.setText(String.valueOf(i.getId()));
-			}
-		});
+//			@Override
+//			public void itemStateChanged(ItemEvent e) {
+//				User i = (User) e.getItem();
+//				textId.setText(String.valueOf(i.getId()));
+//			}
+		}
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(Color.WHITE);
 		GridLayout centerLayout = new GridLayout(2, 0);
 		centerPanel.setLayout(centerLayout);
 
-		labelId = new JLabel("ID:");
+		//labelId = new JLabel("ID:");
 		// labelId.setPreferredSize(new Dimension(50, 24));
-		add(labelId);
-		textId = new JTextField();
-		add(textId);
+		//add(labelId);
+		//textId = new JTextField();
+		//add(textId);
 		labelFirstName = new JLabel("Vorname:");
 		add(labelFirstName);
 		textFirstName = new JTextField();
@@ -113,6 +119,10 @@ public class UserPanel extends JPanel {
 		add(labelEmail);
 		textEmail = new JTextField();
 		add(textEmail);
+		labelPassword = new JLabel("Passwort:");
+		add(labelPassword);
+		textPassword = new JTextField();
+		add(textPassword);
 		labelCanReadAppointments = new JLabel("Berechtigung Termine lesen");
 		add(labelCanReadAppointments);
 		CheckCanReadAppointments = new JCheckBox();
@@ -129,6 +139,15 @@ public class UserPanel extends JPanel {
 		add(labelCanWriteIssues);
 		CheckCanWriteIssues = new JCheckBox();
 		add(CheckCanWriteIssues);
+		labelCanReadUsers = new JLabel("Berechtigung Lesen von User");
+		add(labelCanReadUsers);
+		CheckCanReadUsers = new JCheckBox();
+		add(CheckCanReadUsers);
+		labelCanWriteUsers = new JLabel("Berechtigung Bearbeiten von User");
+		add(labelCanWriteUsers);
+		CheckCanWriteUsers = new JCheckBox();
+		add(CheckCanWriteUsers);
+		
 
 		buttonCancel = new JButton("Abbruch");
 		buttonCancel.setSize(20, 30);
@@ -149,7 +168,7 @@ public class UserPanel extends JPanel {
 		});
 
 		buttonOk.addActionListener(new ActionListener() {
-			int id, age, number;
+			int  age, number;
 			boolean readA, writeA, readI, writeI;
 
 			@Override
@@ -158,20 +177,20 @@ public class UserPanel extends JPanel {
 
 				// User user = new User();
 
-				try {
-					id = Integer.parseInt(textId.getText());
-				} catch (NumberFormatException e1) {
-					textId.setText("Fehlerhafte Eingabe: [ID]");
-					log.warning("Fehlerhafte Eingabe: [ID]");
-					textId.setForeground(Color.RED);
-					return;
-				}
-				if (textId.getText().trim().equals("")) {
-					textId.setForeground(Color.RED);
-					textId.setText("Pflichteingabe");
-
-					return;
-				}
+//				try {
+//					id = Integer.parseInt(textId.getText());
+//				} catch (NumberFormatException e1) {
+//					textId.setText("Fehlerhafte Eingabe: [ID]");
+//					log.warning("Fehlerhafte Eingabe: [ID]");
+//					textId.setForeground(Color.RED);
+//					return;
+//				}
+//				if (textId.getText().trim().equals("")) {
+//					textId.setForeground(Color.RED);
+//					textId.setText("Pflichteingabe");
+//
+//					return;
+//				}
 
 				if (textFirstName.getText().trim().equals("")) {
 					textFirstName.setForeground(Color.RED);
@@ -219,33 +238,9 @@ public class UserPanel extends JPanel {
 
 					return;
 				}
-				if (e.getSource() == CheckCanReadAppointments) {
-					if (CheckCanReadAppointments.isSelected()) {
-						readA = true;
-					} else {
-						readA = false;
-					}
-				}
-				if (e.getSource() == CheckCanWriteAppointments) {
-					if (CheckCanWriteAppointments.isSelected()) {
-						writeA = true;
-					} else {
-						writeA = false;
-					}
-				}
-				if (e.getSource() == CheckCanReadIssues) {
-					if (CheckCanReadIssues.isSelected()) {
-						readI = true;
-					} else {
-						readI = false;
-					}
-				}
-				if (e.getSource() == CheckCanWriteIssues) {
-					if (CheckCanWriteIssues.isSelected()) {
-						writeI = true;
-					} else {
-						writeI = false;
-					}
+				if(textPassword.getText().trim().equals("")) {
+					textPassword.setForeground(Color.RED);
+					textPassword.setText("Pflichteingabe");
 				}
 
 				// User user = new User(Integer.parseInt(textId.getText()),
@@ -253,21 +248,25 @@ public class UserPanel extends JPanel {
 				// Integer.parseInt(textAge.getText()),Integer.parseInt(textPhoneNumber.getText()),
 				// textEmail.getText(), readA, writeA,readI,writeI);
 				//
-				User user = new User(Integer.parseInt(textId.getText()), textFirstName.getText(),
-						textLastName.getText(), Integer.parseInt(textAge.getText()),
-						Integer.parseInt(textPhoneNumber.getText()), textEmail.getText(), readA, writeA, readI, readA);
+				User user = new User(textFirstName.getText(), textLastName.getText(),
+						Integer.parseInt(textAge.getText()), Integer.parseInt(textPhoneNumber.getText()),
+						textEmail.getText(),textPassword.getText(), CheckCanReadAppointments.isSelected(),
+						CheckCanWriteAppointments.isSelected(), CheckCanReadIssues.isSelected(),
+						CheckCanWriteIssues.isSelected(),CheckCanReadUsers.isSelected(),CheckCanWriteUsers.isSelected());
 				try {
 					Get.users.store(user);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				labelId.setForeground(Color.BLACK);
-				labelFirstName.setForeground(Color.BLACK);
-				labelLastName.setForeground(Color.BLACK);
-				labelAge.setForeground(Color.BLACK);
-				labelPhoneNumber.setForeground(Color.BLACK);
-				labelEmail.setForeground(Color.BLACK);
+				//labelId.setForeground(Color.BLACK);
+				textFirstName.setForeground(Color.BLACK);
+				textLastName.setForeground(Color.BLACK);
+				textAge.setForeground(Color.BLACK);
+				textPhoneNumber.setForeground(Color.BLACK);
+				textEmail.setForeground(Color.BLACK);
+				
+				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
 
 			}
 		});

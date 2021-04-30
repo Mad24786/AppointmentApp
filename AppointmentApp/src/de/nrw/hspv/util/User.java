@@ -3,13 +3,14 @@ package de.nrw.hspv.util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import de.nrw.hspv.database.Get;
 
 public class User implements Serializable {
 
 	/**
 	 * 
 	 */
-	
+
 	// Ale Datenbanken laden, und benötigte Datenbank holen
 
 	private int id;
@@ -23,23 +24,31 @@ public class User implements Serializable {
 	private boolean canWriteAppointments = false;
 	private boolean canReadIssues = false;
 	private boolean canWriteIssues = false;
+	private boolean canReadUsers = false;
+	private boolean canWriteUsers = false;
+	private String password;
 
 	// Konstruktor
 	public User() {
 
 	}
 
-	public User(int id, String firstName, String lastName, int age, int phoneNumber, String email, boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues ) {
-		this.id = id;
+	public User(String firstName, String lastName, int age, int phoneNumber, String email, String password,
+			boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues,
+			boolean canReadUsers, boolean canWriteUsers) {
+		this.id = Get.users.getNextId();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.password = password;
 		this.canReadAppointments = canReadAppointments;
 		this.canWriteAppointments = canWriteAppointments;
 		this.canReadIssues = canReadIssues;
 		this.canWriteIssues = canWriteIssues;
+		this.canReadUsers = canReadUsers;
+		this.canWriteUsers = canWriteUsers;
 	}
 
 	// Getter und Setter
@@ -48,7 +57,7 @@ public class User implements Serializable {
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.id = Get.users.getNextId();
 	}
 
 	public String getFirstName() {
@@ -99,6 +108,14 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public boolean isCanReadAppointments() {
 		return canReadAppointments;
 	}
@@ -131,9 +148,24 @@ public class User implements Serializable {
 		this.canWriteIssues = canWriteIssues;
 	}
 
+	public boolean isCanReadUsers() {
+		return canReadUsers;
+	}
+
+	public void setCanReadUsers(boolean canReadUsers) {
+		this.canReadUsers = canReadUsers;
+	}
+
+	public boolean isCanWriteUsers() {
+		return canWriteUsers;
+	}
+
+	public void setCanWriteUsers(boolean canWriteUsers) {
+		this.canWriteUsers = canWriteUsers;
+	}
+
 	public static void main(String[] args) {
 		User user = new User();
 	}
 
-	
 }
