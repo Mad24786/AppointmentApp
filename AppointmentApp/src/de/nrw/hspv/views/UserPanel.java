@@ -13,6 +13,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -163,34 +164,24 @@ public class UserPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				log.info("Aktion abgebrochen.");
-
+				textFirstName.setText("");
+				textLastName.setText("");
+				textAge.setText("");
+				textPhoneNumber.setText("");
+				textEmail.setText("");
+				textPassword.setText("");
+				
 			}
 		});
 
 		buttonOk.addActionListener(new ActionListener() {
 			int  age, number;
-			boolean readA, writeA, readI, writeI;
-
+			
 			@Override
 
 			public void actionPerformed(ActionEvent e) {
 
-				// User user = new User();
-
-//				try {
-//					id = Integer.parseInt(textId.getText());
-//				} catch (NumberFormatException e1) {
-//					textId.setText("Fehlerhafte Eingabe: [ID]");
-//					log.warning("Fehlerhafte Eingabe: [ID]");
-//					textId.setForeground(Color.RED);
-//					return;
-//				}
-//				if (textId.getText().trim().equals("")) {
-//					textId.setForeground(Color.RED);
-//					textId.setText("Pflichteingabe");
-//
-//					return;
-//				}
+				
 
 				if (textFirstName.getText().trim().equals("")) {
 					textFirstName.setForeground(Color.RED);
@@ -218,6 +209,11 @@ public class UserPanel extends JPanel {
 
 					return;
 				}
+				if(age >120) {
+					textAge.setForeground(Color.RED);
+					textAge.setText("Geben sie ein richtiges Alter ein");
+					return;
+				}
 				try {
 					number = Integer.parseInt(textPhoneNumber.getText());
 				} catch (NumberFormatException e1) {
@@ -243,11 +239,7 @@ public class UserPanel extends JPanel {
 					textPassword.setText("Pflichteingabe");
 				}
 
-				// User user = new User(Integer.parseInt(textId.getText()),
-				// textFirstName.getText(),textLastName.getText(),
-				// Integer.parseInt(textAge.getText()),Integer.parseInt(textPhoneNumber.getText()),
-				// textEmail.getText(), readA, writeA,readI,writeI);
-				//
+				
 				User user = new User(textFirstName.getText(), textLastName.getText(),
 						Integer.parseInt(textAge.getText()), Integer.parseInt(textPhoneNumber.getText()),
 						textEmail.getText(),textPassword.getText(), CheckCanReadAppointments.isSelected(),
@@ -267,7 +259,13 @@ public class UserPanel extends JPanel {
 				textEmail.setForeground(Color.BLACK);
 				
 				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
-
+				JOptionPane.showMessageDialog(null,"Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
+				textFirstName.setText("");
+				textLastName.setText("");
+				textAge.setText("");
+				textPhoneNumber.setText("");
+				textEmail.setText("");
+				textPassword.setText("");
 			}
 		});
 

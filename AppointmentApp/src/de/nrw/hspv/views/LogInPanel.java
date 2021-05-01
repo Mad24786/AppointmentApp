@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import de.nrw.hspv.database.Get;
+import de.nrw.hspv.util.User;
 
 public class LogInPanel implements ActionListener, KeyListener{
 	//Fenster
