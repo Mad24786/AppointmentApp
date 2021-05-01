@@ -27,6 +27,7 @@ public class User implements Serializable {
 	private boolean canReadUsers = false;
 	private boolean canWriteUsers = false;
 	private String password;
+	private String username;
 
 	// Konstruktor
 	public User() {
@@ -49,6 +50,7 @@ public class User implements Serializable {
 		this.canWriteIssues = canWriteIssues;
 		this.canReadUsers = canReadUsers;
 		this.canWriteUsers = canWriteUsers;
+		this.username = "username"+getId();
 	}
 
 	// Getter und Setter
@@ -58,6 +60,12 @@ public class User implements Serializable {
 
 	public void setId(int id) {
 		this.id = Get.users.getNextId();
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getFirstName() {

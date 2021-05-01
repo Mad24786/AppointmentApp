@@ -187,7 +187,7 @@ public class AppointmentPanel extends JPanel {
 			
 			@SuppressWarnings("static-access")
 			ArrayList<Issue> allIssues = AppointmentApp.get.issues.getAllAsArrayList();
-			Collections.sort(allIssues);
+			//Collections.sort(allIssues);
 			for(Issue i : allIssues) {
 				vecIssues.add(i);
 			}
