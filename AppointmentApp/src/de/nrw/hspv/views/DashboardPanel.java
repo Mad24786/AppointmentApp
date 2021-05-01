@@ -50,16 +50,22 @@ public class DashboardPanel extends JPanel {
 		add(northPanel, BorderLayout.NORTH);
 		
 		JPanel centerPanel = new JPanel();		
-		centerPanel.setLayout(new GridLayout(5, 7, 5, 5));
+		centerPanel.setLayout(new GridLayout(0, 7, 5, 5));
 		centerPanel.setBackground(Color.WHITE);
 		
 		/** TEST BEGINN **/
 		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
 		int days =gCal.getActualMaximum(Calendar.DATE);
 		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);
-		
+
 		gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
 		int totalweeks = gCal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+		
+		// NEU //
+		if ((startInWeek == 7 && days > 29) || (startInWeek == 6 && days > 30)) {
+			totalweeks +=1;
+		}
+		////////
 		
 		int count = 1; // count the days
 		for (int i = 1; i <= totalweeks; i++) {
@@ -97,25 +103,36 @@ public class DashboardPanel extends JPanel {
 		eastPanel.add(lblEast);
 		
 		
-		ArrayList<Appointment> allAppointments = Get.appointments.getAllAsArrayList();
-		Date dt = new Date();
-		dt.setHours(0);
+		
+
+		/*
+		 * Get instance of Calendar
+		 */
 		Calendar c = Calendar.getInstance();
-		c.setTime(dt);
+		/* set time to current day 0:00 */
+		c.setTime(new Date());
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		Date today = c.getTime();
+		/* set time to next day 0:00 */
 		c.add(Calendar.DATE, 1);
 		Date tomorrow = c.getTime();
 		
+		/* Fetch data */
+		ArrayList<Appointment> allAppointments = Get.appointments.getAllAsArrayList();		
 		Collections.sort(allAppointments);
 		for(Appointment i : allAppointments) {
 			
-			if(i.getDateAndTime().after(dt) && i.getDateAndTime().before(tomorrow)) {
+			if(i.getDateAndTime().after(today) && i.getDateAndTime().before(tomorrow)) {
+				/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
 				JLabel lblTestEast = new JLabel(i.getDateAndTime().toString());
 				eastPanel.add(lblTestEast);
 			}
 				
 		}
 		eastPanel.setPreferredSize(new Dimension(250, 0));
-//		eastPanel.setMinimumSize(new Dimension(500, 0));
+		
 		add(centerPanel, BorderLayout.CENTER);
 		add(eastPanel, BorderLayout.EAST);
 	}
@@ -133,7 +150,7 @@ public class DashboardPanel extends JPanel {
 			return "Feburar";
 		}
 		case 2: {
-			return "März";
+			return "Mï¿½rz";
 		}
 		case 3: {
 			return "April";

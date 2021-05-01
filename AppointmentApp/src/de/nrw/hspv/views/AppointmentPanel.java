@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -71,7 +72,7 @@ public class AppointmentPanel extends JPanel {
 	
 	private void initComponents() {
 	
-		// TODO Speicher für alle Panels, kann noch nützlich sein
+		// TODO Speicher fï¿½r alle Panels, kann noch nï¿½tzlich sein
 		HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
 		panels.put("main", new JPanel());
 				
@@ -79,7 +80,7 @@ public class AppointmentPanel extends JPanel {
 		setBackground(Color.WHITE);
 		setLayout(mainLayout);
 				
-		/* oberes Panel (Menüleiste) */
+		/* oberes Panel (Menï¿½leiste) */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -106,7 +107,7 @@ public class AppointmentPanel extends JPanel {
 		southPanel.add(btnOk);
 		add(southPanel, BorderLayout.SOUTH);
 		
-		/* linkes Panel (derzeit nicht benötigt) */
+		/* linkes Panel (derzeit nicht benï¿½tigt) */
 //		JPanel westPanel = new JPanel();
 //		westPanel.setBackground(Color.WHITE);
 //		add(westPanel, BorderLayout.WEST);
@@ -187,7 +188,6 @@ public class AppointmentPanel extends JPanel {
 			
 			@SuppressWarnings("static-access")
 			ArrayList<Issue> allIssues = AppointmentApp.get.issues.getAllAsArrayList();
-			Collections.sort(allIssues);
 			for(Issue i : allIssues) {
 				vecIssues.add(i);
 			}
