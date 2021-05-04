@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import de.nrw.hspv.database.Get;
+import de.nrw.hspv.views.AppointmentApp;
 
 public class Issue implements Serializable, Comparable<Issue>{
 
@@ -50,7 +50,7 @@ public class Issue implements Serializable, Comparable<Issue>{
 	 * @param d Die Beschreibung des Anliegens
 	 */
 	public Issue(String n, int t, String d) {
-		setId(Get.issues.getNextId());
+		setId(AppointmentApp.ISSUES.getNextId());
 		setName(n);
 		setDescription(d);
 		setScheduledTime(t);

@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
@@ -60,7 +59,7 @@ public class DashboardPanel extends JPanel {
 	/* 
 	 * Fetch appointments data 
 	 */
-	public static ArrayList<Appointment> allAppointments = Get.appointments.getAllAsArrayList();		
+	public static ArrayList<Appointment> allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();		
 	
 	public DashboardPanel() {
 		initComponents();

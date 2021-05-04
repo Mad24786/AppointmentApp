@@ -2,6 +2,7 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
+<<<<<<< HEAD
   <date>2021-05-04T06:54:34.466061500Z</date>
   <millis>1620111274466</millis>
   <nanos>61500</nanos>
@@ -107,6 +108,29 @@
   <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
   <method>windowClosing</method>
   <thread>20</thread>
+=======
+  <date>2021-05-04T07:46:09.590369400Z</date>
+  <millis>1620114369590</millis>
+  <nanos>369400</nanos>
+  <sequence>0</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.views.AppointmentApp$2</class>
+  <method>mouseClicked</method>
+  <thread>21</thread>
+  <message>Appointment window set visible</message>
+</record>
+<record>
+  <date>2021-05-04T07:46:22.000163300Z</date>
+  <millis>1620114382000</millis>
+  <nanos>163300</nanos>
+  <sequence>1</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
+  <method>windowClosing</method>
+  <thread>21</thread>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
   <message>Appointment window set invisible</message>
 </record>
 </log>

@@ -21,7 +21,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JCheckBox;
 
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
@@ -76,7 +75,7 @@ public class UserPanel extends JPanel {
 
 		Vector<User> vec = new Vector<User>();
 
-		ArrayList<User> allUsers = Get.users.getAllAsArrayList();
+		ArrayList<User> allUsers = AppointmentApp.USERS.getAllAsArrayList();
 		for (User i : allUsers) {
 			vec.add(i);
 //		}
@@ -246,7 +245,7 @@ public class UserPanel extends JPanel {
 						CheckCanWriteAppointments.isSelected(), CheckCanReadIssues.isSelected(),
 						CheckCanWriteIssues.isSelected(),CheckCanReadUsers.isSelected(),CheckCanWriteUsers.isSelected());
 				try {
-					Get.users.store(user);
+					AppointmentApp.USERS.store(user);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
