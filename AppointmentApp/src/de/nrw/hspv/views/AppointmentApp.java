@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
@@ -19,18 +20,26 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Appointment;
+import de.nrw.hspv.util.FileDatabase;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
+import de.nrw.hspv.util.User;
 
-import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class AppointmentApp extends JFrame{
+	
+	/*
+	 * FileDatabase for global use
+	 */
+	
+	public static FileDatabase<Appointment> APPOINTMENTS;
+	public static FileDatabase<Issue> ISSUES;
+	public static FileDatabase<User> USERS;
 
 	/*
 	 * put other windows than this here
@@ -79,8 +88,13 @@ public class AppointmentApp extends JFrame{
 	AppointmentApp(){	
 		super("AppointmentApp v0.1");
 		/* instance of database */
-		// TODO find another place for this
-		new Get();
+		try {
+			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
+			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
+			APPOINTMENTS = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		/*
 		 * initialize components of this frame

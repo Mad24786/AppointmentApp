@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Issue;
 
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class IssuePanel extends JPanel{
         Vector<Issue> vec = new Vector<Issue>();
         /** Holt alle Objekte aus der DB ab */
 		@SuppressWarnings("static-access")
-		ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();
+		ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
 		for(Issue i : allIssues) {
 			vec.add(i);
 		}

@@ -1,7 +1,6 @@
 package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -14,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -30,7 +27,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,7 +35,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
@@ -137,7 +132,7 @@ public class AppointmentFrame extends JFrame {
 		addComp(gb, lblIssue, 0, 1, 1, 1);
 		
 		@SuppressWarnings("static-access")
-		ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();
+		ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
 		
 		for(Issue i : allIssues) {
 			vecIssues.add(i);
@@ -229,7 +224,7 @@ public class AppointmentFrame extends JFrame {
 				
 				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
 				try {
-					Get.appointments.store(a);
+					AppointmentApp.APPOINTMENTS.store(a);
 				} catch (Exception e2) {
 					// TODO: handle exception
 				}

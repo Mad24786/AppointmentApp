@@ -1,16 +1,6 @@
 package de.nrw.hspv.views;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import de.nrw.hspv.util.Appointment;
 
 import java.awt.*;
 import java.awt.event.*;

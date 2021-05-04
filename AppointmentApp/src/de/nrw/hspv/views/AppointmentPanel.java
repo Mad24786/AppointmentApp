@@ -34,7 +34,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
@@ -147,7 +146,7 @@ public class AppointmentPanel extends JPanel {
 				
 				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
 				try {
-					Get.appointments.store(a);
+					AppointmentApp.APPOINTMENTS.store(a);
 				} catch (Exception e2) {
 					// TODO: handle exception
 				}
@@ -204,7 +203,7 @@ public class AppointmentPanel extends JPanel {
 			addComp(gb, lblIssue, 0, 1, 1, 1);
 			
 			@SuppressWarnings("static-access")
-			ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();
+			ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
 			
 			if(vecIssues.isEmpty()) {
 				for(Issue i : allIssues) {

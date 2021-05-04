@@ -3,7 +3,7 @@ package de.nrw.hspv.util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import de.nrw.hspv.database.Get;
+import de.nrw.hspv.views.AppointmentApp;
 
 public class User implements Serializable {
 
@@ -37,7 +37,7 @@ public class User implements Serializable {
 	public User(String firstName, String lastName, int age, int phoneNumber, String email, String password,
 			boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues,
 			boolean canReadUsers, boolean canWriteUsers) {
-		this.id = Get.users.getNextId();
+		this.id = AppointmentApp.USERS.getNextId();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
@@ -59,7 +59,7 @@ public class User implements Serializable {
 	}
 
 	public void setId(int id) {
-		this.id = Get.users.getNextId();
+		this.id = id;
 	}
 	public String getUsername() {
 		return username;

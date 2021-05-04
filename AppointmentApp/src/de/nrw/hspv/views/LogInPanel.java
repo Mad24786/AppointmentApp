@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.User;
 
 public class LogInPanel implements ActionListener, KeyListener{
@@ -121,13 +120,13 @@ public class LogInPanel implements ActionListener, KeyListener{
 					int id;
 					
 					id = Integer.parseInt(userJTextField.getText());
-					new Get();
+				
 					System.out.println(id);
-					if(Get.users.get(id)== null) {
+					if(AppointmentApp.USERS.get(id)== null) {
 						System.out.println("Falsch");
 						return false;
 					}else {
-						User user = (User) Get.users.get(id);
+						User user = (User) AppointmentApp.USERS.get(id);
 						PASSWORDString = user.getPassword();
 						return true;
 					}
