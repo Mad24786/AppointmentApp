@@ -9,8 +9,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import de.nrw.hspv.views.AppointmentApp;
+
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -39,7 +42,7 @@ public class LogInPanel implements ActionListener, KeyListener{
 	private JCheckBox hidePasswordBox;
 	
 	private final String USERNAMEString = "user123";
-	private final String PASSWORDString	= "123456";
+	private String PASSWORDString	= "123456";
 	
 	
 	public LogInPanel() {
@@ -49,6 +52,7 @@ public class LogInPanel implements ActionListener, KeyListener{
 		addComponentsToContentPane(); //Komponenten hinzufügen
 		setLayoutManager(); // setze das Layout für den Container
 		setLocationAndSizeOfComponent(); 
+	
 	}
 	
 	//Fenster erstellen
@@ -111,6 +115,23 @@ public class LogInPanel implements ActionListener, KeyListener{
 		passwordLabel = new JLabel("Passwort: ");
 		
 		userJTextField = new JTextField();
+		userJTextField.setInputVerifier(new InputVerifier() {
+				@Override
+				public boolean verify(JComponent Input) {
+					int id;
+					
+					id = Integer.parseInt(userJTextField.getText());
+					new Get();
+					System.out.println(id);
+					if(Get.users.get(id)== null) {
+						System.out.println("Falsch");
+						return false;
+					}else {
+						User user = (User) Get.users.get(id);
+						PASSWORDString = user.getPassword();
+						return true;
+					}
+				}});
 		passwordField = new JPasswordField();
 		passwordField.addKeyListener(this);
 		
@@ -172,7 +193,7 @@ public class LogInPanel implements ActionListener, KeyListener{
 			char[] chars = passwordField.getPassword();
 			String userPasswordString = new String(chars);
 			
-			if(USERNAMEString.equalsIgnoreCase(userString) && PASSWORDString.equalsIgnoreCase(userPasswordString)) {
+			if(PASSWORDString.equalsIgnoreCase(userPasswordString)) {
 				System.out.println("Login erfolgreich");
 				createMessage("Login erfolgreich");
 				new AppointmentApp();
