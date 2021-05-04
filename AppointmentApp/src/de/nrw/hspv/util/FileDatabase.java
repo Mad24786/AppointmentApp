@@ -18,12 +18,12 @@ import java.util.Map.Entry;
 
 import de.nrw.hspv.exception.DatabaseException;
 
-public class FileDatabase<O> implements Serializable {
+public class FileDatabase<Object> implements Serializable {
 	
 	private static final long serialVersionUID = 3L;
 	
 	private File storageFile;
-	private HashMap<Integer, O> storageMap;
+	private HashMap<Integer, Object> storageMap;
 
 
 	public FileDatabase(String filepath) throws IOException {
@@ -38,7 +38,7 @@ public class FileDatabase<O> implements Serializable {
 		}
 
 		if (storageFile.length() == 0 || storageFile.createNewFile()) {
-			storageMap = new HashMap<Integer, O>();
+			storageMap = new HashMap<Integer, Object>();
 			save();
 		} else {
 			load();
@@ -59,7 +59,7 @@ public class FileDatabase<O> implements Serializable {
 	private void load() {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(storageFile)));
-			storageMap = (HashMap<Integer, O>) ois.readObject();
+			storageMap = (HashMap<Integer, Object>) ois.readObject();
 			ois.close();
 			System.err.println(Tools.getCurrentDateAndTime() + ": " + storageFile.getName() + " geladen");
 		} catch (Exception e) {
@@ -68,11 +68,11 @@ public class FileDatabase<O> implements Serializable {
 		}
 	}
 	
-	public void store(O o) throws IOException{
+	public void store(Object o) throws IOException{
 		store(getNextId(), o);
 	}
 
-	public void store(int key, O o) throws IOException {
+	public void store(int key, Object o) throws IOException {
 		if(get(key) != null)
 			throw new IOException("key already exists");
 		
@@ -87,23 +87,23 @@ public class FileDatabase<O> implements Serializable {
 	
 	public int getNextId() {
 		int nextId = 0;
-		Iterator<Entry<Integer, O>> it = storageMap.entrySet().iterator();
+		Iterator<Entry<Integer, Object>> it = storageMap.entrySet().iterator();
 	    while (it.hasNext()) {
-	    	Map.Entry<Integer, O> pair = (Map.Entry<Integer, O>)it.next();
+	    	Map.Entry<Integer, Object> pair = (Map.Entry<Integer, Object>)it.next();
 	        nextId = (pair.getKey()+1);
 	    }
 		return nextId;
 	}
 
-	public ArrayList<O> getAllAsArrayList() {
-		ArrayList<O> result = new ArrayList<O>();
-		for (O c : storageMap.values()) {
+	public ArrayList<Object> getAllAsArrayList() {
+		ArrayList<Object> result = new ArrayList<Object>();
+		for (Object c : storageMap.values()) {
 			result.add(c);
 		}
 		return result;
 	}
 
-	public HashMap<Integer, O> getAll() {
+	public HashMap<Integer, Object> getAll() {
 		return storageMap;
 	}
 

@@ -1,9 +1,11 @@
 package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -14,8 +16,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Appointment;
@@ -25,33 +29,65 @@ import de.nrw.hspv.util.Issue;
 @SuppressWarnings("serial")
 public class DashboardPanel extends JPanel {
 	
+	/*
+	 * DashboardPanel Layout
+	 */
+	public static CardLayout layout = new CardLayout();
+	
+	/*
+	 * Get instance of Calendar
+	 */
+	public static Calendar c = Calendar.getInstance();
+	
+	/*
+	 * Components
+	 */
+	public static JPanel mainPanel = new JPanel();
+	public static JPanel eastPanel;
+	public static JPanel cards;
+	
+	public static JLabel lblEast;
+	
+	/*
+	 *  Initialize calendar vars 
+	 */
+	public static int selectedMonth, selectedYear;
+	public static Calendar cal = new GregorianCalendar();
+	public static int cDay = cal.get(Calendar.DATE);
+	public static int cMonth = selectedMonth = cal.get(Calendar.MONTH);
+	public static int cYear = selectedYear = cal.get(Calendar.YEAR);
+	
+	/* 
+	 * Fetch appointments data 
+	 */
+	public static ArrayList<Appointment> allAppointments = Get.appointments.getAllAsArrayList();		
+	
 	public DashboardPanel() {
 		initComponents();
 		createEvents();
 	}
 	
-	public void initComponents(){
-		
-		/** Initialize calendar vars */
-		int selectedMonth, selectedYear;
-		Calendar cal = new GregorianCalendar();
-		int cDay = cal.get(Calendar.DATE);
-		int cMonth = selectedMonth = cal.get(Calendar.MONTH);
-		int cYear = selectedYear = cal.get(Calendar.YEAR);
+	public void initComponents(){	
+		setLayout(layout);
 		
 		/** */
-		setLayout(new BorderLayout());
+		mainPanel.setLayout(new BorderLayout(0,0));
+		mainPanel.setBackground(Color.WHITE);
 		
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		northPanel.setBackground(Color.WHITE);
 		JLabel lblDate = new JLabel(monthToString(cMonth) + " " + cYear);
 		northPanel.add(lblDate);
-		add(northPanel, BorderLayout.NORTH);
+		mainPanel.add(northPanel, BorderLayout.NORTH);
 		
 		JPanel centerPanel = new JPanel();		
 		centerPanel.setLayout(new GridLayout(0, 7, 5, 5));
 		centerPanel.setBackground(Color.WHITE);
+		
+		for (int i = 0; i < 7; i++) {
+			centerPanel.add(new WeekdayLabel(i));
+		}
 		
 		/** TEST BEGINN **/
 		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
@@ -61,11 +97,10 @@ public class DashboardPanel extends JPanel {
 		gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
 		int totalweeks = gCal.getActualMaximum(Calendar.WEEK_OF_MONTH);
 		
-		// NEU //
+		/* Build dashboard calendar */
 		if ((startInWeek == 7 && days > 29) || (startInWeek == 6 && days > 30)) {
 			totalweeks +=1;
 		}
-		////////
 		
 		int count = 1; // count the days
 		for (int i = 1; i <= totalweeks; i++) {
@@ -96,73 +131,131 @@ public class DashboardPanel extends JPanel {
 		
 		/** TEST ENDE **/
 
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
-		JPanel eastPanel = new JPanel(new FlowLayout());
-		JLabel lblEast = new JLabel("Termine heute");
-		eastPanel.setBackground(Color.WHITE);
-		eastPanel.add(lblEast);
-		
-		
-		
-
-		/*
-		 * Get instance of Calendar
-		 */
-		Calendar c = Calendar.getInstance();
-		/* set time to current day 0:00 */
-		c.setTime(new Date());
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		Date today = c.getTime();
-		/* set time to next day 0:00 */
-		c.add(Calendar.DATE, 1);
-		Date tomorrow = c.getTime();
-		
-		/* Fetch data */
-		ArrayList<Appointment> allAppointments = Get.appointments.getAllAsArrayList();		
-		Collections.sort(allAppointments);
-		for(Appointment i : allAppointments) {
+		//Create the panel that contains the "cards".
+        cards = new JPanel(new CardLayout());
+        JPanel defaultCard = new AppointmentsByDate(cDay);
+        
+        
+        cards.add(defaultCard, Integer.toString(cDay));
+        for (int i = 1; i <= days; i++) {
+        	if (i != cDay) {
+        		JPanel anotherCard = new AppointmentsByDate(i);
+            	cards.add(anotherCard, Integer.toString(i));
+        	}
+        }
+        
+		mainPanel.add(cards, BorderLayout.EAST);
 			
-			if(i.getDateAndTime().after(today) && i.getDateAndTime().before(tomorrow)) {
-				/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
-				JLabel lblTestEast = new JLabel(i.getDateAndTime().toString());
-				eastPanel.add(lblTestEast);
-			}
-				
-		}
-		eastPanel.setPreferredSize(new Dimension(250, 0));
+		add(mainPanel);
 		
-		add(centerPanel, BorderLayout.CENTER);
-		add(eastPanel, BorderLayout.EAST);
 	}
 	
 	public void createEvents() {
 		
 	}
 	
-	public String monthToString(int m) {
+	public static class AppointmentsByDate extends JPanel {
+				
+		public AppointmentsByDate(int d) {
+			super(new FlowLayout());
+			setBackground(Color.WHITE);
+			setPreferredSize(new Dimension(250, 0));
+			setName(Integer.toString(d));
+			
+			lblEast = new JLabel("Termine " + d + ". " + monthToString(cMonth) + " " + cYear);
+			add(lblEast);
+			
+			/* set time to given day 0:00 */
+			c.setTime(new Date());
+			c.set(Calendar.DATE, d);
+			c.set(Calendar.HOUR_OF_DAY, 0);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			Date today = c.getTime();
+			/* set time to next day 0:00 */
+			c.add(Calendar.DATE, 1);
+			Date tomorrow = c.getTime();
+			
+			Collections.sort(allAppointments);
+			for(Appointment i : allAppointments) {
+				
+				if(i.getStart().after(today) && i.getStart().before(tomorrow)) {
+					/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
+					JLabel lblTestEast = new JLabel(i.getStart().toString());
+					add(lblTestEast);
+				}
+					
+			}
+		
+		}
+		
+		public static int getCount(int d) {
+			int appointmentCount = 0;
+					
+			/* set time to given day 0:00 */
+			c.setTime(new Date());
+			c.set(Calendar.DATE, d);
+			c.set(Calendar.HOUR_OF_DAY, 0);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			Date today = c.getTime();
+			/* set time to next day 0:00 */
+			c.add(Calendar.DATE, 1);
+			Date tomorrow = c.getTime();
+			
+			for(Appointment i : allAppointments) {
+				
+				if(i.getStart().after(today) && i.getStart().before(tomorrow)) {
+					/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
+					appointmentCount++;
+				}
+					
+			}
+			return appointmentCount;
+		}
+		
+	}
+	
+	public static String monthToString(int m) {
 		switch (m) {
-		case 0: {
-			return "Januar";
-		}
-		case 1: {
-			return "Feburar";
-		}
-		case 2: {
-			return "Mï¿½rz";
-		}
-		case 3: {
-			return "April";
-		}
-		default:
-			return "ein anderer Monat";
+	        case 0:  return "Januar";
+	        case 1:  return "Februar";
+	        case 2:  return "März";
+	        case 3:  return "April";
+	        case 4:  return "Mai";
+	        case 5:  return "Juni";
+	        case 6:  return "Juli";
+	        case 7:  return "August";
+	        case 8:  return "September";
+	        case 9:  return "Oktober";
+	        case 10: return "November";
+	        case 11: return "Dezember";
+	        default: return "Invalid month";
 		}
 	}
 	
 	public class MyMouseListener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			 CardLayout cl = (CardLayout)(cards.getLayout());
+		     cl.show(cards, Integer.toString(((CalendarPanel) e.getComponent()).getDay()));
+			
+//			mainPanel.remove(layout.getLayoutComponent(BorderLayout.EAST));
+//			
+//			eastPanel = new AppointmentsByDate(((CalendarPanel) e.getComponent()).getDay());
+//			
+//			System.out.println(eastPanel.toString());
+//			
+//			mainPanel.add(eastPanel, BorderLayout.EAST);
+//			
+//			add(mainPanel);
+//			
+//			AppointmentApp.centerPanel.add(eastPanel);
+//			
+//			
+			
 			System.out.println(((CalendarPanel) e.getComponent()).getDay());
 		}
 	}
@@ -177,23 +270,56 @@ public class DashboardPanel extends JPanel {
 			
 			setPreferredSize(new Dimension(75,75));
 			setMaximumSize(new Dimension(75,75));
-			
+			setLayout(new BorderLayout(2,2));
 			setBackground(c);
+			
+			/*
+			 * add label only if it is a colored panel
+			 */
+			if(c.equals(Color.WHITE) == false) {
+				/* label for date */
+				JLabel lblDate = new JLabel(" " + Integer.toString(day));
+				add(lblDate, BorderLayout.NORTH);
+				
+				/* label for appointment count */
+				JLabel lblAppCount = new JLabel("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
+				lblAppCount.setHorizontalAlignment(SwingConstants.RIGHT);
+				lblAppCount.setFont(new Font(lblDate.getFont().toString(), Font.PLAIN, 11));
+				add(lblAppCount, BorderLayout.SOUTH);
+			}
 			
 		}
 		
-		@Override
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			if(day != 0) {
-				g.drawString(String.valueOf(day), 5, 15);
-			}
-		}
+//		@Override
+//		public void paintComponent(Graphics g) {
+//			super.paintComponent(g);
+//			if(day != 0) {
+//				g.setFont(new Font("Arial", Font.PLAIN, 10));
+//				g.drawString(Integer.toString(AppointmentsByDate.getCount(day)) + " Termine", 5, 60);
+//				g.setFont(new Font("Arial", Font.BOLD, 15));
+//				g.drawString(String.valueOf(day), 5, 20);
+//				
+//			}
+//		}
 
 		public int getDay() {
 			return day;
 		}
 
+	}
+	
+	public class WeekdayLabel extends JLabel {
+
+		int index;
+		String[] weekdays = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
+		
+		public WeekdayLabel(int i) {
+			this.index = i;
+			setHorizontalAlignment(SwingConstants.CENTER);
+			setVerticalAlignment(SwingConstants.BOTTOM);
+			setText(weekdays[index]);
+			
+		}
 	}
 
 	public static void main(String[] args) {

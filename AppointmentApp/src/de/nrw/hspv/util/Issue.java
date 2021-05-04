@@ -2,13 +2,18 @@ package de.nrw.hspv.util;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import de.nrw.hspv.database.Get;
 
-public class Issue implements Serializable{
+public class Issue implements Serializable, Comparable<Issue>{
 
 	private static final long serialVersionUID = -7500772649592229468L;
 	
+	/** Nur zum Testen */ 
+	//public static Get get = new Get();
+	/*******************/
 	
 	/**
 	 * Objektvariablen
@@ -31,8 +36,8 @@ public class Issue implements Serializable{
 	 * @param n Die Bezeichnung des Anliegens
 	 * @param t Die Bearbeitungsdauer des Anliegens
 	 */
-	public Issue(int id, String n, int t) {
-		this(id, n, t, "./.");
+	public Issue(String n, int t) {
+		this(n, t, "./.");
 	}
 	
 	/**
@@ -44,9 +49,8 @@ public class Issue implements Serializable{
 	 * @param t Die Bearbeitungsdauer des Anliegens
 	 * @param d Die Beschreibung des Anliegens
 	 */
-	public Issue(int id, String n, int t, String d) {
-//		setId(database.getSmallestId());
-		setId(id);
+	public Issue(String n, int t, String d) {
+		setId(Get.issues.getNextId());
 		setName(n);
 		setDescription(d);
 		setScheduledTime(t);
@@ -71,8 +75,21 @@ public class Issue implements Serializable{
 ////		}
 //		
 //		/** Anliegen erzeugen und hinzufügen */
-		Issue issue = new Issue(7, "Gewerbeanmeldung", 1000*60*15);
-		Get.issues.store(issue);
+//		Issue issue = new Issue("Test", 1000*60*10);
+//		Get.issues.store(issue);
+		
+		
+//		ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();
+//
+//		for(Issue i : allIssues) {
+//			System.out.println(i.getId());
+//		}
+//		
+//		Collections.sort(allIssues);
+//		
+//		for(Issue i : allIssues) {
+//			System.out.println(i.getId());
+//		}
 //				
 //		/** Zieht ein Objekt mittels ID aus der Datenbank */
 //		Issue issue2 = (Issue) database.get(2);
@@ -97,7 +114,7 @@ public class Issue implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return String.format(this.getId() + ": %s", this.getName());
+		return this.getName();
 	}
 	
 	/**
@@ -159,6 +176,11 @@ public class Issue implements Serializable{
 	 */
 	public void setScheduledTime(int scheduledTime) {
 		this.scheduledTime = scheduledTime;
+	}
+
+	@Override
+	public int compareTo(Issue o) {
+		return this.getName().compareTo(o.getName());
 	}	
 
 }

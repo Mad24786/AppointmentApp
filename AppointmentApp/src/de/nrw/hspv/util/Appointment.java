@@ -5,18 +5,38 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 
+ * @author mfern
+ *
+ */
+
 @SuppressWarnings("serial")
 public class Appointment implements Serializable, Comparable<Appointment> {
 		
 	int id, employeeId, customerId;
+	User employee;
 	Issue issue;
-	Date dateAndTime;
+	Date start;
+	Date end;
 	String customerMessage;
 	
-	public Appointment(int eId, Issue i, Date d, String cMsg){
-		setCustomerId(eId);
+	
+	/**
+	 * 
+	 * Constructor creates an appointment object with 
+	 * 
+	 * @param eId	ID of employee object who is going to handle this appointment
+	 * @param i		Issue object for this appointment
+	 * @param s		Date object that marks the beginning of this appointment
+	 * @param e		The end of this appointment
+	 * @param cMsg	A custom message 
+	 */
+	public Appointment(User eId, Issue i, Date s, Date e, String cMsg){
+		setEmployee(eId);
 		setIssue(i);
-		setDateAndTime(d);
+		setStart(s);
+		setEnd(e);
 		setCustomerMessage(cMsg);	
 	}
 	
@@ -43,6 +63,14 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 		this.customerId = customerId;
 	}
 	
+	public User getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(User employee) {
+		this.employee = employee;
+	}
+
 	public Issue getIssue() {
 		return issue;
 	}
@@ -51,12 +79,20 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 		this.issue = issue;
 	}
 
-	public Date getDateAndTime() {
-		return dateAndTime;
+	public Date getStart() {
+		return start;
 	}
-	public void setDateAndTime(Date d) {
-		this.dateAndTime = d;
+	public void setStart(Date d) {
+		this.start = d;
 	}
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end;
+	}
+
 	public String getCustomerMessage() {
 		return customerMessage;
 	}
@@ -66,10 +102,10 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 
 	@Override
 	public int compareTo(Appointment o) {
-		if(this.getDateAndTime().after(o.getDateAndTime())) {
+		if(this.getStart().after(o.getStart())) {
 			return 1;
 		}
-		else if(this.getDateAndTime().before(o.getDateAndTime())) {
+		else if(this.getStart().before(o.getStart())) {
 			return -1;
 		}
 		else return 0;

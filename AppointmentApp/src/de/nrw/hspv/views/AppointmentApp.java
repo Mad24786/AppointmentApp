@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,64 +20,106 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import de.nrw.hspv.database.Get;
+import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
+import de.nrw.hspv.util.Issue;
+
+import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class AppointmentApp extends JFrame{
 
-	/** 
-	 * Alle Datenbanken laden und die benötigte Datenbank holen
+	/*
+	 * put other windows than this here
 	 */
-	public static Get get = new Get();	
+	public static AppointmentFrame appFrame;
 	
+	/*
+	 * get user screen size
+	 */
 	public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(AppointmentApp.class.getName());
+	/*
+	 * Logger
+	 */
+	public static final Logger log = Logger.getLogger(AppointmentApp.class.getName());
 	
-	public static final Dimension windowSize = new Dimension(1024, 768); 
+	/*
+	 * set window size here
+	 */
+	public static final Dimension windowSize = new Dimension(1024, 768);
 	
-	public static JPanel centerPanel;
-	JLabel lblNorth = new JLabel(); 
+	/*
+	 * border layout for main panel
+	 */
+	private static BorderLayout mainLayout = new BorderLayout();
 	
+	/*
+	 * components of this window for use in this class 
+	 */
+	private static JPanel mainPanel = new JPanel(mainLayout);
+	private static JPanel centerPanel;
+	private static JLabel lblNorth = new JLabel(); 
 	
-	BorderLayout mainLayout = new BorderLayout();
-	JPanel mainPanel = new JPanel(mainLayout);
+	// navigation panels
+	private static JPanel iconDashboard;
+	private static JPanel iconAppointment;
+	private static JPanel iconUser;
+	private static JPanel iconIssue;
+	private static JPanel iconInfo;
+	private static JPanel iconExit;
+	//JPanel[] icons;
 	
-	JPanel iconDashboard;
-	JPanel iconAppointment;
-	JPanel iconUser;
-	JPanel iconIssue;
-	JPanel iconInfo;
-	JPanel iconExit;
-	
-	JPanel[] icons;
-	
-	AppointmentApp(){
-		
+	/**
+	 * getting started with AppointmentApp
+	 */
+	AppointmentApp(){	
 		super("AppointmentApp v0.1");
+		/* instance of database */
+		// TODO find another place for this
+		new Get();
+		
+		/*
+		 * initialize components of this frame
+		 */
 		initComponents();
+		
+		/*
+		 * create events for this frame
+		 */
 		createEvents();
+
+		/* instance of other windows */
+		// TODO find another place for this
+		appFrame = new AppointmentFrame();
 	}
 	
 	private void initComponents() {
+		/*
+		 * set default values of this window
+		 */
 		setSize(windowSize);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(true);
+		setResizable(false);
 		int x = (screenSize.width - this.getSize().width) / 2;
 	    int y = (screenSize.height - this.getSize().height) / 2;
 	    setLocation(x, y);
 		
-
-		add(mainPanel);
-		
+	    /* 
+	     * build up navigation panel in the west
+	     */
+	    
+	    // set grid layout with 6 rows in 1 column
 		JPanel navigation = new JPanel(new GridLayout(6,1,5,5));
-		
+		// set default values for this panel
 		navigation.setBackground(Color.WHITE);
 		navigation.setPreferredSize(new Dimension(125,0));
 		navigation.setBorder(new EmptyBorder(0, 15, 0, 15));
 		
+		// create and add icons to navigation panel
 		iconDashboard = new IconPanel("dashboard", true);
 		navigation.add(iconDashboard);
 		iconAppointment = new IconPanel("calendar", true);
@@ -90,8 +133,12 @@ public class AppointmentApp extends JFrame{
 		iconExit = new IconPanel("exit", true);		
 		navigation.add(iconExit);
 		
+		// add navigation in west to main panel
 		mainPanel.add(navigation, BorderLayout.WEST);
 		
+		/*
+		 * build up northern panel, just a label to show where the user is moving
+		 */
 		
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
@@ -100,23 +147,37 @@ public class AppointmentApp extends JFrame{
 		lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
         northPanel.add(lblNorth);
         northPanel.setAlignmentY(LEFT_ALIGNMENT);
+        // add this to main panel
         mainPanel.add(northPanel, BorderLayout.NORTH);
         
-        
+        /*
+         * center panel is an instance of DashboardPanel() by default
+         */
 		centerPanel = new DashboardPanel();
+		// add center panel to main panel
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
+		/*
+		 * south panel is never used so long, but there could be cool things :)
+		 */
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new FlowLayout(SwingConstants.RIGHT));
 		southPanel.setBackground(Color.WHITE);
 		southPanel.setPreferredSize(new Dimension(0,50));
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
-						
-		pack();
 		
+		/*
+		 * finally add main panel to this frame, pack and make it visible
+		 */
+		add(mainPanel);
+		pack();
 		setVisible(true);
 	}
 	
+	/**
+	 * This method creates all events for the main window. Until now it is
+	 * only controlling the navigation icons.
+	 */
 	private void createEvents() {
 		
 		// TODO eigenen MouseListener schreiben
@@ -138,18 +199,16 @@ public class AppointmentApp extends JFrame{
 				centerPanel = new DashboardPanel();
 				/* 6. CenterPanel im Center des mainPanel hinzufügen */
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
+				
+				log.log(Level.INFO, "Dashboard called");
 			}
 		});
 		
 		iconAppointment.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-				lblNorth.setText("Terminverwaltung");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
-				centerPanel = new AppointmentPanel();
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
-// 				iconIssue.setBackground(Color.RED);
+				appFrame.setVisible(true);
+				log.log(Level.INFO, "Appointment window set visible");
 			}
 		});
 				
@@ -185,12 +244,24 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
+	/**
+	 *  Inner class IconPanel can create icons for main navigation easily.
+	 *  
+	 *  @author Mathias Fernahl
+	 *  @version 0.1
+	 */
 	public class IconPanel extends JPanel {
-		
-		/** Erzeugt Hauptmenü-Icons */
 		
 		private String s; 
 			
+		/**
+		 * The constructor does all the work by getting a String and a boolean value
+		 * to manage access of different users
+		 * 
+		 * @param s			The String for getting the correct icon. 
+		 * @param access	A boolean value from user class to make sure a user
+		 * 					is allowed to get access to this menu item
+		 */
 		public IconPanel(String s, boolean access) {
 			
 			this.s = s;
@@ -206,6 +277,10 @@ public class AppointmentApp extends JFrame{
 			}
 		}
 		
+		/*
+		 * draws the icon on this panel by reading the given string
+		 * make sure that the image file exists!
+		 */
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -215,7 +290,20 @@ public class AppointmentApp extends JFrame{
 
 	}
 	
+	/**
+	 * Starts the program!
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
+		
+		try {
+			log.addHandler(new FileHandler("log.txt"));
+		} catch (SecurityException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		new AppointmentApp();
 	}
 

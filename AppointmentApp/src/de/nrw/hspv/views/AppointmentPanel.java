@@ -1,9 +1,9 @@
 package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -14,51 +14,49 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JSpinner.DateEditor;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-
 import de.nrw.hspv.database.Get;
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
+import de.nrw.hspv.util.User;
 
 @SuppressWarnings("serial")
 public class AppointmentPanel extends JPanel {
 	
 	public static BorderLayout mainLayout = new BorderLayout();
 	public static JPanel mainPanel = new JPanel(mainLayout);
-	
-	
-	
+		
 	public static JPanel centerPanel;
+	public static JPanel cards;
 	
 	public static JTextField txtId;
 	public static JComboBox<Issue> cbIssue;
 	public static JSpinner spinner;
 	public static JTextArea txtText;
+	
+	public static JPanel addIcon;
+	public static JPanel editIcon;
+	public static JPanel deleteIcon;
 	
 	public static JButton btnOk = new JButton("OK");
 	public static JButton btnCancel = new JButton("Abbrechen");
@@ -86,13 +84,13 @@ public class AppointmentPanel extends JPanel {
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		/* Buttons generieren */
-		JPanel addIcon = new CreateIcon("add", true);
+		addIcon = new CreateIcon("add", true);
 		northPanel.add(addIcon);
-		JPanel editIcon = new CreateIcon("edit", false);
+		editIcon = new CreateIcon("edit", false);
 		northPanel.add(editIcon);
-		JPanel deleteIcon = new CreateIcon("delete", false);
+		deleteIcon = new CreateIcon("delete", false);
 		northPanel.add(deleteIcon);
-		add(northPanel, BorderLayout.NORTH);
+		//add(northPanel, BorderLayout.NORTH);
 		
 		/* rechtes Panel */
 		JPanel eastPanel = new JPanel();
@@ -112,9 +110,8 @@ public class AppointmentPanel extends JPanel {
 //		westPanel.setBackground(Color.WHITE);
 //		add(westPanel, BorderLayout.WEST);
 		
-		/* mittleres Panel */
+		/* mittleres Panel */        
 		centerPanel = new CreateCenterAdd();
-		centerPanel.setBackground(Color.WHITE);
 		add(centerPanel, BorderLayout.CENTER);
 		
 //		add(mainPanel);
@@ -123,12 +120,32 @@ public class AppointmentPanel extends JPanel {
 	
 	public static void createEvents() {
 		
+		editIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Clicked");
+				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+				centerPanel = new JPanel();
+				centerPanel.setBackground(Color.BLACK);
+				centerPanel.validate();
+				
+				System.out.println(centerPanel.toString());
+				mainPanel.add(centerPanel, BorderLayout.CENTER);
+			}
+			
+		});
+		
 		btnOk.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				Appointment a = new Appointment(Integer.parseInt(txtId.getText()), ((Issue) cbIssue.getSelectedItem()), ((Date) spinner.getValue()), txtText.getText());
+				Date start = (Date) spinner.getValue();
+				Date end = null;
+				User user = null;
+				Issue issue = (Issue) cbIssue.getSelectedItem();
+				
+				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
 				try {
 					Get.appointments.store(a);
 				} catch (Exception e2) {
@@ -175,7 +192,7 @@ public class AppointmentPanel extends JPanel {
 
 			GridBagLayout gb = new GridBagLayout();
 			setLayout(gb);
-//			setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			setBackground(Color.WHITE);
 			
 			JLabel lblId = new JLabel("ID:");
 			addComp(gb, lblId, 0, 0, 1, 1);
@@ -187,11 +204,17 @@ public class AppointmentPanel extends JPanel {
 			addComp(gb, lblIssue, 0, 1, 1, 1);
 			
 			@SuppressWarnings("static-access")
-			ArrayList<Issue> allIssues = AppointmentApp.get.issues.getAllAsArrayList();
-
-			for(Issue i : allIssues) {
-				vecIssues.add(i);
+			ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();
+			
+			if(vecIssues.isEmpty()) {
+				for(Issue i : allIssues) {
+					vecIssues.add(i);
+				}
 			}
+			else {
+				System.out.println("Steht schon was drin");
+			}
+			
 			
 			cbIssue = new JComboBox<Issue>(vecIssues);
 	        cbIssue.addItemListener(new ItemListener() {
@@ -221,9 +244,6 @@ public class AppointmentPanel extends JPanel {
 	        spinner = new JSpinner(dateModel);
 	        spinner.setEditor(new JSpinner.DateEditor(spinner, "dd.MM.yyyy, HH:mm 'Uhr'"));
 			addComp(gb, spinner, 1, 2, 1, 1);
-	
-			
-			
 			
 			JLabel lblTime = new JLabel("Uhrzeit:");
 			addComp(gb, lblTime, 0, 3, 1, 1);
