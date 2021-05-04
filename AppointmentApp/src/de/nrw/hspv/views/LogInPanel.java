@@ -197,6 +197,7 @@ public class LogInPanel implements ActionListener, KeyListener{
 				System.out.println("Login erfolgreich");
 				createMessage("Login erfolgreich");
 				new AppointmentApp();
+				jFrame.dispose();
 				
 			}else {
 				System.out.println("Username oder Password falsch");
