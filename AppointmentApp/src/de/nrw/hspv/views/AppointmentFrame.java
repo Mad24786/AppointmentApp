@@ -208,14 +208,14 @@ public class AppointmentFrame extends JFrame {
 	
 	public static void createEvents() {
 		
-		editIcon.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Clicked");
-				
-			}
-			
-		});
+//		editIcon.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				System.out.println("Clicked");
+//				
+//			}
+//			
+//		});
 		
 		btnOk.addActionListener(new ActionListener() {
 			
