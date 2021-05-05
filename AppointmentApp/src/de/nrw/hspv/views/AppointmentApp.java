@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -186,6 +188,7 @@ public class AppointmentApp extends JFrame{
 		 */
 		eastPanel = new DashboardPanel.AppointmentsByDate(cDay);
 		// TODO add scroll pane
+  		//JScrollPane scrPane = new JScrollPane(eastPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		// add center panel to main panel
 		mainPanel.add(eastPanel, BorderLayout.EAST);
 		
@@ -239,8 +242,11 @@ public class AppointmentApp extends JFrame{
 		iconAppointment.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				appFrame.setVisible(true);
-				log.log(Level.INFO, "Appointment window set visible");
+				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+				lblNorth.setText("Terminverwaltung");
+				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
+				centerPanel = new AppointmentPanel();
+				mainPanel.add(centerPanel, BorderLayout.CENTER);				
 			}
 		});
 				
@@ -276,6 +282,7 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
+	// TODO doesnt work until now
 	public static void refreshDashboard() {
 		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
 		centerPanel = new DashboardPanel();
@@ -296,8 +303,8 @@ public class AppointmentApp extends JFrame{
 		private String s; 
 			
 		/**
-		 * The constructor does all the work by getting a String and a boolean value
-		 * to manage access of different users
+		 * The constructor does all the work by getting a String for the icon 
+		 * and a boolean value to manage access of different users.
 		 * 
 		 * @param s			The String for getting the correct icon. 
 		 * @param access	A boolean value from user class to make sure a user
@@ -320,7 +327,7 @@ public class AppointmentApp extends JFrame{
 		
 		/*
 		 * draws the icon on this panel by reading the given string
-		 * make sure that the image file exists!
+		 * make sure the image file exists!
 		 */
 		@Override
 		public void paintComponent(Graphics g) {

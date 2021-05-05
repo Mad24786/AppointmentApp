@@ -75,8 +75,13 @@ public class Issue implements Serializable, Comparable<Issue>{
 ////		}
 //		
 //		/** Anliegen erzeugen und hinzufügen */
-//		Issue issue = new Issue("Test", 1000*60*10);
-//		Get.issues.store(issue);
+//		new AppointmentApp();
+//		Issue issue = new Issue("Perso_neu", 15);
+//		Issue issue2 = new Issue("Reisepass_neu", 20);
+//		Issue issue3 = new Issue("Perso_Reisepass_neu", 30);
+//		AppointmentApp.ISSUES.store(issue);
+//		AppointmentApp.ISSUES.store(issue2);
+//		AppointmentApp.ISSUES.store(issue3);
 		
 		
 //		ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();

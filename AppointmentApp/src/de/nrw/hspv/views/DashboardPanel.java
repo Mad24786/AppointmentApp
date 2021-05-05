@@ -66,7 +66,8 @@ public class DashboardPanel extends JPanel {
 	public static int cMonth = selectedMonth = cal.get(Calendar.MONTH);
 	public static int cYear = selectedYear = cal.get(Calendar.YEAR);
 	// format pattern
-	public static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+	public static SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM.yyyy");
+	public static SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
 	
 	/* 
 	 * Fetch appointments data 
@@ -175,13 +176,10 @@ public class DashboardPanel extends JPanel {
 				
 		public AppointmentsByDate(int d) {
 			setLayout(new FlowLayout());
-//			add(Box.createHorizontalGlue());
-//			add(Box.createHorizontalStrut(0));
 			setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
 			setBackground(Color.WHITE);
-			setPreferredSize(new Dimension(250, 0));
+			setPreferredSize(new Dimension(250, 10));
 			setName(Integer.toString(d));
-			
 			lblEast = new JLabel("Termine " + d + ". " + monthToString(cMonth) + " " + cYear);
 			add(lblEast);
 			
@@ -202,6 +200,14 @@ public class DashboardPanel extends JPanel {
 				if(i.getStart().after(today) && i.getStart().before(tomorrow)) {
 					/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
 					JPanel lblTestEast = new SmallAppointmentPanel(i);
+					lblTestEast.addMouseListener(new MouseAdapter() {
+						
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							new AppointmentFrame(i);
+						}
+						
+					});
 					add(lblTestEast);
 				}
 					
@@ -210,13 +216,27 @@ public class DashboardPanel extends JPanel {
 		}
 		
 		public class SmallAppointmentPanel extends JPanel {
+			
+			Appointment a;
 
 			public SmallAppointmentPanel(Appointment a) {
-		
-				JLabel lblDate = new JLabel(sdf.format(a.getStart()) + ": " + a.getIssue().getName());
-				setBackground(Color.WHITE);
-				add(lblDate, BorderLayout.WEST);
-
+				this.a = a;
+				setPreferredSize(new Dimension(200, 25));
+				setBackground(HspvColor.SEC_BROWN);
+			}
+			
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				
+				String end = null;
+				if(a.getEnd() != null ) {
+					end = sdfTime.format(a.getEnd());
+				}
+				
+				g.setFont(new Font("Arial", Font.PLAIN, 10));
+				g.drawString(sdfTime.format(a.getStart()) + " - " + end + ": " + a.getIssue().getName(), 5, 15);					
+	
 			}
 
 		}
@@ -270,8 +290,7 @@ public class DashboardPanel extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent e) {		
 			AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.EAST));
-			AppointmentApp.eastPanel = new AppointmentsByDate(((CalendarPanel) e.getComponent()).getDay());
-			AppointmentApp.mainPanel.add(AppointmentApp.eastPanel, BorderLayout.EAST);
+			AppointmentApp.mainPanel.add(new AppointmentsByDate(((CalendarPanel) e.getComponent()).getDay()), BorderLayout.EAST);
 			AppointmentApp.mainPanel.validate();
 		}
 	}
@@ -342,7 +361,7 @@ public class DashboardPanel extends JPanel {
 
 	public static void main(String[] args) {
 		
-		new DashboardPanel();
+		//new DashboardPanel();
 
 	}
 

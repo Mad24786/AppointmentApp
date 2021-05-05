@@ -11,12 +11,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -25,8 +30,10 @@ import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,10 +42,16 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import de.nrw.hspv.util.Appointment;
+import de.nrw.hspv.util.FileDatabase;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
+import de.nrw.hspv.views.DashboardPanel.AppointmentsByDate.SmallAppointmentPanel;
 
 @SuppressWarnings("serial")
 public class AppointmentFrame extends JFrame {
@@ -47,12 +60,15 @@ public class AppointmentFrame extends JFrame {
 	public static JPanel mainPanel = new JPanel(mainLayout);
 		
 	public static JPanel centerPanel = new JPanel();
+	public static JPanel southPanel;
 	public static JPanel cards;
 	
 	public static JTextField txtId;
+	public static JTextField txtCustomer;
 	public static JComboBox<Issue> cbIssue;
 	public static JSpinner spinner;
 	public static JTextArea txtText;
+	public static JLabel errMsg = new JLabel();
 	
 	public static JPanel addIcon;
 	public static JPanel editIcon;
@@ -64,9 +80,18 @@ public class AppointmentFrame extends JFrame {
 	public static Vector<Issue> vecIssues = new Vector<Issue>();
 	
 	public AppointmentFrame(){
-//		new Get();
+
+		
 		initComponents();
 		createEvents();
+		
+		
+	}
+	public AppointmentFrame(Appointment a){
+		System.out.println("Frame mit Termin");
+		initComponents();
+		createEvents();
+				
 	}
 	
 	private void initComponents() {
@@ -104,11 +129,13 @@ public class AppointmentFrame extends JFrame {
 		mainPanel.add(eastPanel, BorderLayout.EAST);
 		
 		/* unteres Panel */
-		JPanel southPanel = new JPanel();
+		southPanel = new JPanel();
 		southPanel.setBackground(Color.WHITE);
-		southPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		southPanel.add(btnCancel);
+		southPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		southPanel.add(btnOk);
+		southPanel.add(btnCancel);
+		errMsg.setForeground(HspvColor.ORANGE);
+		southPanel.add(errMsg);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
 		/* linkes Panel (derzeit nicht ben�tigt) */
@@ -148,6 +175,7 @@ public class AppointmentFrame extends JFrame {
 				txtId.setText(String.valueOf(i.getId()));
 			}
 		});
+        cbIssue.addFocusListener(new MyFocusListener());
         addComp(gb, cbIssue, 1, 1, 1, 1);
 		
 		JLabel lblDate = new JLabel("Datum:");
@@ -165,6 +193,14 @@ public class AppointmentFrame extends JFrame {
         SpinnerModel dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
         
         spinner = new JSpinner(dateModel);
+        ((JSpinner.DefaultEditor)spinner.getEditor()).getTextField().addFocusListener(new MyFocusListener());
+        spinner.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				checkDate();
+			}
+		});
         spinner.setEditor(new JSpinner.DateEditor(spinner, "dd.MM.yyyy, HH:mm 'Uhr'"));
 		addComp(gb, spinner, 1, 2, 1, 1);
 		
@@ -181,7 +217,8 @@ public class AppointmentFrame extends JFrame {
 		
 		JLabel lblCustomer = new JLabel("Kunde:");
 		addComp(gb, lblCustomer, 0, 5, 1, 1);
-		JTextField txtCustomer = new JTextField();
+		txtCustomer = new JTextField();
+		txtCustomer.addFocusListener(new MyFocusListener());
 		addComp(gb, txtCustomer, 1, 5, 1, 1);
 		
 		JLabel lblText = new JLabel("Bemerkung:");
@@ -217,14 +254,26 @@ public class AppointmentFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				Date start = (Date) spinner.getValue();
-				Date end = null;
-				User user = null;
+				// selected issue
 				Issue issue = (Issue) cbIssue.getSelectedItem();
+				// start end
+				Date start = (Date) spinner.getValue();
+				
+				// user to do this appointment
+				User user = AppointmentApp.USERS.get(4);
+				
+				// end date
+				DashboardPanel.c.setTime(start);
+				DashboardPanel.c.add(Calendar.MINUTE, issue.getScheduledTime());
+				Date end = DashboardPanel.c.getTime();
 				
 				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
 				try {
 					AppointmentApp.APPOINTMENTS.store(a);
+					AppointmentApp.APPOINTMENTS = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
+					errMsg.setText("Termin wurde gespeichert.");
+					AppointmentApp.mainPanel.repaint();
+//					AppointmentApp.mainPanel.setVisible(true);
 				} catch (Exception e2) {
 					// TODO: handle exception
 				}
@@ -232,13 +281,76 @@ public class AppointmentFrame extends JFrame {
 		});
 		
 	}
+	
+	public static void checkDate() {
+		
+		// get current selected date
+		Date start = (Date) spinner.getValue();
+		
+		// get selected issue 
+		Issue selectedIssue = (Issue) cbIssue.getSelectedItem();
+		
+		// get end date in dependency of selected issue
+		DashboardPanel.c.setTime(start);
+		DashboardPanel.c.add(Calendar.MINUTE, selectedIssue.getScheduledTime());
+		Date end = DashboardPanel.c.getTime();
+		
+		// variables for appointments to compare, before an after selected time
+		Appointment theAppointmentBefore = null;
+		Appointment theAppointmentAfter = null;
+		
+		// get all appointments
+		ArrayList<Appointment> allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
+		Collections.sort(allAppointments);
+		for(Appointment i : allAppointments) {
+			if(i.getStart().before(start) || i.getStart().equals(start)) {
+				// if appointment is before selected date, overwrite until last appointment
+				theAppointmentBefore = i;
+			}
+			else {
+				// if appointment is after selected date
+				theAppointmentAfter = i;
+				break;
+			}
+		}
+		
+		// check appointments for conflict
+		if(theAppointmentBefore.getEnd() != null && start.compareTo(theAppointmentBefore.getEnd()) < 0) {
+			errMsg.setText("Konflikt mit vorherigem Termin");
+			btnOk.setEnabled(false);
+		}
+		else if (theAppointmentAfter != null && theAppointmentAfter.getStart() != null && end.compareTo(theAppointmentAfter.getStart()) > 0) {
+			errMsg.setText("Konflikt mit folgendem Termin");
+			btnOk.setEnabled(false);
+		}
+		else {
+			errMsg.setText("");
+			btnOk.setEnabled(true);
+		}
+		
+	}
+	
+	
 	private class MyWindowListener extends WindowAdapter {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			setVisible(false);		
-			AppointmentApp.refreshDashboard();
+//			AppointmentApp.refreshDashboard();
 			AppointmentApp.log.log(Level.INFO, "Appointment window set invisible");
 		}
+	}
+	
+	private class MyFocusListener extends FocusAdapter{
+				
+		@Override
+		public void focusLost(FocusEvent e) {
+			checkDate();
+		}
+		
+//		@Override
+//		public void focusGained(FocusEvent e) {
+//			System.out.println(e.getComponent().toString() + ": focus gained");
+//		}
 	}
 	
 	public class CreateIcon extends JPanel {

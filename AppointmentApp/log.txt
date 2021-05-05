@@ -2,135 +2,15 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-<<<<<<< HEAD
-  <date>2021-05-04T06:54:34.466061500Z</date>
-  <millis>1620111274466</millis>
-  <nanos>61500</nanos>
+  <date>2021-05-05T14:29:00.560281400Z</date>
+  <millis>1620224940560</millis>
+  <nanos>281400</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$2</class>
-  <method>mouseClicked</method>
-  <thread>20</thread>
-  <message>Appointment window set visible</message>
-</record>
-<record>
-  <date>2021-05-04T06:54:36.610495300Z</date>
-  <millis>1620111276610</millis>
-  <nanos>495300</nanos>
-  <sequence>1</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
-  <method>windowClosing</method>
-  <thread>20</thread>
-  <message>Appointment window set invisible</message>
-</record>
-<record>
-  <date>2021-05-04T06:54:38.543003200Z</date>
-  <millis>1620111278543</millis>
-  <nanos>3200</nanos>
-  <sequence>2</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$2</class>
-  <method>mouseClicked</method>
-  <thread>20</thread>
-  <message>Appointment window set visible</message>
-</record>
-<record>
-  <date>2021-05-04T06:54:40.767119200Z</date>
-  <millis>1620111280767</millis>
-  <nanos>119200</nanos>
-  <sequence>3</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
-  <method>windowClosing</method>
-  <thread>20</thread>
-  <message>Appointment window set invisible</message>
-</record>
-<record>
-  <date>2021-05-04T06:54:52.905681500Z</date>
-  <millis>1620111292905</millis>
-  <nanos>681500</nanos>
-  <sequence>4</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$2</class>
-  <method>mouseClicked</method>
-  <thread>20</thread>
-  <message>Appointment window set visible</message>
-</record>
-<record>
-  <date>2021-05-04T06:54:54.513976100Z</date>
-  <millis>1620111294513</millis>
-  <nanos>976100</nanos>
-  <sequence>5</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
-  <method>windowClosing</method>
-  <thread>20</thread>
-  <message>Appointment window set invisible</message>
-</record>
-<record>
-  <date>2021-05-04T06:55:02.312714600Z</date>
-  <millis>1620111302312</millis>
-  <nanos>714600</nanos>
-  <sequence>6</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$1</class>
-  <method>mouseClicked</method>
-  <thread>20</thread>
-  <message>Dashboard called</message>
-</record>
-<record>
-  <date>2021-05-04T06:56:35.725711400Z</date>
-  <millis>1620111395725</millis>
-  <nanos>711400</nanos>
-  <sequence>7</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$2</class>
-  <method>mouseClicked</method>
-  <thread>20</thread>
-  <message>Appointment window set visible</message>
-</record>
-<record>
-  <date>2021-05-04T06:56:37.200935Z</date>
-  <millis>1620111397200</millis>
-  <nanos>935000</nanos>
-  <sequence>8</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
-  <method>windowClosing</method>
-  <thread>20</thread>
-=======
-  <date>2021-05-04T07:46:09.590369400Z</date>
-  <millis>1620114369590</millis>
-  <nanos>369400</nanos>
-  <sequence>0</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$2</class>
-  <method>mouseClicked</method>
-  <thread>21</thread>
-  <message>Appointment window set visible</message>
-</record>
-<record>
-  <date>2021-05-04T07:46:22.000163300Z</date>
-  <millis>1620114382000</millis>
-  <nanos>163300</nanos>
-  <sequence>1</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
-  <method>windowClosing</method>
-  <thread>21</thread>
->>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
-  <message>Appointment window set invisible</message>
+  <class>de.nrw.hspv.views.DashboardPanel</class>
+  <method>&lt;init&gt;</method>
+  <thread>1</thread>
+  <message>new instance of Dashboard</message>
 </record>
 </log>
