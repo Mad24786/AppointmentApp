@@ -26,6 +26,8 @@ import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,10 +38,17 @@ public class AppointmentApp extends JFrame{
 	/*
 	 * FileDatabase for global use
 	 */
-	
 	public static FileDatabase<Appointment> APPOINTMENTS;
 	public static FileDatabase<Issue> ISSUES;
 	public static FileDatabase<User> USERS;
+	
+	/*
+	 * calendar variables
+	 */
+	public static Calendar cal = new GregorianCalendar();
+	public static int cDay = cal.get(Calendar.DATE);
+	public static int cMonth = cal.get(Calendar.MONTH);
+	public static int cYear = cal.get(Calendar.YEAR);
 
 	/*
 	 * put other windows than this here
@@ -64,13 +73,14 @@ public class AppointmentApp extends JFrame{
 	/*
 	 * border layout for main panel
 	 */
-	private static BorderLayout mainLayout = new BorderLayout();
+	public static BorderLayout mainLayout = new BorderLayout();
 	
 	/*
 	 * components of this window for use in this class 
 	 */
-	private static JPanel mainPanel = new JPanel(mainLayout);
+	public static JPanel mainPanel = new JPanel(mainLayout);
 	private static JPanel centerPanel;
+	public static JPanel eastPanel;
 	private static JLabel lblNorth = new JLabel(); 
 	
 	// navigation panels
@@ -87,7 +97,7 @@ public class AppointmentApp extends JFrame{
 	 */
 	AppointmentApp(){	
 		super("AppointmentApp v0.1");
-		/* instance of database */
+		/* load database */
 		try {
 			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
 			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
@@ -170,6 +180,14 @@ public class AppointmentApp extends JFrame{
 		centerPanel = new DashboardPanel();
 		// add center panel to main panel
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		
+		/*
+		 * east panel with today appointments
+		 */
+		eastPanel = new DashboardPanel.AppointmentsByDate(cDay);
+		// TODO add scroll pane
+		// add center panel to main panel
+		mainPanel.add(eastPanel, BorderLayout.EAST);
 		
 		/*
 		 * south panel is never used so long, but there could be cool things :)
@@ -256,6 +274,15 @@ public class AppointmentApp extends JFrame{
 			}
 		});
 		
+	}
+	
+	public static void refreshDashboard() {
+		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+		centerPanel = new DashboardPanel();
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		mainPanel.validate();
+		mainPanel.repaint();
+		log.log(Level.INFO, "Dashboard refreshed");
 	}
 	
 	/**

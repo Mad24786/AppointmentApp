@@ -236,6 +236,7 @@ public class AppointmentFrame extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			setVisible(false);		
+			AppointmentApp.refreshDashboard();
 			AppointmentApp.log.log(Level.INFO, "Appointment window set invisible");
 		}
 	}
