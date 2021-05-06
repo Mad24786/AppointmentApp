@@ -1,7 +1,6 @@
 package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -10,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.desktop.ScreenSleepEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -40,7 +38,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
 import javax.swing.event.ListSelectionEvent;
@@ -139,7 +136,9 @@ public class AppointmentPanel extends JPanel {
 		
 		list = new JList<Appointment>(listModel);
 		JScrollPane scrPane = new JScrollPane(list);
-		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrPane.setPreferredSize(new Dimension(548,300));
+		scrPane.setBorder(BorderFactory.createEmptyBorder());
 		list.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -187,7 +186,7 @@ public class AppointmentPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				Appointment a = list.getSelectedValue();	
 				if(a != null) {
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin {" + a.getId() + "} löschen?") == 0) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?") == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");

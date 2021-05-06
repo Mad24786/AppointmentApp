@@ -14,8 +14,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import de.nrw.hspv.exception.DatabaseException;
+import de.nrw.hspv.views.AppointmentApp;
 
 public class FileDatabase<Object> implements Serializable {
 	
@@ -77,7 +79,7 @@ public class FileDatabase<Object> implements Serializable {
 		
 		storageMap.put(key, o);
 		save();
-		System.err.println(Tools.getCurrentDateAndTime() + ": Objekt (ID: " + key + ") gespeichert.");
+		AppointmentApp.log.log(Level.INFO, o.toString() + " #" + key + " saved.");
 	}
 
 	public Object get(int key) {
@@ -113,10 +115,10 @@ public class FileDatabase<Object> implements Serializable {
 	public void remove(int key) throws IOException {
 		if(get(key) == null)
 			throw new IOException("key does not exist");
-		
+		Object o = get(key);
 		storageMap.remove(key);
 		save();
-		System.err.println(Tools.getCurrentDateAndTime() + ": Objekt (ID: " + key + ") entfernt.");
+		AppointmentApp.log.log(Level.INFO, o.toString() + " #" + key + " deleted.");
 	}
 
 	public boolean hasKey(int key) {

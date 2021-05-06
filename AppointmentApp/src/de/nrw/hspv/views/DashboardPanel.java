@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -24,12 +26,15 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
@@ -52,6 +57,7 @@ public class DashboardPanel extends JPanel {
 	 * Components
 	 */
 	public static JPanel mainPanel = new JPanel();
+	public static JPanel centerPanel;
 	public static JPanel eastPanel;
 	public static JPanel cards;
 	
@@ -74,6 +80,11 @@ public class DashboardPanel extends JPanel {
 	 */
 	public static ArrayList<Appointment> allAppointments;		
 	
+	/*
+	 * settings
+	 */
+	public static boolean showUserAppointments = false;
+	
 	public DashboardPanel() {
 		allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 		AppointmentApp.log.log(Level.INFO, "new instance of Dashboard");
@@ -95,7 +106,7 @@ public class DashboardPanel extends JPanel {
 		northPanel.add(lblDate);
 		mainPanel.add(northPanel, BorderLayout.NORTH);
 		
-		JPanel centerPanel = new JPanel();		
+		centerPanel = new JPanel();		
 		centerPanel.setLayout(new GridLayout(0, 7, 5, 5));
 		centerPanel.setBackground(Color.WHITE);
 		
@@ -104,6 +115,70 @@ public class DashboardPanel extends JPanel {
 		}
 		
 		/** TEST BEGINN **/
+		buildDashboardCalendar();
+//		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
+//		int days =gCal.getActualMaximum(Calendar.DATE);
+//		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);
+//
+//		gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
+//		int totalweeks = gCal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+//		
+//		/* Build dashboard calendar */
+//		if ((startInWeek == 7 && days > 29) || (startInWeek == 6 && days > 30)) {
+//			totalweeks +=1;
+//		}
+//		
+//		int count = 1; // count the days
+//		for (int i = 1; i <= totalweeks; i++) {
+//			for(int j = 1; j <= 7; j++) {
+//				JPanel panel;
+//				if (count < startInWeek || (count - startInWeek + 1) > days) {
+//					// no day here
+//					panel = new CalendarPanel(0, Color.WHITE);
+//					centerPanel.add(panel);
+//				}
+//				else {
+//					if(cDay == (count - startInWeek + 1) && cMonth == selectedMonth && cYear == selectedYear) {
+//						// marks the current day
+//						panel = new CalendarPanel((count - startInWeek + 1), HspvColor.ORANGE);
+//						centerPanel.add(panel);
+//					}
+//					else {
+//						// every other day
+//						panel = new CalendarPanel((count - startInWeek + 1), HspvColor.SEC_BROWN);
+//						centerPanel.add(panel);
+//					}
+//					panel.addMouseListener(new MyMouseListener());
+//				}
+//				count++;
+//			}
+//			
+//		}
+		
+		/** TEST ENDE **/
+
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		
+		//Create the panel that contains the "cards".
+//        cards = new JPanel(new CardLayout());
+//        JPanel defaultCard = new AppointmentsByDate(cDay);
+//        
+//        
+//        cards.add(defaultCard, Integer.toString(cDay));
+//        for (int i = 1; i <= days; i++) {
+//        	if (i != cDay) {
+//        		JPanel anotherCard = new AppointmentsByDate(i);
+//            	cards.add(anotherCard, Integer.toString(i));
+//        	}
+//        }
+//        
+//		mainPanel.add(cards, BorderLayout.EAST);
+			
+		add(mainPanel);
+		
+	}
+	
+	public static void buildDashboardCalendar() {
 		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
 		int days =gCal.getActualMaximum(Calendar.DATE);
 		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);
@@ -142,28 +217,6 @@ public class DashboardPanel extends JPanel {
 			}
 			
 		}
-		
-		/** TEST ENDE **/
-
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		
-		//Create the panel that contains the "cards".
-//        cards = new JPanel(new CardLayout());
-//        JPanel defaultCard = new AppointmentsByDate(cDay);
-//        
-//        
-//        cards.add(defaultCard, Integer.toString(cDay));
-//        for (int i = 1; i <= days; i++) {
-//        	if (i != cDay) {
-//        		JPanel anotherCard = new AppointmentsByDate(i);
-//            	cards.add(anotherCard, Integer.toString(i));
-//        	}
-//        }
-//        
-//		mainPanel.add(cards, BorderLayout.EAST);
-			
-		add(mainPanel);
-		
 	}
 	
 	public void createEvents() {
@@ -174,13 +227,35 @@ public class DashboardPanel extends JPanel {
 	
 	public static class AppointmentsByDate extends JPanel {
 				
-		public AppointmentsByDate(int d) {
+		public AppointmentsByDate(int d, boolean singleUserAppointments) {
 			setLayout(new FlowLayout());
 			setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
 			setBackground(Color.WHITE);
 			setPreferredSize(new Dimension(250, 10));
 			setName(Integer.toString(d));
 			lblEast = new JLabel("Termine " + d + ". " + monthToString(cMonth) + " " + cYear);
+			
+			JCheckBox chbAppointments = new JCheckBox("nur meine Termine anzeigen");
+			chbAppointments.setSelected(showUserAppointments);
+			chbAppointments.setBackground(Color.WHITE);
+			chbAppointments.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if(chbAppointments.isSelected()) {
+						showUserAppointments = true;
+						AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.EAST));
+						AppointmentApp.mainPanel.add(new AppointmentsByDate(AppointmentApp.sDay, showUserAppointments), BorderLayout.EAST);
+						AppointmentApp.mainPanel.validate();
+					}
+					else {
+						showUserAppointments = false;
+						AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.EAST));
+						AppointmentApp.mainPanel.add(new AppointmentsByDate(AppointmentApp.sDay, showUserAppointments), BorderLayout.EAST);
+						AppointmentApp.mainPanel.validate();
+					}
+						
+				}
+			});
 			add(lblEast);
 			
 			/* set time to given day 0:00 */
@@ -197,21 +272,41 @@ public class DashboardPanel extends JPanel {
 			Collections.sort(allAppointments);
 			for(Appointment i : allAppointments) {
 				
-				if(i.getStart().after(today) && i.getStart().before(tomorrow)) {
-					/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
-					JPanel lblTestEast = new SmallAppointmentPanel(i);
-					lblTestEast.addMouseListener(new MouseAdapter() {
-						
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							new AppointmentFrame(i);
-						}
-						
-					});
-					add(lblTestEast);
+				if (singleUserAppointments) {
+					if(i.getStart().after(today) && i.getStart().before(tomorrow) && AppointmentApp.user.getId() == i.getEmployee().getId()) {
+						/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
+						JPanel lblTestEast = new SmallAppointmentPanel(i);
+						lblTestEast.addMouseListener(new MouseAdapter() {
+							
+							@Override
+							public void mouseClicked(MouseEvent e) {
+								new AppointmentFrame(i);
+							}
+							
+						});
+						add(lblTestEast);
+					}
 				}
+				else {
+					if(i.getStart().after(today) && i.getStart().before(tomorrow)) {
+						/* if appointment is after today 0:00 and tomorrow 0:00 put it out */
+						JPanel lblTestEast = new SmallAppointmentPanel(i);
+						lblTestEast.addMouseListener(new MouseAdapter() {
+							
+							@Override
+							public void mouseClicked(MouseEvent e) {
+								new AppointmentFrame(i);
+							}
+							
+						});
+						add(lblTestEast);
+					}
+				}
+				
+				
 					
 			}
+			add(chbAppointments);
 		
 		}
 		
@@ -221,7 +316,7 @@ public class DashboardPanel extends JPanel {
 
 			public SmallAppointmentPanel(Appointment a) {
 				this.a = a;
-				setPreferredSize(new Dimension(200, 25));
+				setPreferredSize(new Dimension(200, 30));
 				setBackground(HspvColor.SEC_BROWN);
 			}
 			
@@ -235,7 +330,8 @@ public class DashboardPanel extends JPanel {
 				}
 				
 				g.setFont(new Font("Arial", Font.PLAIN, 10));
-				g.drawString(sdfTime.format(a.getStart()) + " - " + end + ": " + a.getIssue().getName(), 5, 15);					
+				g.drawString(sdfTime.format(a.getStart()) + " - " + end + ": " + a.getIssue().getName(), 5, 12);					
+				g.drawString(a.getEmployee().getLastName() + ", " + a.getEmployee().getFirstName(), 5, 26);					
 	
 			}
 
@@ -286,16 +382,17 @@ public class DashboardPanel extends JPanel {
 		}
 	}
 	
-	public class MyMouseListener extends MouseAdapter{
+	public static class MyMouseListener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {		
 			AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.EAST));
-			AppointmentApp.mainPanel.add(new AppointmentsByDate(((CalendarPanel) e.getComponent()).getDay()), BorderLayout.EAST);
+			AppointmentApp.sDay = ((CalendarPanel) e.getComponent()).getDay();
+			AppointmentApp.mainPanel.add(new AppointmentsByDate(AppointmentApp.sDay, showUserAppointments), BorderLayout.EAST);
 			AppointmentApp.mainPanel.validate();
 		}
 	}
 	
-	public class CalendarPanel extends JPanel {
+	public static class CalendarPanel extends JPanel {
 
 		int day;
 		
@@ -324,18 +421,6 @@ public class DashboardPanel extends JPanel {
 			}
 			
 		}
-		
-//		@Override
-//		public void paintComponent(Graphics g) {
-//			super.paintComponent(g);
-//			if(day != 0) {
-//				g.setFont(new Font("Arial", Font.PLAIN, 10));
-//				g.drawString(Integer.toString(AppointmentsByDate.getCount(day)) + " Termine", 5, 60);
-//				g.setFont(new Font("Arial", Font.BOLD, 15));
-//				g.drawString(String.valueOf(day), 5, 20);
-//				
-//			}
-//		}
 
 		public int getDay() {
 			return day;

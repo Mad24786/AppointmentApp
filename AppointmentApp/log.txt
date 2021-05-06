@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-05T14:29:00.560281400Z</date>
-  <millis>1620224940560</millis>
-  <nanos>281400</nanos>
+  <date>2021-05-06T11:18:11.648370100Z</date>
+  <millis>1620299891648</millis>
+  <nanos>370100</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -12,5 +12,29 @@
   <method>&lt;init&gt;</method>
   <thread>1</thread>
   <message>new instance of Dashboard</message>
+</record>
+<record>
+  <date>2021-05-06T11:19:52.851695700Z</date>
+  <millis>1620299992851</millis>
+  <nanos>695700</nanos>
+  <sequence>1</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.views.DashboardPanel</class>
+  <method>&lt;init&gt;</method>
+  <thread>21</thread>
+  <message>new instance of Dashboard</message>
+</record>
+<record>
+  <date>2021-05-06T11:19:52.856682900Z</date>
+  <millis>1620299992856</millis>
+  <nanos>682900</nanos>
+  <sequence>2</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.views.AppointmentApp$1</class>
+  <method>mouseClicked</method>
+  <thread>21</thread>
+  <message>Dashboard called</message>
 </record>
 </log>

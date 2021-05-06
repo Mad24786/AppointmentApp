@@ -57,7 +57,7 @@ public class User implements Serializable {
 	
 	@Override
 	public String toString() {
-		return String.format("%s, %s", getLastName(), getFirstName());
+		return String.format("%s, %s (%d)", getLastName(), getFirstName(), getId());
 	}
 
 	// Getter und Setter

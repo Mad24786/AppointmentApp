@@ -58,7 +58,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 	}
 	@Override
 	public String toString() {
-		return String.format("%s", DashboardPanel.sdfDate.format(getStart()) + " " + DashboardPanel.sdfTime.format(getStart()) + " - " + end + ": " + getIssue().getName());
+		return String.format("%s", DashboardPanel.sdfDate.format(getStart()) + ", " + DashboardPanel.sdfTime.format(getStart()) + " - " + DashboardPanel.sdfTime.format(getEnd()) + ": " + getIssue().getName());
 	}
 	
 	public int getId() { return id;	}

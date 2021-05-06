@@ -38,6 +38,11 @@ import java.util.logging.Logger;
 public class AppointmentApp extends JFrame{
 	
 	/*
+	 * user
+	 */
+	public static User user;
+	
+	/*
 	 * FileDatabase for global use
 	 */
 	public static FileDatabase<Appointment> APPOINTMENTS;
@@ -48,7 +53,8 @@ public class AppointmentApp extends JFrame{
 	 * calendar variables
 	 */
 	public static Calendar cal = new GregorianCalendar();
-	public static int cDay = cal.get(Calendar.DATE);
+	public static int sDay;
+	public static int cDay = sDay = cal.get(Calendar.DATE);
 	public static int cMonth = cal.get(Calendar.MONTH);
 	public static int cYear = cal.get(Calendar.YEAR);
 
@@ -97,8 +103,9 @@ public class AppointmentApp extends JFrame{
 	/**
 	 * getting started with AppointmentApp
 	 */
-	AppointmentApp(){	
+	AppointmentApp(int userId){	
 		super("AppointmentApp v0.1");
+		
 		/* load database */
 		try {
 			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
@@ -107,6 +114,11 @@ public class AppointmentApp extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		/*
+		 * set user
+		 */
+		AppointmentApp.user = AppointmentApp.USERS.get(userId);
 		
 		/*
 		 * initialize components of this frame
@@ -186,7 +198,7 @@ public class AppointmentApp extends JFrame{
 		/*
 		 * east panel with today appointments
 		 */
-		eastPanel = new DashboardPanel.AppointmentsByDate(cDay);
+		eastPanel = new DashboardPanel.AppointmentsByDate(cDay, false);
 		// TODO add scroll pane
   		//JScrollPane scrPane = new JScrollPane(eastPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		// add center panel to main panel
@@ -196,9 +208,11 @@ public class AppointmentApp extends JFrame{
 		 * south panel is never used so long, but there could be cool things :)
 		 */
 		JPanel southPanel = new JPanel();
-		southPanel.setLayout(new FlowLayout(SwingConstants.RIGHT));
+		southPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		southPanel.setBackground(Color.WHITE);
 		southPanel.setPreferredSize(new Dimension(0,50));
+		JLabel lblUser = new JLabel("Benutzer: " + user.getLastName() + ", " + user.getFirstName());
+		southPanel.add(lblUser);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
 		/*
@@ -258,7 +272,7 @@ public class AppointmentApp extends JFrame{
 				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
 				centerPanel = new IssuePanel();
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
-// 				iconIssue.setBackground(Color.RED);
+
 			}
 		});
 		iconUser.addMouseListener(new MouseAdapter() {
@@ -352,7 +366,7 @@ public class AppointmentApp extends JFrame{
 			e.printStackTrace();
 		}
 		
-		new AppointmentApp();
+		new AppointmentApp(4);
 	}
 
 }

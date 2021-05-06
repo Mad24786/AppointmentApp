@@ -66,6 +66,7 @@ public class AppointmentFrame extends JFrame {
 	public static JTextField txtId;
 	public static JTextField txtCustomer;
 	public static JComboBox<Issue> cbIssue;
+	public static JComboBox<User> cbUser;
 	public static JSpinner spinner;
 	public static JTextArea txtText;
 	public static JLabel errMsg = new JLabel();
@@ -78,6 +79,7 @@ public class AppointmentFrame extends JFrame {
 	public static JButton btnCancel = new JButton("Abbrechen");
 	
 	public static Vector<Issue> vecIssues = new Vector<Issue>();
+	public static Vector<User> vecUsers = new Vector<User>();
 	
 	public AppointmentFrame(){
 
@@ -158,7 +160,6 @@ public class AppointmentFrame extends JFrame {
 		JLabel lblIssue = new JLabel("Anliegen:");
 		addComp(gb, lblIssue, 0, 1, 1, 1);
 		
-		@SuppressWarnings("static-access")
 		ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
 		
 		for(Issue i : allIssues) {
@@ -212,8 +213,25 @@ public class AppointmentFrame extends JFrame {
 		
 		JLabel lblEmployee = new JLabel("Mitarbeiter:");
 		addComp(gb, lblEmployee, 0, 4, 1, 1);
-		JTextField txtEmployee = new JTextField();
-		addComp(gb, txtEmployee, 1, 4, 1, 1);
+//		JTextField txtEmployee = new JTextField();
+		
+		ArrayList<User> allUsers = AppointmentApp.USERS.getAllAsArrayList();
+		
+		for(User u : allUsers) {
+			vecUsers.add(u);
+		}
+		
+		
+		cbUser = new JComboBox<User>(vecUsers);
+		cbUser.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				checkDate();
+			}
+		});
+        cbUser.addFocusListener(new MyFocusListener());
+        addComp(gb, cbUser, 1, 4, 1, 1);
+//		addComp(gb, txtEmployee, 1, 4, 1, 1);
 		
 		JLabel lblCustomer = new JLabel("Kunde:");
 		addComp(gb, lblCustomer, 0, 5, 1, 1);
@@ -260,7 +278,7 @@ public class AppointmentFrame extends JFrame {
 				Date start = (Date) spinner.getValue();
 				
 				// user to do this appointment
-				User user = AppointmentApp.USERS.get(4);
+				User user = (User) cbUser.getSelectedItem();
 				
 				// end date
 				DashboardPanel.c.setTime(start);
@@ -272,7 +290,11 @@ public class AppointmentFrame extends JFrame {
 					AppointmentApp.APPOINTMENTS.store(a);
 					AppointmentApp.APPOINTMENTS = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
 					errMsg.setText("Termin wurde gespeichert.");
+					AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.CENTER));
+					DashboardPanel.buildDashboardCalendar();
+					DashboardPanel.centerPanel.repaint();
 					AppointmentApp.mainPanel.repaint();
+					AppointmentApp.mainPanel.validate();
 //					AppointmentApp.mainPanel.setVisible(true);
 				} catch (Exception e2) {
 					// TODO: handle exception
@@ -289,6 +311,9 @@ public class AppointmentFrame extends JFrame {
 		
 		// get selected issue 
 		Issue selectedIssue = (Issue) cbIssue.getSelectedItem();
+		
+		// get selected user
+		User user = (User) cbUser.getSelectedItem();
 		
 		// get end date in dependency of selected issue
 		DashboardPanel.c.setTime(start);
@@ -314,19 +339,17 @@ public class AppointmentFrame extends JFrame {
 			}
 		}
 		
+		String strErrMsg = "";
 		// check appointments for conflict
-		if(theAppointmentBefore.getEnd() != null && start.compareTo(theAppointmentBefore.getEnd()) < 0) {
-			errMsg.setText("Konflikt mit vorherigem Termin");
+		if((theAppointmentBefore != null && start.compareTo(theAppointmentBefore.getEnd()) < 0 && user.getId() == theAppointmentBefore.getEmployee().getId()) ||
+				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId())) {
+			strErrMsg = "Terminkonflikt";
 			btnOk.setEnabled(false);
 		}
-		else if (theAppointmentAfter != null && theAppointmentAfter.getStart() != null && end.compareTo(theAppointmentAfter.getStart()) > 0) {
-			errMsg.setText("Konflikt mit folgendem Termin");
-			btnOk.setEnabled(false);
-		}
-		else {
-			errMsg.setText("");
+		else {			
 			btnOk.setEnabled(true);
 		}
+		errMsg.setText(strErrMsg);
 		
 	}
 	
