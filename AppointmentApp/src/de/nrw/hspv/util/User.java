@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import de.nrw.hspv.views.AppointmentApp;
+import de.nrw.hspv.views.DashboardPanel;
 
 public class User implements Serializable {
 
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = -4763035350427944677L;
 
 	// Ale Datenbanken laden, und benötigte Datenbank holen
 
@@ -51,6 +53,11 @@ public class User implements Serializable {
 		this.canReadUsers = canReadUsers;
 		this.canWriteUsers = canWriteUsers;
 		this.username = "username"+getId();
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s, %s", getLastName(), getFirstName());
 	}
 
 	// Getter und Setter
