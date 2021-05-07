@@ -128,7 +128,9 @@ public class LogInPanel implements ActionListener, KeyListener{
 					}else {
 						User user = (User) AppointmentApp.USERS.get(id);
 						PASSWORDString = user.getPassword();
+						
 						return true;
+						
 					}
 				}});
 		passwordField = new JPasswordField();
