@@ -1,7 +1,6 @@
 package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -16,24 +15,34 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
@@ -47,11 +56,14 @@ public class AppointmentPanel extends JPanel {
 		
 	public static JPanel centerPanel;
 	public static JPanel cards;
+	public static JLabel errMsg = new JLabel();
 	
 	public static JTextField txtId;
 	public static JComboBox<Issue> cbIssue;
 	public static JSpinner spinner;
 	public static JTextArea txtText;
+	
+	public static JList<Appointment> list; 
 	
 	public static JPanel addIcon;
 	public static JPanel editIcon;
@@ -87,22 +99,26 @@ public class AppointmentPanel extends JPanel {
 		northPanel.add(addIcon);
 		editIcon = new CreateIcon("edit", false);
 		northPanel.add(editIcon);
-		deleteIcon = new CreateIcon("delete", false);
+		deleteIcon = new CreateIcon("delete", true);
 		northPanel.add(deleteIcon);
-		//add(northPanel, BorderLayout.NORTH);
+		
+		/* label for error message */
+		errMsg.setForeground(HspvColor.ORANGE);
+		northPanel.add(errMsg);
+		add(northPanel, BorderLayout.NORTH);
 		
 		/* rechtes Panel */
-		JPanel eastPanel = new JPanel();
-		eastPanel.setBackground(Color.WHITE);
-		add(eastPanel, BorderLayout.EAST);
+//		JPanel eastPanel = new JPanel();
+//		eastPanel.setBackground(Color.WHITE);
+//		add(eastPanel, BorderLayout.EAST);
 		
 		/* unteres Panel */
-		JPanel southPanel = new JPanel();
-		southPanel.setBackground(Color.WHITE);
-		southPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		southPanel.add(btnCancel);
-		southPanel.add(btnOk);
-		add(southPanel, BorderLayout.SOUTH);
+//		JPanel southPanel = new JPanel();
+//		southPanel.setBackground(Color.WHITE);
+//		southPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+//		southPanel.add(btnCancel);
+//		southPanel.add(btnOk);
+//		add(southPanel, BorderLayout.SOUTH);
 		
 		/* linkes Panel (derzeit nicht benï¿½tigt) */
 //		JPanel westPanel = new JPanel();
@@ -110,7 +126,28 @@ public class AppointmentPanel extends JPanel {
 //		add(westPanel, BorderLayout.WEST);
 		
 		/* mittleres Panel */        
-		centerPanel = new CreateCenterAdd();
+		centerPanel = new JPanel();
+		centerPanel.setBackground(Color.WHITE);
+		DefaultListModel<Appointment> listModel = new DefaultListModel<Appointment>();
+		Collections.sort(DashboardPanel.allAppointments);
+		for (Appointment e : DashboardPanel.allAppointments) {
+			listModel.addElement(e);
+		}
+		
+		list = new JList<Appointment>(listModel);
+		JScrollPane scrPane = new JScrollPane(list);
+		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrPane.setPreferredSize(new Dimension(548,300));
+		scrPane.setBorder(BorderFactory.createEmptyBorder());
+		list.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Appointment a = list.getSelectedValue();
+				System.out.println(a.getId());				
+			}
+		});
+		centerPanel.add(scrPane);
 		add(centerPanel, BorderLayout.CENTER);
 		
 //		add(mainPanel);
@@ -118,6 +155,16 @@ public class AppointmentPanel extends JPanel {
 	}
 	
 	public static void createEvents() {
+		
+		addIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				AppointmentApp.appFrame.setVisible(true);
+				AppointmentFrame.checkDate();
+				AppointmentApp.log.log(Level.INFO, "Appointment window set visible");
+			}
+			
+		});
 		
 		editIcon.addMouseListener(new MouseAdapter() {
 			@Override
@@ -132,6 +179,27 @@ public class AppointmentPanel extends JPanel {
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
 			}
 			
+		});
+		
+		deleteIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Appointment a = list.getSelectedValue();	
+				if(a != null) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?") == 0) {
+						try {
+							AppointmentApp.APPOINTMENTS.remove(a.getId());
+							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				else {
+					errMsg.setText("Bitte wählen Sie den zu löschenden Termin aus.");
+				}
+			}
 		});
 		
 		btnOk.addActionListener(new ActionListener() {

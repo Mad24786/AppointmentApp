@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -26,6 +28,8 @@ import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,12 +38,25 @@ import java.util.logging.Logger;
 public class AppointmentApp extends JFrame{
 	
 	/*
+	 * user
+	 */
+	public static User user;
+	
+	/*
 	 * FileDatabase for global use
 	 */
-	
 	public static FileDatabase<Appointment> APPOINTMENTS;
 	public static FileDatabase<Issue> ISSUES;
 	public static FileDatabase<User> USERS;
+	
+	/*
+	 * calendar variables
+	 */
+	public static Calendar cal = new GregorianCalendar();
+	public static int sDay;
+	public static int cDay = sDay = cal.get(Calendar.DATE);
+	public static int cMonth = cal.get(Calendar.MONTH);
+	public static int cYear = cal.get(Calendar.YEAR);
 
 	/*
 	 * put other windows than this here
@@ -64,13 +81,14 @@ public class AppointmentApp extends JFrame{
 	/*
 	 * border layout for main panel
 	 */
-	private static BorderLayout mainLayout = new BorderLayout();
+	public static BorderLayout mainLayout = new BorderLayout();
 	
 	/*
 	 * components of this window for use in this class 
 	 */
-	private static JPanel mainPanel = new JPanel(mainLayout);
+	public static JPanel mainPanel = new JPanel(mainLayout);
 	private static JPanel centerPanel;
+	public static JPanel eastPanel;
 	private static JLabel lblNorth = new JLabel(); 
 	
 	// navigation panels
@@ -85,9 +103,10 @@ public class AppointmentApp extends JFrame{
 	/**
 	 * getting started with AppointmentApp
 	 */
-	AppointmentApp(){	
+	AppointmentApp(int userId){	
 		super("AppointmentApp v0.1");
-		/* instance of database */
+		
+		/* load database */
 		try {
 			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
 			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
@@ -95,6 +114,11 @@ public class AppointmentApp extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		/*
+		 * set user
+		 */
+		AppointmentApp.user = AppointmentApp.USERS.get(userId);
 		
 		/*
 		 * initialize components of this frame
@@ -172,14 +196,25 @@ public class AppointmentApp extends JFrame{
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
 		/*
+		 * east panel with today appointments
+		 */
+		eastPanel = new DashboardPanel.AppointmentsByDate(cDay, false);
+		// TODO add scroll pane
+  		//JScrollPane scrPane = new JScrollPane(eastPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		// add center panel to main panel
+		mainPanel.add(eastPanel, BorderLayout.EAST);
+		
+		/*
 		 * south panel is never used so long, but there could be cool things :)
 		 */
 		JPanel southPanel = new JPanel();
-		southPanel.setLayout(new FlowLayout(SwingConstants.RIGHT));
+		southPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		southPanel.setBackground(Color.WHITE);
-		southPanel.setPreferredSize(new Dimension(0,50));
+		JLabel lblUser = new JLabel("Benutzer: " + user.getLastName() + ", " + user.getFirstName());
+		southPanel.add(lblUser);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
+//		validate();
 		/*
 		 * finally add main panel to this frame, pack and make it visible
 		 */
@@ -204,16 +239,24 @@ public class AppointmentApp extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				/* 3. Das aktuelle Panel aus dem Center löschen 
 				 * mainLayout.getLayoutComponent(BorderLayout.CENTER) -> zieht sich immer die aktuelle Komponente */
+				
+				System.out.println(centerPanel.toString());
 				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+//				mainPanel.invalidate();
 				/* 4. Das obere Panel mit dem ausgewählten Bereich aktualiesiren und das passende Icon wählen */
 				lblNorth.setText("Dashboard");
 				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
 				/* 5. Neues Panel-Objekt erzeugen und der Variable centerPanel zuweisen
 				 * new DashboardPanel(); -> dort steht dann der Name der Klasse, z. B. UserPanel() */
-				centerPanel = new DashboardPanel();
-				/* 6. CenterPanel im Center des mainPanel hinzufügen */
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
+				System.out.println(centerPanel.toString());
+//				centerPanel = new DashboardPanel();
 				
+				
+				System.out.println(centerPanel.toString());
+				/* 6. CenterPanel im Center des mainPanel hinzufügen */
+				mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
+				mainPanel.validate();
+				validate();
 				log.log(Level.INFO, "Dashboard called");
 			}
 		});
@@ -221,8 +264,12 @@ public class AppointmentApp extends JFrame{
 		iconAppointment.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				appFrame.setVisible(true);
-				log.log(Level.INFO, "Appointment window set visible");
+				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+				lblNorth.setText("Terminverwaltung");
+				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
+				mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);	
+				mainPanel.validate();
+				validate();
 			}
 		});
 				
@@ -234,7 +281,7 @@ public class AppointmentApp extends JFrame{
 				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
 				centerPanel = new IssuePanel();
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
-// 				iconIssue.setBackground(Color.RED);
+
 			}
 		});
 		iconUser.addMouseListener(new MouseAdapter() {
@@ -258,6 +305,16 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
+	// TODO doesnt work until now
+	public static void refreshDashboard() {
+		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+		centerPanel = new DashboardPanel();
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		mainPanel.validate();
+		mainPanel.repaint();
+		log.log(Level.INFO, "Dashboard refreshed");
+	}
+	
 	/**
 	 *  Inner class IconPanel can create icons for main navigation easily.
 	 *  
@@ -269,8 +326,8 @@ public class AppointmentApp extends JFrame{
 		private String s; 
 			
 		/**
-		 * The constructor does all the work by getting a String and a boolean value
-		 * to manage access of different users
+		 * The constructor does all the work by getting a String for the icon 
+		 * and a boolean value to manage access of different users.
 		 * 
 		 * @param s			The String for getting the correct icon. 
 		 * @param access	A boolean value from user class to make sure a user
@@ -293,7 +350,7 @@ public class AppointmentApp extends JFrame{
 		
 		/*
 		 * draws the icon on this panel by reading the given string
-		 * make sure that the image file exists!
+		 * make sure the image file exists!
 		 */
 		@Override
 		public void paintComponent(Graphics g) {
@@ -318,7 +375,7 @@ public class AppointmentApp extends JFrame{
 			e.printStackTrace();
 		}
 		
-		new AppointmentApp();
+		new AppointmentApp(4);
 	}
 
 }
