@@ -14,6 +14,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +39,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.nrw.hspv.util.Appointment;
+import de.nrw.hspv.util.FileDatabase;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 
@@ -93,7 +96,7 @@ public class DashboardPanel extends JPanel {
 	}
 	
 	public void initComponents(){	
-		setLayout(layout);
+//		setLayout(layout);
 		
 		/** */
 		mainPanel.setLayout(new BorderLayout(0,0));
@@ -179,6 +182,12 @@ public class DashboardPanel extends JPanel {
 	}
 	
 	public static void buildDashboardCalendar() {
+		try {
+			AppointmentApp.APPOINTMENTS = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
 		int days =gCal.getActualMaximum(Calendar.DATE);
 		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);

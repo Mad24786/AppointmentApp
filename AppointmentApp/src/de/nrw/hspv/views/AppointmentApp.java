@@ -210,11 +210,11 @@ public class AppointmentApp extends JFrame{
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		southPanel.setBackground(Color.WHITE);
-		southPanel.setPreferredSize(new Dimension(0,50));
 		JLabel lblUser = new JLabel("Benutzer: " + user.getLastName() + ", " + user.getFirstName());
 		southPanel.add(lblUser);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
+//		validate();
 		/*
 		 * finally add main panel to this frame, pack and make it visible
 		 */
@@ -239,16 +239,24 @@ public class AppointmentApp extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				/* 3. Das aktuelle Panel aus dem Center löschen 
 				 * mainLayout.getLayoutComponent(BorderLayout.CENTER) -> zieht sich immer die aktuelle Komponente */
+				
+				System.out.println(centerPanel.toString());
 				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+//				mainPanel.invalidate();
 				/* 4. Das obere Panel mit dem ausgewählten Bereich aktualiesiren und das passende Icon wählen */
 				lblNorth.setText("Dashboard");
 				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
 				/* 5. Neues Panel-Objekt erzeugen und der Variable centerPanel zuweisen
 				 * new DashboardPanel(); -> dort steht dann der Name der Klasse, z. B. UserPanel() */
-				centerPanel = new DashboardPanel();
-				/* 6. CenterPanel im Center des mainPanel hinzufügen */
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
+				System.out.println(centerPanel.toString());
+//				centerPanel = new DashboardPanel();
 				
+				
+				System.out.println(centerPanel.toString());
+				/* 6. CenterPanel im Center des mainPanel hinzufügen */
+				mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
+				mainPanel.validate();
+				validate();
 				log.log(Level.INFO, "Dashboard called");
 			}
 		});
@@ -259,8 +267,9 @@ public class AppointmentApp extends JFrame{
 				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
 				lblNorth.setText("Terminverwaltung");
 				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
-				centerPanel = new AppointmentPanel();
-				mainPanel.add(centerPanel, BorderLayout.CENTER);				
+				mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);	
+				mainPanel.validate();
+				validate();
 			}
 		});
 				

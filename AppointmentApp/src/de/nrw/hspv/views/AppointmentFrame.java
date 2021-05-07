@@ -288,9 +288,9 @@ public class AppointmentFrame extends JFrame {
 				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
 				try {
 					AppointmentApp.APPOINTMENTS.store(a);
-					AppointmentApp.APPOINTMENTS = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
+					
 					errMsg.setText("Termin wurde gespeichert.");
-					AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.CENTER));
+//					AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.CENTER));
 					DashboardPanel.buildDashboardCalendar();
 					DashboardPanel.centerPanel.repaint();
 					AppointmentApp.mainPanel.repaint();
