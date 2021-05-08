@@ -64,6 +64,7 @@ public class AppointmentPanel extends JPanel {
 	public static JTextArea txtText;
 	
 	public static JList<Appointment> list; 
+	public static DefaultListModel<Appointment> listModel;
 	
 	public static JPanel addIcon;
 	public static JPanel editIcon;
@@ -128,23 +129,23 @@ public class AppointmentPanel extends JPanel {
 		/* mittleres Panel */        
 		centerPanel = new JPanel();
 		centerPanel.setBackground(Color.WHITE);
-		DefaultListModel<Appointment> listModel = new DefaultListModel<Appointment>();
-		Collections.sort(DashboardPanel.allAppointments);
-		for (Appointment e : DashboardPanel.allAppointments) {
-			listModel.addElement(e);
-		}
+		listModel = new DefaultListModel<Appointment>();
+//		Collections.sort(DashboardPanel.allAppointments);
+//		for (Appointment e : DashboardPanel.allAppointments) {
+//			listModel.addElement(e);
+//		}
+		addToList();
 		
 		list = new JList<Appointment>(listModel);
 		JScrollPane scrPane = new JScrollPane(list);
 		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrPane.setPreferredSize(new Dimension(548,300));
+		scrPane.setPreferredSize(new Dimension(548,445));
 		scrPane.setBorder(BorderFactory.createEmptyBorder());
 		list.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				Appointment a = list.getSelectedValue();
-				System.out.println(a.getId());				
 			}
 		});
 		centerPanel.add(scrPane);
@@ -153,7 +154,15 @@ public class AppointmentPanel extends JPanel {
 //		add(mainPanel);
 				
 	}
-	
+	public static void addToList() {
+		if(listModel.getSize() != 0)
+			listModel.removeAllElements();
+		DashboardPanel.allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
+		Collections.sort(DashboardPanel.allAppointments);
+		for (Appointment e : DashboardPanel.allAppointments) {
+			listModel.addElement((Appointment) e);
+		}
+	}
 	public static void createEvents() {
 		
 		addIcon.addMouseListener(new MouseAdapter() {
@@ -186,9 +195,10 @@ public class AppointmentPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				Appointment a = list.getSelectedValue();	
 				if(a != null) {
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?") == 0) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " lï¿½schen?") == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
+							AppointmentPanel.addToList();
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
@@ -197,7 +207,7 @@ public class AppointmentPanel extends JPanel {
 					}
 				}
 				else {
-					errMsg.setText("Bitte wählen Sie den zu löschenden Termin aus.");
+					errMsg.setText("Bitte wï¿½hlen Sie den zu lï¿½schenden Termin aus.");
 				}
 			}
 		});

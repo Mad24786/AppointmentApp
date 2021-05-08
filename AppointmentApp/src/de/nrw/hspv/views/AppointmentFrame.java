@@ -288,16 +288,12 @@ public class AppointmentFrame extends JFrame {
 				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
 				try {
 					AppointmentApp.APPOINTMENTS.store(a);
-					
 					errMsg.setText("Termin wurde gespeichert.");
-//					AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.CENTER));
+					AppointmentPanel.addToList();
+					DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
 					DashboardPanel.buildDashboardCalendar();
-					DashboardPanel.centerPanel.repaint();
-					AppointmentApp.mainPanel.repaint();
-					AppointmentApp.mainPanel.validate();
-//					AppointmentApp.mainPanel.setVisible(true);
 				} catch (Exception e2) {
-					// TODO: handle exception
+					errMsg.setText("Es ist ein Fehler aufgetreten.");
 				}
 			}
 		});
@@ -342,7 +338,8 @@ public class AppointmentFrame extends JFrame {
 		String strErrMsg = "";
 		// check appointments for conflict
 		if((theAppointmentBefore != null && start.compareTo(theAppointmentBefore.getEnd()) < 0 && user.getId() == theAppointmentBefore.getEmployee().getId()) ||
-				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId())) {
+				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId()) ||
+				start.before(new Date())) {
 			strErrMsg = "Terminkonflikt";
 			btnOk.setEnabled(false);
 		}
