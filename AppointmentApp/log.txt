@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="windows-1252" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
-<<<<<<< HEAD
-=======
 <record>
-  <date>2021-05-06T11:18:11.648370100Z</date>
-  <millis>1620299891648</millis>
-  <nanos>370100</nanos>
+  <date>2021-05-07T14:16:33.604860200Z</date>
+  <millis>1620396993604</millis>
+  <nanos>860200</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -15,29 +13,4 @@
   <thread>1</thread>
   <message>new instance of Dashboard</message>
 </record>
-<record>
-  <date>2021-05-06T11:19:52.851695700Z</date>
-  <millis>1620299992851</millis>
-  <nanos>695700</nanos>
-  <sequence>1</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.DashboardPanel</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>new instance of Dashboard</message>
-</record>
-<record>
-  <date>2021-05-06T11:19:52.856682900Z</date>
-  <millis>1620299992856</millis>
-  <nanos>682900</nanos>
-  <sequence>2</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentApp$1</class>
-  <method>mouseClicked</method>
-  <thread>21</thread>
-  <message>Dashboard called</message>
-</record>
->>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
 </log>

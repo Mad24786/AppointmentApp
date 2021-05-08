@@ -42,6 +42,7 @@ public class LogInPanel implements ActionListener, KeyListener{
 	
 	private final String USERNAMEString = "user123";
 	private String PASSWORDString	= "123456";
+	private int id;
 	
 	
 	public LogInPanel() {
@@ -117,9 +118,9 @@ public class LogInPanel implements ActionListener, KeyListener{
 		userJTextField.setInputVerifier(new InputVerifier() {
 				@Override
 				public boolean verify(JComponent Input) {
-					int id;
+//					int id;
 					
-					id = Integer.parseInt(userJTextField.getText());
+					 id = Integer.parseInt(userJTextField.getText());
 				
 					System.out.println(id);
 					if(AppointmentApp.USERS.get(id)== null) {
@@ -197,7 +198,8 @@ public class LogInPanel implements ActionListener, KeyListener{
 			if(PASSWORDString.equalsIgnoreCase(userPasswordString)) {
 				System.out.println("Login erfolgreich");
 				createMessage("Login erfolgreich");
-				new AppointmentApp();
+				
+				new AppointmentApp(id);
 				jFrame.dispose();
 				
 			}else {
