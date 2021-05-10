@@ -52,6 +52,8 @@ import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 import de.nrw.hspv.views.DashboardPanel.AppointmentsByDate.SmallAppointmentPanel;
+import de.nrw.hspv.views.DashboardPanel.AppointmentsByDate;
+import de.nrw.hspv.views.DashboardPanel.CalendarPanel;
 
 @SuppressWarnings("serial")
 public class AppointmentFrame extends JFrame {
@@ -285,13 +287,15 @@ public class AppointmentFrame extends JFrame {
 				DashboardPanel.c.add(Calendar.MINUTE, issue.getScheduledTime());
 				Date end = DashboardPanel.c.getTime();
 				
-				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
+				Appointment a = new Appointment(user, AppointmentApp.user, issue, start, end, txtText.getText());
 				try {
 					AppointmentApp.APPOINTMENTS.store(a);
 					errMsg.setText("Termin wurde gespeichert.");
-					AppointmentPanel.addToList();
+					int day = start.getDate();
+					CalendarPanel cp = (CalendarPanel) DashboardPanel.panel[day]; 
+					cp.lblAppCount.setText("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
+					AppointmentPanel.fillAppointmentList();
 					DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
-					DashboardPanel.buildDashboardCalendar();
 				} catch (Exception e2) {
 					errMsg.setText("Es ist ein Fehler aufgetreten.");
 				}
@@ -337,9 +341,12 @@ public class AppointmentFrame extends JFrame {
 		
 		String strErrMsg = "";
 		// check appointments for conflict
-		if((theAppointmentBefore != null && start.compareTo(theAppointmentBefore.getEnd()) < 0 && user.getId() == theAppointmentBefore.getEmployee().getId()) ||
-				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId()) ||
-				start.before(new Date())) {
+		if(start.before(new Date())) {
+			strErrMsg = "Termin liegt in der Vergangenheit.";
+			btnOk.setEnabled(false);
+		}
+		else if((theAppointmentBefore != null && start.compareTo(theAppointmentBefore.getEnd()) < 0 && user.getId() == theAppointmentBefore.getEmployee().getId()) ||
+				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId())) {
 			strErrMsg = "Terminkonflikt";
 			btnOk.setEnabled(false);
 		}

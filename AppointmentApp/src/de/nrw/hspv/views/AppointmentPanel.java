@@ -48,319 +48,231 @@ import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
-@SuppressWarnings("serial")
+/**
+ * 
+ * In this class the appointment panel (as an instance of JPanel) will be created.
+ * This object will be instanced, if the user clicks on the appointment icon in main
+ * navigation. Existing rights provided.
+ * 
+ * From this panel the user is able to set new appointments or delete existing
+ * appointments.
+ * 
+ * 
+ * @author Mathias Fernahl
+ * 
+ */
 public class AppointmentPanel extends JPanel {
 	
+	/*
+	 * some layout components for class-wide use
+	 */
 	public static BorderLayout mainLayout = new BorderLayout();
-	public static JPanel mainPanel = new JPanel(mainLayout);
-		
-	public static JPanel centerPanel;
-	public static JPanel cards;
-	public static JLabel errMsg = new JLabel();
+	public static JPanel centerPanel = new JPanel();
 	
+	/*
+	 * components for user input and system output
+	 */
 	public static JTextField txtId;
 	public static JComboBox<Issue> cbIssue;
 	public static JSpinner spinner;
 	public static JTextArea txtText;
-	
 	public static JList<Appointment> list; 
 	public static DefaultListModel<Appointment> listModel;
+	public static JLabel errMsg = new JLabel();
 	
+	/*
+	 * sub navigation icons
+	 */
 	public static JPanel addIcon;
-	public static JPanel editIcon;
 	public static JPanel deleteIcon;
 	
-	public static JButton btnOk = new JButton("OK");
-	public static JButton btnCancel = new JButton("Abbrechen");
-	
-	public static Vector<Issue> vecIssues = new Vector<Issue>();
-	
+	/**
+	 * Constructor to initialize components and create events
+	 * in this panel. 
+	 */
 	public AppointmentPanel(){
 		initComponents();
 		createEvents();
 	}
 	
+	/**
+	 * Initializes all needed components in this panel
+	 * and feeds them with data if needed.
+	 */
 	private void initComponents() {
-	
-		// TODO Speicher fï¿½r alle Panels, kann noch nï¿½tzlich sein
-		HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
-		panels.put("main", new JPanel());
-				
-		/* this Panel */
+		/* first remove all to reset if repeating call */
+		centerPanel.removeAll();
+
+		/* general settings for  this Panel */
 		setBackground(Color.WHITE);
 		setLayout(mainLayout);
 				
-		/* oberes Panel (Menï¿½leiste) */
+		
+		/* 
+		 * Build upper panel with FlowLayout for sub navigation 
+		 */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		/* Buttons generieren */
-		addIcon = new CreateIcon("add", true);
+		/* create sub navigation icons and add to panel */
+		addIcon = new CreateIcon("add", AppointmentApp.user.isCanWriteAppointments());
 		northPanel.add(addIcon);
-		editIcon = new CreateIcon("edit", false);
-		northPanel.add(editIcon);
-		deleteIcon = new CreateIcon("delete", true);
+		deleteIcon = new CreateIcon("delete", AppointmentApp.user.isCanWriteAppointments());
 		northPanel.add(deleteIcon);
 		
-		/* label for error message */
+		/* add error message label with noticeable orange font color */
 		errMsg.setForeground(HspvColor.ORANGE);
 		northPanel.add(errMsg);
+		/* add whole upper panel */
 		add(northPanel, BorderLayout.NORTH);
 		
-		/* rechtes Panel */
-//		JPanel eastPanel = new JPanel();
-//		eastPanel.setBackground(Color.WHITE);
-//		add(eastPanel, BorderLayout.EAST);
-		
-		/* unteres Panel */
-//		JPanel southPanel = new JPanel();
-//		southPanel.setBackground(Color.WHITE);
-//		southPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-//		southPanel.add(btnCancel);
-//		southPanel.add(btnOk);
-//		add(southPanel, BorderLayout.SOUTH);
-		
-		/* linkes Panel (derzeit nicht benï¿½tigt) */
-//		JPanel westPanel = new JPanel();
-//		westPanel.setBackground(Color.WHITE);
-//		add(westPanel, BorderLayout.WEST);
-		
-		/* mittleres Panel */        
-		centerPanel = new JPanel();
+		/* 
+		 * Build center panel with a JList of all available appointments 
+		 */        
 		centerPanel.setBackground(Color.WHITE);
 		listModel = new DefaultListModel<Appointment>();
-//		Collections.sort(DashboardPanel.allAppointments);
-//		for (Appointment e : DashboardPanel.allAppointments) {
-//			listModel.addElement(e);
-//		}
-		addToList();
-		
+		/* fill the list */
+		fillAppointmentList();
+		/* instantiate list with data */ 
 		list = new JList<Appointment>(listModel);
+		/* add list to a JScrollPane and remove border */
 		JScrollPane scrPane = new JScrollPane(list);
 		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrPane.setPreferredSize(new Dimension(548,445));
 		scrPane.setBorder(BorderFactory.createEmptyBorder());
-		list.addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				Appointment a = list.getSelectedValue();
-			}
-		});
+		/* add customized list to center panel */
 		centerPanel.add(scrPane);
+		/* add whole center panel */
 		add(centerPanel, BorderLayout.CENTER);
 		
-//		add(mainPanel);
-				
 	}
-	public static void addToList() {
+	
+	/**
+	 * This methods builds respectively <b>re</b>builds 
+	 * the existing JList with all available appointments.
+	 */
+	public static void fillAppointmentList() {
+		// if content already exists, remove it
 		if(listModel.getSize() != 0)
 			listModel.removeAllElements();
+		
+		// get the freshest data of appointments and sort
+		// TODO source out...
 		DashboardPanel.allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 		Collections.sort(DashboardPanel.allAppointments);
+		
+		// add all appointments to JList related listModel
 		for (Appointment e : DashboardPanel.allAppointments) {
 			listModel.addElement((Appointment) e);
 		}
 	}
+	
+	/**
+	 * Events for sub navigation in appointment panel will be created here.
+	 */
 	public static void createEvents() {
 		
+		/* adds action for clicking the add button */
 		addIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				AppointmentApp.appFrame.setVisible(true);
 				AppointmentFrame.checkDate();
-				AppointmentApp.log.log(Level.INFO, "Appointment window set visible");
 			}
 			
 		});
 		
-		editIcon.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Clicked");
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-				centerPanel = new JPanel();
-				centerPanel.setBackground(Color.BLACK);
-				centerPanel.validate();
-				
-				System.out.println(centerPanel.toString());
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
-			}
-			
-		});
-		
+		/* adds action for clicking the delete button */
 		deleteIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Appointment a = list.getSelectedValue();	
+				Appointment a = list.getSelectedValue();
+				/* first check if an appointment is selected... */
 				if(a != null) {
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " lï¿½schen?") == 0) {
+					/* if user has selected an appointment and really wants to delete it */
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?", "Termin löschen", JOptionPane.YES_NO_OPTION) == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
-							AppointmentPanel.addToList();
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						} catch (IOException ioe) { errMsg.setText("Löschen nicht möglich."); }
+						/* refresh JList if everything is fine */
+						AppointmentPanel.fillAppointmentList();
 					}
 				}
+				/* ...else give a notice to the user */
 				else {
-					errMsg.setText("Bitte wï¿½hlen Sie den zu lï¿½schenden Termin aus.");
-				}
-			}
-		});
-		
-		btnOk.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				Date start = (Date) spinner.getValue();
-				Date end = null;
-				User user = null;
-				Issue issue = (Issue) cbIssue.getSelectedItem();
-				
-				Appointment a = new Appointment(user, issue, start, end, txtText.getText());
-				try {
-					AppointmentApp.APPOINTMENTS.store(a);
-				} catch (Exception e2) {
-					// TODO: handle exception
+					errMsg.setText("Bitte wählen Sie den zu löschenden Termin aus.");
 				}
 			}
 		});
 		
 	}
 	
+	/**
+	 * As <code>CreateIcon</code> suggests, this class creates the icons for sub 
+	 * navigation in <code>AppointmentPanel</code> to control appointment operations. 
+	 * 
+	 * @author Mathias Fernahl
+	 *
+	 */
 	public class CreateIcon extends JPanel {
 		
+		/**
+		 * A unique serial version identifier.
+		 * @see Serializable#serialVersionUID
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		/* String for icon resource */
 		private String s; 
 			
+		/**
+		 * Constructor for creating an icon. 
+		 * 
+		 * @param s			A string for icon resource. Has to be the filename of the icon image. 
+		 * @param access	A boolean value. Should be given from <code>User</code> object of 
+		 * 					user, who is currently logged in.
+		 * 
+		 */
 		public CreateIcon(String s, boolean access) {
 			
+			/* put given String to object variable */ 
 			this.s = s;
 			
+			/* setting the size */
 			Dimension size = new Dimension(50,50);
 			
+			// TODO maybe useless??
 			setPreferredSize(size);
 			setMaximumSize(size);
 			
-			if(access) {
+			/* if access is granted, show icon in orange, else gray */
+			if(access) 
 				setBackground(HspvColor.ORANGE);
-			}
-			else {
+			else 
 				setBackground(HspvColor.SEC_GRAY);
-			}
+			
 		}
-		
-		@Override
+	
+		/**
+		 * Paints this component with icon image. 
+		 * 
+		 * @param g			Object of <code>Graphics</code> 
+		 * 
+		 */
+		@Override		
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
+			/* getting the icon */
 			ImageIcon icon = new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/" + s + ".png"));
+			/* paint in center */
 			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2), ((this.getHeight() - icon.getIconHeight()) / 2));
 		}
 
 	}
+
 	
-	public static class CreateCenterAdd extends JPanel{
-		
-		public CreateCenterAdd() {
-
-			GridBagLayout gb = new GridBagLayout();
-			setLayout(gb);
-			setBackground(Color.WHITE);
-			
-			JLabel lblId = new JLabel("ID:");
-			addComp(gb, lblId, 0, 0, 1, 1);
-			txtId = new JTextField();
-			txtId.setEnabled(false);
-			addComp(gb, txtId, 1, 0, 1, 1);
-			
-			JLabel lblIssue = new JLabel("Anliegen:");
-			addComp(gb, lblIssue, 0, 1, 1, 1);
-			
-			@SuppressWarnings("static-access")
-			ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
-			
-			if(vecIssues.isEmpty()) {
-				for(Issue i : allIssues) {
-					vecIssues.add(i);
-				}
-			}
-			else {
-				System.out.println("Steht schon was drin");
-			}
-			
-			
-			cbIssue = new JComboBox<Issue>(vecIssues);
-	        cbIssue.addItemListener(new ItemListener() {
-				
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					Issue i = (Issue) e.getItem();
-					txtId.setText(String.valueOf(i.getId()));
-				}
-			});
-	        addComp(gb, cbIssue, 1, 1, 1, 1);
-			
-			JLabel lblDate = new JLabel("Datum:");
-			addComp(gb, lblDate, 0, 2, 1, 1);
-
-	        Calendar calendar = Calendar.getInstance();
-
-	        //Add the third label-spinner pair.
-//	        Date initDate = calendar.getTime();
-	        Date initDate = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 8, 0).getTime();
-	        calendar.add(Calendar.YEAR, -1);
-	        Date earliestDate = calendar.getTime();
-	        calendar.add(Calendar.YEAR, 200);
-	        Date latestDate = calendar.getTime();
-	        SpinnerModel dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
-	        
-	        spinner = new JSpinner(dateModel);
-	        spinner.setEditor(new JSpinner.DateEditor(spinner, "dd.MM.yyyy, HH:mm 'Uhr'"));
-			addComp(gb, spinner, 1, 2, 1, 1);
-			
-			JLabel lblTime = new JLabel("Uhrzeit:");
-			addComp(gb, lblTime, 0, 3, 1, 1);
-			JTextField txtTime = new JTextField();
-			txtTime.setEnabled(false);
-			addComp(gb, txtTime, 1, 3, 1, 1);
-			
-			JLabel lblEmployee = new JLabel("Mitarbeiter:");
-			addComp(gb, lblEmployee, 0, 4, 1, 1);
-			JTextField txtEmployee = new JTextField();
-			addComp(gb, txtEmployee, 1, 4, 1, 1);
-			
-			JLabel lblCustomer = new JLabel("Kunde:");
-			addComp(gb, lblCustomer, 0, 5, 1, 1);
-			JTextField txtCustomer = new JTextField();
-			addComp(gb, txtCustomer, 1, 5, 1, 1);
-			
-			JLabel lblText = new JLabel("Bemerkung:");
-			addComp(gb, lblText, 0, 6, 1, 1);
-			txtText = new JTextArea();
-			txtText.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			addComp(gb, txtText, 1, 6, 1, 1);
-		
-		}
-		
-		private void addComp(GridBagLayout gb, Component c, int x, int y, int w, int h) {
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.insets = new Insets(2,2,2,2);
-			gbc.gridx = x;
-			gbc.gridy = y;
-			gbc.gridwidth = w;
-			gbc.gridheight = h;
-			gbc.fill = GridBagConstraints.BOTH;
-			gbc.weightx = gbc.weighty = 1;
-			gb.setConstraints(c, gbc);
-			add(c);				
-		}
-		
-	}
-
 	public static void main(String[] args) {
 
 		new AppointmentPanel();
