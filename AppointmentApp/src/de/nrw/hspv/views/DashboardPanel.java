@@ -90,7 +90,6 @@ public class DashboardPanel extends JPanel {
 	
 	public DashboardPanel() {
 		allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
-		AppointmentApp.log.log(Level.INFO, "new instance of Dashboard");
 		initComponents();
 		createEvents();
 	}
@@ -182,12 +181,8 @@ public class DashboardPanel extends JPanel {
 	}
 	
 	public static void buildDashboardCalendar() {
-		try {
-			AppointmentApp.APPOINTMENTS = new FileDatabase<Appointment>(new File("src/de/nrw/hspv/database/appointments.dat"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		centerPanel.removeAll();
+		allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
 		int days =gCal.getActualMaximum(Calendar.DATE);
 		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);
@@ -237,6 +232,8 @@ public class DashboardPanel extends JPanel {
 	public static class AppointmentsByDate extends JPanel {
 				
 		public AppointmentsByDate(int d, boolean singleUserAppointments) {
+			AppointmentApp.appointmentListDay = d;
+			allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 			setLayout(new FlowLayout());
 			setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
 			setBackground(Color.WHITE);
@@ -277,7 +274,7 @@ public class DashboardPanel extends JPanel {
 			/* set time to next day 0:00 */
 			c.add(Calendar.DATE, 1);
 			Date tomorrow = c.getTime();
-			
+			allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 			Collections.sort(allAppointments);
 			for(Appointment i : allAppointments) {
 				
@@ -377,7 +374,7 @@ public class DashboardPanel extends JPanel {
 		switch (m) {
 	        case 0:  return "Januar";
 	        case 1:  return "Februar";
-	        case 2:  return "März";
+	        case 2:  return "Mï¿½rz";
 	        case 3:  return "April";
 	        case 4:  return "Mai";
 	        case 5:  return "Juni";
@@ -394,13 +391,15 @@ public class DashboardPanel extends JPanel {
 	public static class MyMouseListener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {		
-			AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.EAST));
-			AppointmentApp.sDay = ((CalendarPanel) e.getComponent()).getDay();
-			AppointmentApp.mainPanel.add(new AppointmentsByDate(AppointmentApp.sDay, showUserAppointments), BorderLayout.EAST);
-			AppointmentApp.mainPanel.validate();
+			refreshAppointmentList(((CalendarPanel) e.getComponent()).getDay());
 		}
 	}
-	
+	public static void refreshAppointmentList(int day) {
+		AppointmentApp.mainPanel.remove(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.EAST));
+		AppointmentApp.sDay = (day);
+		AppointmentApp.mainPanel.add(new AppointmentsByDate(AppointmentApp.sDay, showUserAppointments), BorderLayout.EAST);
+		AppointmentApp.mainPanel.validate();
+	}
 	public static class CalendarPanel extends JPanel {
 
 		int day;

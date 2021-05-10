@@ -53,8 +53,8 @@ public class AppointmentApp extends JFrame{
 	 * calendar variables
 	 */
 	public static Calendar cal = new GregorianCalendar();
-	public static int sDay;
-	public static int cDay = sDay = cal.get(Calendar.DATE);
+	public static int sDay, appointmentListDay;
+	public static int cDay = sDay = appointmentListDay = cal.get(Calendar.DATE);
 	public static int cMonth = cal.get(Calendar.MONTH);
 	public static int cYear = cal.get(Calendar.YEAR);
 
@@ -142,6 +142,7 @@ public class AppointmentApp extends JFrame{
 		setSize(windowSize);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		mainPanel.setBackground(Color.WHITE);
 		int x = (screenSize.width - this.getSize().width) / 2;
 	    int y = (screenSize.height - this.getSize().height) / 2;
 	    setLocation(x, y);
@@ -231,35 +232,7 @@ public class AppointmentApp extends JFrame{
 		
 		// TODO eigenen MouseListener schreiben
 		
-		/* Aktion für Klick auf Icon festlegen */ 
-		/* 1. MouseListener zum Icon adden */
-		iconDashboard.addMouseListener(new MouseAdapter() {
-			/* 2. MouseClicked-Methode überschreiben */
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				/* 3. Das aktuelle Panel aus dem Center löschen 
-				 * mainLayout.getLayoutComponent(BorderLayout.CENTER) -> zieht sich immer die aktuelle Komponente */
-				
-				System.out.println(centerPanel.toString());
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-//				mainPanel.invalidate();
-				/* 4. Das obere Panel mit dem ausgewählten Bereich aktualiesiren und das passende Icon wählen */
-				lblNorth.setText("Dashboard");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
-				/* 5. Neues Panel-Objekt erzeugen und der Variable centerPanel zuweisen
-				 * new DashboardPanel(); -> dort steht dann der Name der Klasse, z. B. UserPanel() */
-				System.out.println(centerPanel.toString());
-//				centerPanel = new DashboardPanel();
-				
-				
-				System.out.println(centerPanel.toString());
-				/* 6. CenterPanel im Center des mainPanel hinzufügen */
-				mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
-				mainPanel.validate();
-				validate();
-				log.log(Level.INFO, "Dashboard called");
-			}
-		});
+		iconDashboard.addMouseListener(new DashboardMouseListener());
 		
 		iconAppointment.addMouseListener(new MouseAdapter() {
 			@Override
@@ -313,6 +286,27 @@ public class AppointmentApp extends JFrame{
 		mainPanel.validate();
 		mainPanel.repaint();
 		log.log(Level.INFO, "Dashboard refreshed");
+	}
+	
+	private class DashboardMouseListener extends MouseAdapter{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.out.println(centerPanel.toString());
+			System.out.println(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.CENTER).toString());
+			
+			mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+
+			lblNorth.setText("Dashboard");
+			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+		
+			DashboardPanel.mainPanel.validate();
+			System.out.println(DashboardPanel.mainPanel.toString());
+			
+			
+			mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
+			AppointmentApp.mainPanel.validate();
+			System.out.println(AppointmentApp.mainPanel.toString());
+		}
 	}
 	
 	/**

@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+
 import de.nrw.hspv.views.AppointmentApp;
 
 import javax.swing.InputVerifier;
@@ -23,13 +26,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+
+import de.nrw.hspv.util.Appointment;
+import de.nrw.hspv.util.FileDatabase;
+import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
-public class LogInPanel implements ActionListener, KeyListener{
-	//Fenster
+public class LogInPanel implements ActionListener, KeyListener {
+	// Fenster
 	private JFrame jFrame;
 	private Container contentPane;
-	
+
 	// Komponenten
 	private JLabel userLabel;
 	private JLabel passwordLabel;
@@ -39,116 +46,122 @@ public class LogInPanel implements ActionListener, KeyListener{
 	private JButton resetJButton;
 	private JCheckBox showPasswordBox;
 	private JCheckBox hidePasswordBox;
-	
+
 	private final String USERNAMEString = "user123";
-	private String PASSWORDString	= "123456";
+	private String PASSWORDString = "123456";
 	private int id;
-	
-	
+	public static FileDatabase<User> USERS;
+
 	public LogInPanel() {
-		initUI(); //Fester erstellt
-		createMenu(); //Menü erstellt
-		createComponent(); //Komponenten erstellt
-		addComponentsToContentPane(); //Komponenten hinzufügen
+		initUI(); // Fester erstellt
+		createMenu(); // Menü erstellt
+		createComponent(); // Komponenten erstellt
+		addComponentsToContentPane(); // Komponenten hinzufügen
 		setLayoutManager(); // setze das Layout für den Container
-		setLocationAndSizeOfComponent(); 
-	
+		setLocationAndSizeOfComponent();
+
+		try {
+
+			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
-	
-	//Fenster erstellen
-	
+
+	// Fenster erstellen
+
 	private void initUI() {
 		jFrame = new JFrame("Login");
 		jFrame.setSize(400, 400);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setDefaultCloseOperation(jFrame.EXIT_ON_CLOSE);
-		
+
 		contentPane = jFrame.getContentPane();
-		jFrame.setResizable(false); //Nutzer kann Fenster nicht mehr kleiner oder größer machen
+		jFrame.setResizable(false); // Nutzer kann Fenster nicht mehr kleiner oder größer machen
 		jFrame.setVisible(true);
 	}
-	
-	
+
 	// Menü erstellen
-	
+
 	private void createMenu() {
-		
-		
+
 		JMenuBar jMenuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenu editMenu = new JMenu("Edit");
 		JMenu sourceMenu = new JMenu("Source");
-		
+
 		jMenuBar.add(fileMenu);
 		jMenuBar.add(editMenu);
 		jMenuBar.add(sourceMenu);
-		
+
 		JMenuItem exitItem = new JMenuItem("Exit");
 		exitItem.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.exit(0);
 			}
 		});
-		
-		//oder
-		
-		exitItem.addActionListener(e ->{
+
+		// oder
+
+		exitItem.addActionListener(e -> {
 			System.exit(0);
 		});
-		
-		exitItem.setMnemonic(KeyEvent.VK_E);		//Shortcut erstellen
-		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.ALT_MASK));  
-		
-		
+
+		exitItem.setMnemonic(KeyEvent.VK_E); // Shortcut erstellen
+		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.ALT_MASK));
+
 		fileMenu.add(exitItem);
-		
+
 		jFrame.setJMenuBar(jMenuBar);
-		
+
 	}
-	
-	//Komponenten erstellen
+
+	// Komponenten erstellen
 	private void createComponent() {
 		userLabel = new JLabel("Username: ");
 		passwordLabel = new JLabel("Passwort: ");
-		
+
 		userJTextField = new JTextField();
 		userJTextField.setInputVerifier(new InputVerifier() {
-				@Override
-				public boolean verify(JComponent Input) {
+			@Override
+			public boolean verify(JComponent Input) {
 //					int id;
+
+				id = Integer.parseInt(userJTextField.getText());
+
+				System.out.println(id);
+				if (USERS.get(id) == null) {
+					System.out.println("Falsch");
+					return false;
+				} else {
+					User user = (User) USERS.get(id);
+					PASSWORDString = user.getPassword();
 					
-					 id = Integer.parseInt(userJTextField.getText());
-				
-					System.out.println(id);
-					if(AppointmentApp.USERS.get(id)== null) {
-						System.out.println("Falsch");
-						return false;
-					}else {
-						User user = (User) AppointmentApp.USERS.get(id);
-						PASSWORDString = user.getPassword();
-						
-						return true;
-						
-					}
-				}});
+					return true;
+
+				}
+			}
+		});
 		passwordField = new JPasswordField();
 		passwordField.addKeyListener(this);
-		
+
 		loginButton = new JButton("Login");
 		loginButton.addActionListener(this);
 		resetJButton = new JButton("Reset");
 		resetJButton.addActionListener(this);
-		
+
 		showPasswordBox = new JCheckBox("Passwort anzeigen");
 		showPasswordBox.addActionListener(this);
 		hidePasswordBox = new JCheckBox("Passwort verbergen");
-		
+
 	}
-	
-	//Komponenten hinzufügen
+
+	// Komponenten hinzufügen
 	private void addComponentsToContentPane() {
 		contentPane.add(userLabel);
 		contentPane.add(passwordLabel);
@@ -158,51 +171,54 @@ public class LogInPanel implements ActionListener, KeyListener{
 		contentPane.add(resetJButton);
 		contentPane.add(hidePasswordBox);
 		contentPane.add(showPasswordBox);
-		
+
 	}
+
 	private void setLocationAndSizeOfComponent() {
-		userLabel.setBounds(50, 150, 100, 30); 
-		passwordLabel.setBounds(50,220, 100, 30);
+		userLabel.setBounds(50, 150, 100, 30);
+		passwordLabel.setBounds(50, 220, 100, 30);
 		userJTextField.setBounds(150, 150, 150, 30);
 		passwordField.setBounds(150, 220, 150, 30);
-		//hidePasswordBox.setBounds(50, 250, 150, 30);
+		// hidePasswordBox.setBounds(50, 250, 150, 30);
 		showPasswordBox.setBounds(150, 250, 150, 30);
 		loginButton.setBounds(50, 300, 100, 30);
 		resetJButton.setBounds(200, 300, 100, 30);
 	}
-	
-	//Layout setzen
-	
+
+	// Layout setzen
+
 	private void setLayoutManager() {
-		
+
 		contentPane.setLayout(null);
 	}
+
 	public static void main(String[] args) {
 
 		new LogInPanel();
 	}
-	
+
 	// Dialog erstellen
-	
+
 	private void createMessage(String message) {
 		JOptionPane.showMessageDialog(jFrame, message);
 	}
+
 	// Event Handling
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()== loginButton) {
+		if (e.getSource() == loginButton) {
 			String userString = userJTextField.getText();
 			char[] chars = passwordField.getPassword();
 			String userPasswordString = new String(chars);
-			
-			if(PASSWORDString.equalsIgnoreCase(userPasswordString)) {
+
+			if (PASSWORDString.equalsIgnoreCase(userPasswordString)) {
 				System.out.println("Login erfolgreich");
 				createMessage("Login erfolgreich");
-				
+
 				new AppointmentApp(id);
 				jFrame.dispose();
-				
-			}else {
+
+			} else {
 				System.out.println("Username oder Password falsch");
 				createMessage("Username oder Password falsch");
 			}
@@ -211,11 +227,11 @@ public class LogInPanel implements ActionListener, KeyListener{
 			userJTextField.setText("");
 			passwordField.setText("");
 		}
-		
-		if (e.getSource()== showPasswordBox) {
-			if(showPasswordBox.isSelected()) {
+
+		if (e.getSource() == showPasswordBox) {
+			if (showPasswordBox.isSelected()) {
 				passwordField.setEchoChar((char) 0);
-			}else {
+			} else {
 				passwordField.setEchoChar('*');
 			}
 		}
@@ -224,22 +240,21 @@ public class LogInPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyChar()== KeyEvent.VK_ENTER) {
+		if (e.getKeyChar() == KeyEvent.VK_ENTER) {
 			System.out.println("Zum Login");
 		}
-		
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

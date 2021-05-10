@@ -1,42 +1,64 @@
 package de.nrw.hspv.views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.JCheckBox;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import de.nrw.hspv.util.Appointment;
+import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
-import java.util.ArrayList;
-import java.util.Vector;
-
-import java.util.logging.Logger;
-
-public class UserPanel extends JPanel {
-
-	private static final Logger log = Logger.getLogger(UserPanel.class.getName());
-
+public class UserPanel1 extends JFrame {
+	private JFrame jFrame;
+	private Container contentPane;
 	JButton buttonOk;
 	JButton buttonCancel;
-
+	private static final Logger log = Logger.getLogger(UserPanel.class.getName());
 	//JLabel labelId;
 	JLabel labelFirstName;
 	JLabel labelLastName;
@@ -65,41 +87,27 @@ public class UserPanel extends JPanel {
 	JCheckBox CheckCanReadUsers;
 	JCheckBox CheckCanWriteUsers;
 
-	public UserPanel() {
-		initComponents();
+	public UserPanel1() {
+		initUI();
 		createEvents();
 	}
-
-	public void initComponents() {
+	private void initUI() {
+		jFrame = new JFrame("User");
+		jFrame.setSize(800, 600);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setDefaultCloseOperation(jFrame.EXIT_ON_CLOSE);
+		jFrame.setResizable(false);
 		setLayout(new GridLayout(0, 2));
 		setBackground(Color.WHITE);
 
-		Vector<User> vec = new Vector<User>();
-
-		ArrayList<User> allUsers = AppointmentApp.USERS.getAllAsArrayList();
-		for (User i : allUsers) {
-			vec.add(i);
-//		}
-//		JComboBox<User> highscoreCombo = new JComboBox<User>(vec);
-//		highscoreCombo.addItemListener(new ItemListener() {
-
-//			@Override
-//			public void itemStateChanged(ItemEvent e) {
-//				User i = (User) e.getItem();
-//				textId.setText(String.valueOf(i.getId()));
-//			}
-		}
+		
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(Color.WHITE);
 		GridLayout centerLayout = new GridLayout(2, 0);
 		centerPanel.setLayout(centerLayout);
 
-		//labelId = new JLabel("ID:");
-		// labelId.setPreferredSize(new Dimension(50, 24));
-		//add(labelId);
-		//textId = new JTextField();
-		//add(textId);
+		
 		labelFirstName = new JLabel("Vorname:");
 		add(labelFirstName);
 		textFirstName = new JTextField();
@@ -155,6 +163,9 @@ public class UserPanel extends JPanel {
 		add(buttonCancel);
 		buttonOk = new JButton("Ok");
 		add(buttonOk);
+		add(centerPanel);
+		pack();
+		setVisible(true);
 
 	}
 
@@ -171,7 +182,6 @@ public class UserPanel extends JPanel {
 				textEmail.setText("");
 				textPassword.setText("");
 				
-			
 			}
 		});
 
@@ -179,10 +189,10 @@ public class UserPanel extends JPanel {
 			int  age, number;
 			
 			@Override
-			
+
 			public void actionPerformed(ActionEvent e) {
 
-				new UserPanel1();
+				
 
 				if (textFirstName.getText().trim().equals("")) {
 					textFirstName.setForeground(Color.RED);
@@ -274,8 +284,12 @@ public class UserPanel extends JPanel {
 
 	public static void main(String[] args) {
 
-		new UserPanel();
+		new UserPanel1();
 
 	}
 
-}
+
+
+	}
+
+

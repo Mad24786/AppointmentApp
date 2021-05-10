@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="windows-1252" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
-<record>
-  <date>2021-05-07T14:16:33.604860200Z</date>
-  <millis>1620396993604</millis>
-  <nanos>860200</nanos>
-  <sequence>0</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.views.DashboardPanel</class>
-  <method>&lt;init&gt;</method>
-  <thread>1</thread>
-  <message>new instance of Dashboard</message>
-</record>
 </log>
