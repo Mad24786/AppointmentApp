@@ -62,10 +62,9 @@ public class FileDatabase<Object> implements Serializable {
 			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(storageFile)));
 			storageMap = (HashMap<Integer, Object>) ois.readObject();
 			ois.close();
-			System.err.println(Tools.getCurrentDateAndTime() + ": " + storageFile.getName() + " geladen");
+			AppointmentApp.log.log(Level.INFO, storageFile.getName() + " loaded successfully");
 		} catch (Exception e) {
-			System.err.println("Fehler load()");
-			e.printStackTrace();
+			AppointmentApp.log.log(Level.SEVERE, "Error while loading data");
 		}
 	}
 	
@@ -104,14 +103,6 @@ public class FileDatabase<Object> implements Serializable {
 		return result;
 	}
 
-	public HashMap<Integer, Object> getAll() {
-		return storageMap;
-	}
-
-	public void printAll() {
-		System.out.println(this);
-	}
-
 	public void remove(int key) throws IOException {
 		if(get(key) == null)
 			throw new IOException("key does not exist");
@@ -119,14 +110,6 @@ public class FileDatabase<Object> implements Serializable {
 		storageMap.remove(key);
 		save();
 		AppointmentApp.log.log(Level.INFO, o.toString() + " #" + key + " deleted.");
-	}
-
-	public boolean hasKey(int key) {
-		return storageMap.containsKey(key);
-	}
-
-	public boolean hasObject(Object o) {
-		return storageMap.containsValue(o);
 	}
 
 	public int getSize() {

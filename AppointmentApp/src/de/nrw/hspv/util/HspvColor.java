@@ -2,6 +2,15 @@ package de.nrw.hspv.util;
 
 import java.awt.Color;
 
+/**
+ * The {@code HspvColor} class is used to encapsulate colors
+ * from Corporate Design of HSPV.
+ *
+ * @version     03 May 2021
+ * @author      Mathias Fernahl
+ * @see         Color
+ *
+ */
 public class HspvColor {
 	
 	/**

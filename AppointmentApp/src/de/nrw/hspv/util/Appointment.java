@@ -21,29 +21,31 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 	
 	int id, employeeId, customerId;
 	User employee;
+	User author;
 	Issue issue;
 	Date start;
 	Date end;
-	String customerMessage;
+	String message;
 	
 	
 	/**
 	 * 
 	 * Constructor creates an appointment object with 
 	 * 
-	 * @param user	ID of employee object who is going to handle this appointment
+	 * @param user		ID of employee object who is going to handle this appointment
 	 * @param issue		Issue object for this appointment
 	 * @param start		Date object that marks the beginning of this appointment
 	 * @param end		The end of this appointment
-	 * @param cMsg	A custom message 
+	 * @param cMsg		A custom message 
 	 */
-	public Appointment(User user, Issue issue, Date start, Date end, String cMsg){
+	public Appointment(User user, User author, Issue issue, Date start, Date end, String cMsg){
 		setId(AppointmentApp.APPOINTMENTS.getNextId());
 		setEmployee(user);
+		setAuthor(author);
 		setIssue(issue);
 		setStart(start);
 		setEnd(end);
-		setCustomerMessage(cMsg);	
+		setMessage(cMsg);	
 	}
 	
 	@Override
@@ -89,9 +91,17 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 
 	public void setEnd(Date end) { this.end = end; }
 
-	public String getCustomerMessage() { return customerMessage; }
+	public String getMessage() { return message; }
 	
-	public void setCustomerMessage(String customerMessage) { this.customerMessage = customerMessage; }
+	public void setMessage(String message) { this.message = message; }
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
 
 	
 

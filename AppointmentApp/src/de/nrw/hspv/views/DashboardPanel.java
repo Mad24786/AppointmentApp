@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -28,10 +30,13 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JToolTip;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -49,7 +54,7 @@ public class DashboardPanel extends JPanel {
 	/*
 	 * DashboardPanel Layout
 	 */
-	public static CardLayout layout = new CardLayout();
+//	public static CardLayout layout = new CardLayout();
 	
 	/*
 	 * Get instance of Calendar
@@ -62,7 +67,7 @@ public class DashboardPanel extends JPanel {
 	public static JPanel mainPanel = new JPanel();
 	public static JPanel centerPanel;
 	public static JPanel eastPanel;
-	public static JPanel cards;
+	public static CalendarPanel[] panel = new CalendarPanel[32];
 	
 	public static JLabel lblEast;
 	
@@ -87,6 +92,7 @@ public class DashboardPanel extends JPanel {
 	 * settings
 	 */
 	public static boolean showUserAppointments = false;
+	public static boolean logEvents = true;
 	
 	public DashboardPanel() {
 		allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
@@ -95,7 +101,8 @@ public class DashboardPanel extends JPanel {
 	}
 	
 	public void initComponents(){	
-//		setLayout(layout);
+		setLayout(new FlowLayout());
+		setBackground(Color.WHITE);
 		
 		/** */
 		mainPanel.setLayout(new BorderLayout(0,0));
@@ -105,11 +112,10 @@ public class DashboardPanel extends JPanel {
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		northPanel.setBackground(Color.WHITE);
 		JLabel lblDate = new JLabel(monthToString(cMonth) + " " + cYear);
-		northPanel.add(lblDate);
+		northPanel.add(lblDate);		
 		mainPanel.add(northPanel, BorderLayout.NORTH);
 		
-		centerPanel = new JPanel();		
-		centerPanel.setLayout(new GridLayout(0, 7, 5, 5));
+		centerPanel = new JPanel(new GridLayout(0, 7, 5, 5));		
 		centerPanel.setBackground(Color.WHITE);
 		
 		for (int i = 0; i < 7; i++) {
@@ -117,46 +123,46 @@ public class DashboardPanel extends JPanel {
 		}
 		
 		/** TEST BEGINN **/
-		buildDashboardCalendar();
-//		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
-//		int days =gCal.getActualMaximum(Calendar.DATE);
-//		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);
-//
-//		gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
-//		int totalweeks = gCal.getActualMaximum(Calendar.WEEK_OF_MONTH);
-//		
-//		/* Build dashboard calendar */
-//		if ((startInWeek == 7 && days > 29) || (startInWeek == 6 && days > 30)) {
-//			totalweeks +=1;
-//		}
-//		
-//		int count = 1; // count the days
-//		for (int i = 1; i <= totalweeks; i++) {
-//			for(int j = 1; j <= 7; j++) {
-//				JPanel panel;
-//				if (count < startInWeek || (count - startInWeek + 1) > days) {
-//					// no day here
-//					panel = new CalendarPanel(0, Color.WHITE);
-//					centerPanel.add(panel);
-//				}
-//				else {
-//					if(cDay == (count - startInWeek + 1) && cMonth == selectedMonth && cYear == selectedYear) {
-//						// marks the current day
-//						panel = new CalendarPanel((count - startInWeek + 1), HspvColor.ORANGE);
-//						centerPanel.add(panel);
-//					}
-//					else {
-//						// every other day
-//						panel = new CalendarPanel((count - startInWeek + 1), HspvColor.SEC_BROWN);
-//						centerPanel.add(panel);
-//					}
-//					panel.addMouseListener(new MyMouseListener());
-//				}
-//				count++;
-//			}
-//			
-//		}
+//		buildDashboardCalendar();
+		allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
+		GregorianCalendar gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
+		int days =gCal.getActualMaximum(Calendar.DATE);
+		int startInWeek = gCal.get(Calendar.DAY_OF_WEEK);
+
+		gCal = new GregorianCalendar(selectedYear, selectedMonth, 1);
+		int totalweeks = gCal.getActualMaximum(Calendar.WEEK_OF_MONTH);
 		
+		/* Build dashboard calendar */
+		if ((startInWeek == 7 && days > 29) || (startInWeek == 6 && days > 30)) {
+			totalweeks +=1;
+		}
+		
+		int count = 1; // count the days
+		for (int i = 1; i <= totalweeks; i++) {
+			for(int j = 1; j <= 7; j++) {
+				
+				if (count < startInWeek || (count - startInWeek + 1) > days) {
+					// no day here
+					panel[0] = new CalendarPanel(0, Color.WHITE);
+					centerPanel.add(panel[0]);
+				}
+				else {
+					if(cDay == (count - startInWeek + 1) && cMonth == selectedMonth && cYear == selectedYear) {
+						// marks the current day
+						panel[(count - startInWeek + 1)] = new CalendarPanel((count - startInWeek + 1), HspvColor.ORANGE);
+						centerPanel.add(panel[(count - startInWeek + 1)]);
+					}
+					else {
+						// every other day
+						panel[(count - startInWeek + 1)] = new CalendarPanel((count - startInWeek + 1), HspvColor.SEC_BROWN);
+						centerPanel.add(panel[(count - startInWeek + 1)]);
+					}
+					panel[(count - startInWeek + 1)].addMouseListener(new MyMouseListener());
+				}
+				count++;
+			}
+			
+		}
 		/** TEST ENDE **/
 
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
@@ -215,17 +221,23 @@ public class DashboardPanel extends JPanel {
 						panel = new CalendarPanel((count - startInWeek + 1), HspvColor.SEC_BROWN);
 						centerPanel.add(panel);
 					}
-					panel.addMouseListener(new MyMouseListener());
+//					panel.addMouseListener(new MyMouseListener());
 				}
 				count++;
 			}
 			
 		}
+		AppointmentApp.mainPanel.add(centerPanel, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Events for calendar panels in dashboard panel will be added here.
+	 */
 	public void createEvents() {
 		
-		
+		for (JPanel p : panel) {
+			p.addMouseListener(new MyMouseListener());
+		}
 		
 	}
 	
@@ -324,6 +336,8 @@ public class DashboardPanel extends JPanel {
 				this.a = a;
 				setPreferredSize(new Dimension(200, 30));
 				setBackground(HspvColor.SEC_BROWN);
+				setToolTipText("<html>#" + a.getId() + ": " + ((a.getMessage() == "") ? "keine weiteren Angaben" : a.getMessage()) +
+						"<br/>Eingetragen von: " + a.getAuthor().getLastName() + ", " + a.getAuthor().getFirstName() + "</html>");
 			}
 			
 			@Override
@@ -339,6 +353,18 @@ public class DashboardPanel extends JPanel {
 				g.drawString(sdfTime.format(a.getStart()) + " - " + end + ": " + a.getIssue().getName(), 5, 12);					
 				g.drawString(a.getEmployee().getLastName() + ", " + a.getEmployee().getFirstName(), 5, 26);					
 	
+			}
+			
+			/**
+			 * 
+			 */
+			@Override
+			public JToolTip createToolTip() {
+			    JToolTip tooltip = super.createToolTip();
+			    tooltip.setBorder(BorderFactory.createLineBorder(HspvColor.GRAY));
+			    tooltip.setBackground(HspvColor.ORANGE);  
+			    tooltip.setForeground(Color.BLACK);
+			    return tooltip;
 			}
 
 		}
@@ -356,7 +382,7 @@ public class DashboardPanel extends JPanel {
 			/* set time to next day 0:00 */
 			c.add(Calendar.DATE, 1);
 			Date tomorrow = c.getTime();
-			
+			allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 			for(Appointment i : allAppointments) {
 				
 				if(i.getStart().after(today) && i.getStart().before(tomorrow)) {
@@ -403,10 +429,13 @@ public class DashboardPanel extends JPanel {
 	public static class CalendarPanel extends JPanel {
 
 		int day;
+		public JLabel lblAppCount;
 		
 		public CalendarPanel(int day, Color c) {
-			
+			allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();
 			this.day = day;
+			
+			
 			
 			setPreferredSize(new Dimension(75,75));
 			setMaximumSize(new Dimension(75,75));
@@ -422,7 +451,7 @@ public class DashboardPanel extends JPanel {
 				add(lblDate, BorderLayout.NORTH);
 				
 				/* label for appointment count */
-				JLabel lblAppCount = new JLabel("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
+				lblAppCount = new JLabel("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
 				lblAppCount.setHorizontalAlignment(SwingConstants.RIGHT);
 				lblAppCount.setFont(new Font(lblDate.getFont().toString(), Font.PLAIN, 11));
 				add(lblAppCount, BorderLayout.SOUTH);

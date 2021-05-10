@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JToolTip;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -161,13 +163,13 @@ public class AppointmentApp extends JFrame{
 		// create and add icons to navigation panel
 		iconDashboard = new IconPanel("dashboard", true);
 		navigation.add(iconDashboard);
-		iconAppointment = new IconPanel("calendar", true);
+		iconAppointment = new IconPanel("calendar", AppointmentApp.user.isCanWriteAppointments());
 		navigation.add(iconAppointment);
-		iconUser = new IconPanel("user", true);
+		iconUser = new IconPanel("user", AppointmentApp.user.isCanWriteUsers());
 		navigation.add(iconUser);
-		iconIssue = new IconPanel("issue", true);
+		iconIssue = new IconPanel("issue", AppointmentApp.user.isCanWriteIssues());
 		navigation.add(iconIssue);
-		iconInfo = new IconPanel("info", false);
+		iconInfo = new IconPanel("info", true);
 		navigation.add(iconInfo);
 		iconExit = new IconPanel("exit", true);		
 		navigation.add(iconExit);
@@ -225,8 +227,8 @@ public class AppointmentApp extends JFrame{
 	}
 	
 	/**
-	 * This method creates all events for the main window. Until now it is
-	 * only controlling the navigation icons.
+	 * This method creates all events for the main window. It is
+	 * only controlling the navigation icons so far.
 	 */
 	private void createEvents() {
 		
@@ -234,17 +236,21 @@ public class AppointmentApp extends JFrame{
 		
 		iconDashboard.addMouseListener(new DashboardMouseListener());
 		
-		iconAppointment.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-				lblNorth.setText("Terminverwaltung");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
-				mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);	
-				mainPanel.validate();
-				validate();
-			}
-		});
+		/* check for permission before adding MouseListener */
+		if(AppointmentApp.user.isCanWriteAppointments()) {
+			iconAppointment.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					invalidate();
+					mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+					lblNorth.setText("Terminverwaltung");
+					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
+					mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);
+					validate();
+				}
+			});
+		}
+		
 				
 		iconIssue.addMouseListener(new MouseAdapter() {
 			@Override
@@ -278,34 +284,18 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
-	// TODO doesnt work until now
-	public static void refreshDashboard() {
-		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-		centerPanel = new DashboardPanel();
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		mainPanel.validate();
-		mainPanel.repaint();
-		log.log(Level.INFO, "Dashboard refreshed");
-	}
-	
+		
 	private class DashboardMouseListener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.println(centerPanel.toString());
-			System.out.println(AppointmentApp.mainLayout.getLayoutComponent(BorderLayout.CENTER).toString());
-			
+			invalidate();
 			mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-
 			lblNorth.setText("Dashboard");
 			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
-		
 			DashboardPanel.mainPanel.validate();
-			System.out.println(DashboardPanel.mainPanel.toString());
-			
-			
 			mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
-			AppointmentApp.mainPanel.validate();
-			System.out.println(AppointmentApp.mainPanel.toString());
+			validate();
+			
 		}
 	}
 	
@@ -333,6 +323,7 @@ public class AppointmentApp extends JFrame{
 			
 			setPreferredSize(new Dimension(75,75));
 			setMaximumSize(new Dimension(75,75));
+			setToolTipText(s);
 			
 			if(access) {
 				setBackground(HspvColor.ORANGE);
@@ -351,6 +342,18 @@ public class AppointmentApp extends JFrame{
 			super.paintComponent(g);
 			ImageIcon icon = new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/" + s + ".png"));
 			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2), ((this.getHeight() - icon.getIconHeight()) / 2));
+		}
+		
+		/**
+		 * 
+		 */
+		@Override
+		public JToolTip createToolTip() {
+		    JToolTip tooltip = super.createToolTip();
+		    tooltip.setBorder(BorderFactory.createLineBorder(HspvColor.GRAY));
+		    tooltip.setBackground(HspvColor.SEC_BROWN);  
+		    tooltip.setForeground(Color.BLACK);
+		    return tooltip;
 		}
 
 	}
