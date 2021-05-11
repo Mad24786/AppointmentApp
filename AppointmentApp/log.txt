@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-10T10:53:54.895519200Z</date>
-  <millis>1620644034895</millis>
-  <nanos>519200</nanos>
+  <date>2021-05-10T11:34:17.263525800Z</date>
+  <millis>1620646457263</millis>
+  <nanos>525800</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -12,29 +12,5 @@
   <method>load</method>
   <thread>1</thread>
   <message>issues.dat loaded successfully</message>
-</record>
-<record>
-  <date>2021-05-10T10:53:54.913471900Z</date>
-  <millis>1620644034913</millis>
-  <nanos>471900</nanos>
-  <sequence>1</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.util.FileDatabase</class>
-  <method>load</method>
-  <thread>1</thread>
-  <message>users.dat loaded successfully</message>
-</record>
-<record>
-  <date>2021-05-10T10:53:54.918458700Z</date>
-  <millis>1620644034918</millis>
-  <nanos>458700</nanos>
-  <sequence>2</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.util.FileDatabase</class>
-  <method>load</method>
-  <thread>1</thread>
-  <message>appointments.dat loaded successfully</message>
 </record>
 </log>
