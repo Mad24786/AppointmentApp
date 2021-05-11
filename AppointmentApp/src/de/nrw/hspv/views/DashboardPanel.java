@@ -50,12 +50,7 @@ import de.nrw.hspv.util.Issue;
 
 @SuppressWarnings("serial")
 public class DashboardPanel extends JPanel {
-	
-	/*
-	 * DashboardPanel Layout
-	 */
-//	public static CardLayout layout = new CardLayout();
-	
+
 	/*
 	 * Get instance of Calendar
 	 */

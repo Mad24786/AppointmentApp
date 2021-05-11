@@ -47,6 +47,8 @@ import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
+import de.nrw.hspv.views.DashboardPanel.AppointmentsByDate;
+import de.nrw.hspv.views.DashboardPanel.CalendarPanel;
 
 /**
  * 
@@ -195,9 +197,15 @@ public class AppointmentPanel extends JPanel {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
-						} catch (IOException ioe) { errMsg.setText("Löschen nicht möglich."); }
+						} catch (IOException ioe) {
+							errMsg.setText("Löschen nicht möglich."); 
+						}
+						int day = a.getStart().getDate();
+						CalendarPanel cp = DashboardPanel.panel[day]; 
+						cp.lblAppCount.setText("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
 						/* refresh JList if everything is fine */
 						AppointmentPanel.fillAppointmentList();
+						DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
 					}
 				}
 				/* ...else give a notice to the user */

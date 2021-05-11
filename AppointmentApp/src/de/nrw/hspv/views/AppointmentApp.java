@@ -18,10 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.JToolTip;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import de.nrw.hspv.util.Appointment;
@@ -31,9 +28,9 @@ import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
@@ -241,38 +238,46 @@ public class AppointmentApp extends JFrame{
 			iconAppointment.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					invalidate();
-					mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+					revalidateAndRepaint();
 					lblNorth.setText("Terminverwaltung");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
 					mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);
-					validate();
+					centerPanel.revalidate();
+					centerPanel.validate();
+					centerPanel.repaint();
 				}
 			});
 		}
 		
-				
-		iconIssue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-				lblNorth.setText("Anliegen");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
-				centerPanel = new IssuePanel();
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
-
-			}
-		});
-		iconUser.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-				lblNorth.setText("User");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
-				centerPanel = new UserPanel();
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
-			}
-		});
+		
+		if(AppointmentApp.user.isCanWriteIssues()) {
+			iconIssue.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					revalidateAndRepaint();
+					lblNorth.setText("Anliegen");
+					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
+					mainPanel.add(new IssuePanel(), BorderLayout.CENTER);
+					centerPanel.validate();
+					centerPanel.revalidate();
+					centerPanel.repaint();
+				}
+			});
+		}
+		
+		if(AppointmentApp.user.isCanWriteUsers()) {
+			iconUser.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					revalidateAndRepaint();
+					lblNorth.setText("User");
+					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
+					mainPanel.add(new UserPanel(), BorderLayout.CENTER);
+					centerPanel.validate();
+				}
+			});
+		}
+		
 		
 		iconExit.addMouseListener(new MouseAdapter() {
 			@Override
@@ -284,18 +289,25 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
+	public static void revalidateAndRepaint() {
+		centerPanel.removeAll();
+		centerPanel.revalidate();
+		centerPanel.repaint();
+		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+		DashboardPanel.allAppointments = AppointmentApp.APPOINTMENTS.getAllAsArrayList();		
+	}
+	
 		
 	private class DashboardMouseListener extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			invalidate();
-			mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
+			revalidateAndRepaint();
 			lblNorth.setText("Dashboard");
 			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
-			DashboardPanel.mainPanel.validate();
 			mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
-			validate();
-			
+			centerPanel.revalidate();
+			centerPanel.validate();
+			centerPanel.repaint();
 		}
 	}
 	

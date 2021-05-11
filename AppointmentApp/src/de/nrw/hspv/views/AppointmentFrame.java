@@ -292,7 +292,7 @@ public class AppointmentFrame extends JFrame {
 					AppointmentApp.APPOINTMENTS.store(a);
 					errMsg.setText("Termin wurde gespeichert.");
 					int day = start.getDate();
-					CalendarPanel cp = (CalendarPanel) DashboardPanel.panel[day]; 
+					CalendarPanel cp = DashboardPanel.panel[day]; 
 					cp.lblAppCount.setText("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
 					AppointmentPanel.fillAppointmentList();
 					DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
