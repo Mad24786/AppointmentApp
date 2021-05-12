@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2021-05-12T09:32:00.929703400Z</date>
+  <millis>1620811920929</millis>
+  <nanos>703400</nanos>
+  <sequence>3</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
+  <method>windowClosing</method>
+  <thread>20</thread>
+  <message>Appointment window set invisible</message>
+</record>

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-10T11:34:17.263525800Z</date>
-  <millis>1620646457263</millis>
-  <nanos>525800</nanos>
+  <date>2021-05-11T19:40:47.818227600Z</date>
+  <millis>1620762047818</millis>
+  <nanos>227600</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -12,5 +12,29 @@
   <method>load</method>
   <thread>1</thread>
   <message>issues.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-11T19:40:47.914648700Z</date>
+  <millis>1620762047914</millis>
+  <nanos>648700</nanos>
+  <sequence>1</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>users.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-11T19:40:47.928614100Z</date>
+  <millis>1620762047928</millis>
+  <nanos>614100</nanos>
+  <sequence>2</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>appointments.dat loaded successfully</message>
 </record>
 </log>
