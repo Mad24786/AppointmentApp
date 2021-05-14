@@ -349,6 +349,7 @@ public class UserFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				UserPanel.fillAppointmentList();
 				/**
 				 * Schriftfarbe wird wieder auf Schwarz gesetzt
 				 */

@@ -11,7 +11,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
@@ -20,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -30,11 +33,12 @@ import de.nrw.hspv.views.AppointmentApp;
 import de.nrw.hspv.util.FileDatabase;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.views.UserFrame;
+import de.nrw.hspv.views.DashboardPanel.AppointmentsByDate;
+import de.nrw.hspv.views.DashboardPanel.CalendarPanel;
 import de.nrw.hspv.views.IssuePanel.CreateIcon;
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.User;
-
 
 /**
  * In der Klasse UserPanel wird das Panel erstellt welches die Möglichkeit
@@ -65,6 +69,8 @@ public class UserPanel extends JPanel {
 	static DefaultListModel<User> listModel;
 	// static ArrayList<User> allUsers;
 	public static FileDatabase<User> USERS;
+	public static ArrayList<User> allUsers;
+	public static JLabel errMsg = new JLabel();
 
 	/**
 	 * Konstruktor
@@ -80,7 +86,6 @@ public class UserPanel extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/**
 	 * Panel wird erstellt
@@ -113,11 +118,20 @@ public class UserPanel extends JPanel {
 		JPanel centerPanel = new JPanel();
 
 		centerPanel.setBackground(Color.WHITE);
-		
-		
+		listModel = new DefaultListModel<User>();
+		/* fill the list */
+		fillAppointmentList();
+		/* instantiate list with data */
+		list = new JList<User>(listModel);
+		/* add list to a JScrollPane and remove border */
+		JScrollPane scrPane = new JScrollPane(list);
+		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrPane.setPreferredSize(new Dimension(548, 445));
+		scrPane.setBorder(BorderFactory.createEmptyBorder());
+		/* add customized list to center panel */
+		centerPanel.add(scrPane);
+		/* add whole center panel */
 		add(centerPanel, BorderLayout.CENTER);
-		
-		
 
 	}
 
@@ -135,6 +149,52 @@ public class UserPanel extends JPanel {
 			}
 
 		});
+		/* adds action for clicking the delete button */
+		deleteIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				User a = list.getSelectedValue();
+				/* first check if an appointment is selected... */
+				if (a != null) {
+					/* if user has selected an appointment and really wants to delete it */
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den User #" + a.getId() + " lï¿½schen?",
+							"User löschen", JOptionPane.YES_NO_OPTION) == 0) {
+						try {
+							AppointmentApp.USERS.remove(a.getId());
+							AppointmentApp.log.log(Level.INFO, "User deleted");
+						} catch (IOException ioe) {
+							errMsg.setText("Lï¿½schen nicht mï¿½glich.");
+						}
+//						int day = a.getStart().getDate();
+//						CalendarPanel cp = DashboardPanel.panel[day]; 
+//						cp.lblAppCount.setText("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
+//						/* refresh JList if everything is fine */
+						UserPanel.fillAppointmentList();
+//						DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
+					}
+				}
+				/* ...else give a notice to the user */
+				else {
+					errMsg.setText("Bitte wï¿½hlen Sie den zu lï¿½schenden Termin aus.");
+				}
+			}
+		});
+	}
+
+	public static void fillAppointmentList() {
+		// if content already exists, remove it
+		if (listModel.getSize() != 0)
+			listModel.removeAllElements();
+
+		// get the freshest data of appointments and sort
+		// TODO source out...
+		allUsers = AppointmentApp.USERS.getAllAsArrayList();
+		// Collections.sort(allUsers);
+
+		// add all appointments to JList related listModel
+		for (User e : allUsers) {
+			listModel.addElement((User) e);
+		}
 	}
 
 	/**
@@ -174,4 +234,3 @@ public class UserPanel extends JPanel {
 	}
 
 }
-
