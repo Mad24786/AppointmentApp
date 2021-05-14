@@ -90,7 +90,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s, %s - %s: %s", DashboardPanel.sdfDate.format(getStart()), DashboardPanel.sdfTime.format(getStart()),
+		return String.format("#%d: %s, %s - %s: %s", getId(), DashboardPanel.sdfDate.format(getStart()), DashboardPanel.sdfTime.format(getStart()),
 												DashboardPanel.sdfTime.format(getEnd()), getIssue().getName());
 	}
 

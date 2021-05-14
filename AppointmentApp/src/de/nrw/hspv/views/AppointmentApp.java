@@ -141,6 +141,10 @@ public class AppointmentApp extends JFrame{
 	 */
 	AppointmentApp(int userId){	
 		super("AppointmentApp v0.1");
+		//start logging
+		try {
+			log.addHandler(new FileHandler("src/de/nrw/hspv/database/log.txt"));
+		} catch (SecurityException | IOException e) {}
 		
 		// load database
 		try {
@@ -154,10 +158,7 @@ public class AppointmentApp extends JFrame{
 		// set user
 		AppointmentApp.user = AppointmentApp.USERS.get(userId);
 		
-		//start logging
-		try {
-			log.addHandler(new FileHandler("log.txt"));
-		} catch (SecurityException | IOException e) {}
+		
 		
 		// initialize components of this frame
 		initComponents();

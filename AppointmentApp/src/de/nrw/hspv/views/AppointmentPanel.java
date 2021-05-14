@@ -24,6 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
@@ -124,6 +126,7 @@ public class AppointmentPanel extends JPanel {
 		fillAppointmentList();
 		/* instantiate list with data */ 
 		list = new JList<Appointment>(listModel);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		/* add list to a JScrollPane and remove border */
 		JScrollPane scrPane = new JScrollPane(list);
 		scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
