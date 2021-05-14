@@ -29,12 +29,25 @@ import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-
+/**
+ * AppointmentApp is a light and simple application for managing appointments in an organization.
+ * Users can be created and given different permissions via the user administration. 
+ * Issues can be adapted to the organization and created individually. These are given a fixed 
+ * processing time in order to avoid overlapping. 
+ * 
+ * <code>AppointmentApp</code> is the starting point for the entire application. A frame is 
+ * generated here and navigation and <code>DashboardPanel</code> are loaded as the main screen.
+ * 
+ * In addition, various system components are made available here for application-wide use.
+ * 
+ * @author Mathias Fernahl
+ * @version 17 May 2021
+ *
+ */
 public class AppointmentApp extends JFrame{
 	
 	/**
@@ -120,12 +133,16 @@ public class AppointmentApp extends JFrame{
 	//JPanel[] icons;
 	
 	/**
-	 * getting started with AppointmentApp
+	 * The actual start of the application is when the Constructor of
+	 * <code>AppointmentApp</code> is called. This happens after a user
+	 * has logged in.
+	 * 
+	 * @param userId 	ID of the user, who logged in before calling this class
 	 */
 	AppointmentApp(int userId){	
 		super("AppointmentApp v0.1");
 		
-		/* load database */
+		// load database
 		try {
 			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
 			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
@@ -134,26 +151,18 @@ public class AppointmentApp extends JFrame{
 			e.printStackTrace();
 		}
 		
-		/*
-		 * set user
-		 */
+		// set user
 		AppointmentApp.user = AppointmentApp.USERS.get(userId);
 		
-		/*
-		 * start logging
-		 */
+		//start logging
 		try {
-			log.addHandler(new FileHandler("src/de/nrw/hspv/database/log.txt"));
+			log.addHandler(new FileHandler("log.txt"));
 		} catch (SecurityException | IOException e) {}
 		
-		/*
-		 * initialize components of this frame
-		 */
+		// initialize components of this frame
 		initComponents();
 		
-		/*
-		 * create events for this frame
-		 */
+		// create events for this frame
 		createEvents();
 
 		/* instance of other windows */
@@ -178,7 +187,7 @@ public class AppointmentApp extends JFrame{
 	    setLocation(x, y);
 		
 	    /* 
-	     * build up navigation panel on the left
+	     * build navigation panel on the left
 	     */
 	    // set GridLayout with 6 rows in 1 column
 		JPanel navigation = new JPanel(new GridLayout(6,1,5,5));
@@ -205,7 +214,7 @@ public class AppointmentApp extends JFrame{
 		mainPanel.add(navigation, BorderLayout.WEST);
 		
 		/*
-		 * build upper panel, just a label to show where the user is moving around
+		 * build upper panel, just a labeled icon to show where the user is moving around
 		 */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
@@ -318,9 +327,9 @@ public class AppointmentApp extends JFrame{
 	}
 	
 	public static void revalidateAndRepaint(JPanel panel) {
-		panel.removeAll();
-		panel.revalidate();
-		panel.repaint();
+		centerPanel.removeAll();
+		centerPanel.revalidate();
+		centerPanel.repaint();
 		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));		
 	}
 	
@@ -404,7 +413,7 @@ public class AppointmentApp extends JFrame{
 	}
 	
 	/**
-	 * Starts the program!
+	 * Starts the application!
 	 * 
 	 * @param args
 	 */
