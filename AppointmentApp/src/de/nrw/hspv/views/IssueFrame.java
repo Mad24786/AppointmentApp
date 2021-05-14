@@ -26,8 +26,19 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * This class creates an IssueFrame as an instance of JFrame. You can use this
+ * class to describe the issues.
+ * 
+ * @author Luis Duhme
+ * @version 17 May 2021
+ * @see javax.swing.JFrame
+ *
+ */
+
 @SuppressWarnings("serial")
 public class IssueFrame extends JFrame {
+	// Create instance of JFrame
 
 	JButton btnOk;
 	JButton btnCancel;
@@ -45,15 +56,17 @@ public class IssueFrame extends JFrame {
 
 	GridBagConstraints constr;
 
+//IssueFrame with events and its components 
 	public IssueFrame() {
 		getContentPane().setBackground(new Color(255, 102, 51));
 		initComponents();
 		createEvents();
 	}
 
+//Here the dropdown list at the bottom of the frame is set
 	public void initComponents() {
 		setBackground(new Color(255, 102, 51));
-		setSize(new Dimension(640,480));
+		setSize(new Dimension(640, 480));
 		Vector<Issue> vec = new Vector<Issue>();
 		/** Holt alle Objekte aus der DB ab */
 		@SuppressWarnings("static-access")
@@ -71,13 +84,13 @@ public class IssueFrame extends JFrame {
 				txtId.setText(String.valueOf(i.getId()));
 			}
 		});
-
+//The JPanel which is located in the Center is created and described here
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(Color.WHITE);
 		GridLayout centerLayout = new GridLayout(2, 0);
 		centerPanel.setLayout(centerLayout);
 		getContentPane().setLayout(null);
-
+//The components are described with e.g. their size
 		lblId = new JLabel("ID:");
 		lblId.setForeground(new Color(255, 255, 204));
 		lblId.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -136,66 +149,6 @@ public class IssueFrame extends JFrame {
 	}
 
 	public void createEvents() {
-
-//		btnCancel.addActionListener(new ActionListener() {	
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				log.info("Aktion abgebrochen.");
-////				dispose();
-//			}
-//		});
-
-//		btnOk.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				lblId.setForeground(Color.BLACK);
-//				lblName.setForeground(Color.BLACK);
-//				lblTime.setForeground(Color.BLACK);
-//				lblMsg.setText("");
-//				
-//				int id, time;
-//				
-//				try {
-//					id = Integer.parseInt(txtId.getText());
-//				} catch (NumberFormatException nfe) {
-//					lblMsg.setText("Fehlerhafte Eingabe: {ID}");
-//					log.warning("Fehlerhafte Eingabe: {ID}");
-//					lblId.setForeground(Color.RED);
-//					return;
-//				}
-//				
-//				if(txtName.getText().trim().equals("")) {
-//					lblName.setForeground(Color.RED);
-//					lblMsg.setText("Fehlerhafte Eingabe. Das Feld {Name} ist ein Pflichtfeld.");
-//					log.warning("Das Feld {Name} ist ein Pflichtfeld.");
-//					return;
-//				}
-//				
-//				try {
-//					time = Integer.parseInt(txtTime.getText());
-//				} catch (NumberFormatException nfe) {
-//					lblMsg.setText("Fehlerhafte Eingabe: {Zeit}");
-//					log.warning("Fehlerhafte Eingabe: {Zeit}");
-//					lblTime.setForeground(Color.RED);
-//					return;
-//				}
-//			
-//				Issue issue = new Issue(id, txtName.getText(), (1000*60*time));
-//				try {
-//					Load.getIssues().store(issue);
-//					lblMsg.setText("Anliegen erfolgreich erstellt.");
-//					txtId.setText("");
-//					txtName.setText("");
-//					txtDesc.setText("");
-//					txtTime.setText("");
-//				} catch (IOException e1) {
-//					lblMsg.setText("Fehler beim Schreiben des Objekts.");
-//					log.warning("Fehler beim Schreiben des Objekts.");
-//				}
-//
-//			}
-//		});
 
 	}
 
