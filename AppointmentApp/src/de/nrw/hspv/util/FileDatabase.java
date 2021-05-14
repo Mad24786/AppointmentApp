@@ -63,7 +63,7 @@ public class FileDatabase<T> implements Serializable {
 	}
 	
 	/**
-	 * Creates a FileStorage. It allows you to store your serializable object in a file using a key
+	 * Creates a FileStorage. It allows you to store a serializable object in a file using a key
      * for identification and to read it somewhen later.
      * 
      * All data stored in this FileStorage will instantly be stored in the given file.

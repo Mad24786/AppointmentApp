@@ -2,14 +2,39 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-12T09:32:00.929703400Z</date>
-  <millis>1620811920929</millis>
-  <nanos>703400</nanos>
-  <sequence>3</sequence>
+  <date>2021-05-14T11:51:59.891868500Z</date>
+  <millis>1620993119891</millis>
+  <nanos>868500</nanos>
+  <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
-  <class>de.nrw.hspv.views.AppointmentFrame$MyWindowListener</class>
-  <method>windowClosing</method>
-  <thread>20</thread>
-  <message>Appointment window set invisible</message>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>issues.dat loaded successfully</message>
 </record>
+<record>
+  <date>2021-05-14T11:52:00.015536400Z</date>
+  <millis>1620993120015</millis>
+  <nanos>536400</nanos>
+  <sequence>1</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>users.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-14T11:52:00.044491400Z</date>
+  <millis>1620993120044</millis>
+  <nanos>491400</nanos>
+  <sequence>2</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>appointments.dat loaded successfully</message>
+</record>
+</log>

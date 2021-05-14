@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-11T19:40:47.818227600Z</date>
-  <millis>1620762047818</millis>
-  <nanos>227600</nanos>
+  <date>2021-05-14T11:34:15.917102500Z</date>
+  <millis>1620992055917</millis>
+  <nanos>102500</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>issues.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-11T19:40:47.914648700Z</date>
-  <millis>1620762047914</millis>
-  <nanos>648700</nanos>
+  <date>2021-05-14T11:34:16.063710300Z</date>
+  <millis>1620992056063</millis>
+  <nanos>710300</nanos>
   <sequence>1</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -26,9 +26,9 @@
   <message>users.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-11T19:40:47.928614100Z</date>
-  <millis>1620762047928</millis>
-  <nanos>614100</nanos>
+  <date>2021-05-14T11:34:16.103601Z</date>
+  <millis>1620992056103</millis>
+  <nanos>601000</nanos>
   <sequence>2</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>

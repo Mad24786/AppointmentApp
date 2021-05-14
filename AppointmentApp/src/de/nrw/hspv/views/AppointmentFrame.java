@@ -220,9 +220,11 @@ public class AppointmentFrame extends JFrame {
          */
 		JLabel lblText = new JLabel("Bemerkung:");
 		addComp(gb, lblText, 0, 3, 1, 1);
+		
 		txtText = new JTextArea();
 		txtText.setPreferredSize(new Dimension(250,150));
 		txtText.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		txtText.addFocusListener(new MyFocusListener());
 		addComp(gb, txtText, 1, 3, 1, 1);
 		
 		/*
@@ -273,6 +275,8 @@ public class AppointmentFrame extends JFrame {
 					AppointmentApp.APPOINTMENTS.store(a);
 					// give feedback to the user in case of success
 					errMsg.setText("Termin wurde gespeichert.");
+					// clear fields
+					clearFields();
 					// update concerning dashboard component by extracing the day of month
 					Calendar calendar = Calendar.getInstance();
 					calendar.setTime(start);
@@ -367,6 +371,9 @@ public class AppointmentFrame extends JFrame {
 				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId())) {
 			strErrMsg = "Terminkonflikt";
 			btnOk.setEnabled(false);
+			System.out.println("Start: " + start.toString());
+			System.out.println("< Ende: " + theAppointmentBefore.getEnd().toString());
+			System.out.println("User neu: " + user.getId() + "=" + "User alt: " + theAppointmentBefore.getEmployee().getId());
 		}
 		else {
 			// everything is fine
@@ -399,6 +406,10 @@ public class AppointmentFrame extends JFrame {
 	 * @version 17 May 2021
 	 */
 	private class MyFocusListener extends FocusAdapter{			
+		@Override
+		public void focusGained(FocusEvent e) {
+			checkDate();
+		}
 		@Override
 		public void focusLost(FocusEvent e) {
 			checkDate();
