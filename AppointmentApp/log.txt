@@ -1,10 +1,16 @@
-<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
+<<<<<<< HEAD
   <date>2021-05-14T09:14:50.442902300Z</date>
   <millis>1620983690442</millis>
   <nanos>902300</nanos>
+=======
+  <date>2021-05-11T19:40:47.818227600Z</date>
+  <millis>1620762047818</millis>
+  <nanos>227600</nanos>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -14,6 +20,7 @@
   <message>issues.dat loaded successfully</message>
 </record>
 <record>
+<<<<<<< HEAD
   <date>2021-05-14T09:14:50.487139600Z</date>
   <millis>1620983690487</millis>
   <nanos>139600</nanos>
@@ -48,5 +55,29 @@
   <method>load</method>
   <thread>20</thread>
   <message>users.dat loaded successfully</message>
+=======
+  <date>2021-05-11T19:40:47.914648700Z</date>
+  <millis>1620762047914</millis>
+  <nanos>648700</nanos>
+  <sequence>1</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>users.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-11T19:40:47.928614100Z</date>
+  <millis>1620762047928</millis>
+  <nanos>614100</nanos>
+  <sequence>2</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>appointments.dat loaded successfully</message>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
 </record>
 </log>

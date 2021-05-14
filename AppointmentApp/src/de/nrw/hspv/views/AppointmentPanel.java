@@ -2,33 +2,19 @@ package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.io.Serializable;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Vector;
 import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -38,18 +24,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import de.nrw.hspv.util.Appointment;
 import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
-import de.nrw.hspv.util.User;
+import de.nrw.hspv.views.DashboardPanel.AppointmentsByDate;
+import de.nrw.hspv.views.DashboardPanel.CalendarPanel;
 
 /**
- * 
  * In this class the appointment panel (as an instance of JPanel) will be created.
  * This object will be instanced, if the user clicks on the appointment icon in main
  * navigation. Existing rights provided.
@@ -59,9 +40,16 @@ import de.nrw.hspv.util.User;
  * 
  * 
  * @author Mathias Fernahl
- * 
+ * @version 17 May 2021
  */
 public class AppointmentPanel extends JPanel {
+	
+	/**
+	 * A unique serial version identifier.
+	 * 
+	 * @see Serializable#serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	/*
 	 * some layout components for class-wide use
@@ -150,7 +138,7 @@ public class AppointmentPanel extends JPanel {
 	
 	/**
 	 * This methods builds respectively <b>re</b>builds 
-	 * the existing JList with all available appointments.
+	 * the existing JList <code>list</code> with all available appointments.
 	 */
 	public static void fillAppointmentList() {
 		// if content already exists, remove it
@@ -191,18 +179,24 @@ public class AppointmentPanel extends JPanel {
 				/* first check if an appointment is selected... */
 				if(a != null) {
 					/* if user has selected an appointment and really wants to delete it */
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?", "Termin löschen", JOptionPane.YES_NO_OPTION) == 0) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " lï¿½schen?", "Termin lï¿½schen", JOptionPane.YES_NO_OPTION) == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
-						} catch (IOException ioe) { errMsg.setText("Löschen nicht möglich."); }
+						} catch (IOException ioe) {
+							errMsg.setText("Lï¿½schen nicht mï¿½glich."); 
+						}
+						int day = a.getStart().getDate();
+						CalendarPanel cp = DashboardPanel.panel[day]; 
+						cp.lblAppCount.setText("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
 						/* refresh JList if everything is fine */
 						AppointmentPanel.fillAppointmentList();
+						DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
 					}
 				}
 				/* ...else give a notice to the user */
 				else {
-					errMsg.setText("Bitte wählen Sie den zu löschenden Termin aus.");
+					errMsg.setText("Bitte wï¿½hlen Sie den zu lï¿½schenden Termin aus.");
 				}
 			}
 		});
@@ -269,13 +263,6 @@ public class AppointmentPanel extends JPanel {
 			/* paint in center */
 			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2), ((this.getHeight() - icon.getIconHeight()) / 2));
 		}
-
-	}
-
-	
-	public static void main(String[] args) {
-
-		new AppointmentPanel();
 
 	}
 
