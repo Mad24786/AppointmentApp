@@ -1,281 +1,177 @@
 package de.nrw.hspv.views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
+import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.JCheckBox;
 
+import de.nrw.hspv.views.AppointmentApp;
+import de.nrw.hspv.util.FileDatabase;
 import de.nrw.hspv.util.Issue;
+import de.nrw.hspv.views.UserFrame;
+import de.nrw.hspv.views.IssuePanel.CreateIcon;
+import de.nrw.hspv.util.Appointment;
+import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.User;
 
-import java.util.ArrayList;
-import java.util.Vector;
 
-import java.util.logging.Logger;
-
+/**
+ * In der Klasse UserPanel wird das Panel erstellt welches die Möglichkeit
+ * bietet einen User zu bearbeiten oder zu löschen. Außerdem kann man sich eine
+ * Liste der erstellten User angucken
+ * 
+ * @author Dennis Herrndörfer
+ *
+ */
 public class UserPanel extends JPanel {
+	/**
+	 * Layout
+	 */
+	BorderLayout layout = new BorderLayout();
+	/**
+	 * Panel
+	 */
+	JPanel centerPanel = new JPanel();
+	JPanel addIcon;
+	JPanel deleteIcon;
+	/**
+	 * Buttons
+	 */
+	JButton deleteButton = new JButton();
+	JButton createButton = new JButton();
 
-	private static final Logger log = Logger.getLogger(UserPanel.class.getName());
+	JList<User> list;
+	static DefaultListModel<User> listModel;
+	// static ArrayList<User> allUsers;
+	public static FileDatabase<User> USERS;
 
-	JButton buttonOk;
-	JButton buttonCancel;
-
-	//JLabel labelId;
-	JLabel labelFirstName;
-	JLabel labelLastName;
-	JLabel labelAge;
-	JLabel labelPhoneNumber;
-	JLabel labelEmail;
-	JLabel labelPassword;
-	JLabel labelCanReadAppointments;
-	JLabel labelCanWriteAppointments;
-	JLabel labelCanReadIssues;
-	JLabel labelCanWriteIssues;
-	JLabel labelCanReadUsers;
-	JLabel labelCanWriteUsers;
-
-	//JTextField textId;
-	JTextField textFirstName;
-	JTextField textLastName;
-	JTextField textAge;
-	JTextField textPhoneNumber;
-	JTextField textEmail;
-	JTextField textPassword;
-	JCheckBox CheckCanReadAppointments;
-	JCheckBox CheckCanWriteAppointments;
-	JCheckBox CheckCanReadIssues;
-	JCheckBox CheckCanWriteIssues;
-	JCheckBox CheckCanReadUsers;
-	JCheckBox CheckCanWriteUsers;
-
+	/**
+	 * Konstruktor
+	 */
 	public UserPanel() {
-		initComponents();
+		initUi();
 		createEvents();
-	}
+		try {
 
-	public void initComponents() {
-		setLayout(new GridLayout(0, 2));
-		setBackground(Color.WHITE);
+			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
 
-		Vector<User> vec = new Vector<User>();
-
-		ArrayList<User> allUsers = AppointmentApp.USERS.getAllAsArrayList();
-		for (User i : allUsers) {
-			vec.add(i);
-//		}
-//		JComboBox<User> highscoreCombo = new JComboBox<User>(vec);
-//		highscoreCombo.addItemListener(new ItemListener() {
-
-//			@Override
-//			public void itemStateChanged(ItemEvent e) {
-//				User i = (User) e.getItem();
-//				textId.setText(String.valueOf(i.getId()));
-//			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
+	
+
+	/**
+	 * Panel wird erstellt
+	 */
+	private void initUi() {
+
+		/**
+		 * Layout setzen
+		 */
+		setLayout(layout);
+		/**
+		 * Panel oben erstellen mit den dazugehörigen Icons
+		 */
+		JPanel northPanel = new JPanel();
+		northPanel.setBackground(Color.WHITE);
+		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		/**
+		 * Aufruf der Methode CreateIcon
+		 */
+		addIcon = new CreateIcon("add", true);
+		northPanel.add(addIcon);
+
+		deleteIcon = new CreateIcon("delete", true);
+		northPanel.add(deleteIcon);
+		/**
+		 * northPanel dem Panell hinzufügen
+		 */
+		add(northPanel, BorderLayout.NORTH);
 
 		JPanel centerPanel = new JPanel();
-		centerPanel.setBackground(Color.WHITE);
-		GridLayout centerLayout = new GridLayout(2, 0);
-		centerPanel.setLayout(centerLayout);
 
-		//labelId = new JLabel("ID:");
-		// labelId.setPreferredSize(new Dimension(50, 24));
-		//add(labelId);
-		//textId = new JTextField();
-		//add(textId);
-		labelFirstName = new JLabel("Vorname:");
-		add(labelFirstName);
-		textFirstName = new JTextField();
-		add(textFirstName);
-		labelLastName = new JLabel("Nachname:");
-		add(labelLastName);
-		textLastName = new JTextField();
-		add(textLastName);
-		labelAge = new JLabel("Alter:");
-		add(labelAge);
-		textAge = new JTextField();
-		add(textAge);
-		labelPhoneNumber = new JLabel("Telefonnummer:");
-		add(labelPhoneNumber);
-		textPhoneNumber = new JTextField();
-		add(textPhoneNumber);
-		labelEmail = new JLabel("Email:");
-		add(labelEmail);
-		textEmail = new JTextField();
-		add(textEmail);
-		labelPassword = new JLabel("Passwort:");
-		add(labelPassword);
-		textPassword = new JTextField();
-		add(textPassword);
-		labelCanReadAppointments = new JLabel("Berechtigung Termine lesen");
-		add(labelCanReadAppointments);
-		CheckCanReadAppointments = new JCheckBox();
-		add(CheckCanReadAppointments);
-		labelCanWriteAppointments = new JLabel("Berechtigung Bearbeiten von Terminen");
-		add(labelCanWriteAppointments);
-		CheckCanWriteAppointments = new JCheckBox();
-		add(CheckCanWriteAppointments);
-		labelCanReadIssues = new JLabel("Berechtigung Anliegen lesen");
-		add(labelCanReadIssues);
-		CheckCanReadIssues = new JCheckBox();
-		add(CheckCanReadIssues);
-		labelCanWriteIssues = new JLabel("Berechtigung Bearbeiten von Anliegen");
-		add(labelCanWriteIssues);
-		CheckCanWriteIssues = new JCheckBox();
-		add(CheckCanWriteIssues);
-		labelCanReadUsers = new JLabel("Berechtigung Lesen von User");
-		add(labelCanReadUsers);
-		CheckCanReadUsers = new JCheckBox();
-		add(CheckCanReadUsers);
-		labelCanWriteUsers = new JLabel("Berechtigung Bearbeiten von User");
-		add(labelCanWriteUsers);
-		CheckCanWriteUsers = new JCheckBox();
-		add(CheckCanWriteUsers);
+		centerPanel.setBackground(Color.WHITE);
+		
+		
+		add(centerPanel, BorderLayout.CENTER);
+		
 		
 
-		buttonCancel = new JButton("Abbruch");
-		buttonCancel.setSize(20, 30);
-		add(buttonCancel);
-		buttonOk = new JButton("Ok");
-		add(buttonOk);
-
 	}
 
+	/**
+	 * Event Handling
+	 */
 	public void createEvents() {
-
-		buttonCancel.addActionListener(new ActionListener() {
+		/**
+		 * Aufruf der Klasse UserFrame bei Klicken auf das addIcon
+		 */
+		addIcon.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				log.info("Aktion abgebrochen.");
-				textFirstName.setText("");
-				textLastName.setText("");
-				textAge.setText("");
-				textPhoneNumber.setText("");
-				textEmail.setText("");
-				textPassword.setText("");
-				
-			
+			public void mouseClicked(MouseEvent e) {
+				new UserFrame();
 			}
+
 		});
-
-		buttonOk.addActionListener(new ActionListener() {
-			int  age, number;
-			
-			@Override
-			
-			public void actionPerformed(ActionEvent e) {
-
-				new UserPanel1();
-
-				if (textFirstName.getText().trim().equals("")) {
-					textFirstName.setForeground(Color.RED);
-					textFirstName.setText("Pflichteingabe");
-
-					return;
-				}
-				if (textLastName.getText().trim().equals("")) {
-					textLastName.setForeground(Color.RED);
-					textLastName.setText("Pflichteingabe");
-
-					return;
-				}
-				try {
-					age = Integer.parseInt(textAge.getText());
-				} catch (NumberFormatException e1) {
-					textAge.setText("Fehlerhafte Eingabe: [Age]");
-					log.warning("Fehlerhafte Eingabe: [Age]");
-					textAge.setForeground(Color.RED);
-					return;
-				}
-				if (textAge.getText().trim().equals("")) {
-					textAge.setForeground(Color.RED);
-					textAge.setText("Pflichteingabe");
-
-					return;
-				}
-				if(age >120) {
-					textAge.setForeground(Color.RED);
-					textAge.setText("Geben sie ein richtiges Alter ein");
-					return;
-				}
-				try {
-					number = Integer.parseInt(textPhoneNumber.getText());
-				} catch (NumberFormatException e1) {
-					textPhoneNumber.setText("Fehlerhafte Eingabe: [Number]");
-					log.warning("Fehlerhafte Eingabe: [Number]");
-					textPhoneNumber.setForeground(Color.RED);
-					return;
-				}
-				if (textPhoneNumber.getText().trim().equals("")) {
-					textPhoneNumber.setForeground(Color.RED);
-					textPhoneNumber.setText("Pflichteingabe");
-
-					return;
-				}
-				if (textEmail.getText().trim().equals("")) {
-					textEmail.setForeground(Color.RED);
-					textEmail.setText("Pflichteingabe");
-
-					return;
-				}
-				if(textPassword.getText().trim().equals("")) {
-					textPassword.setForeground(Color.RED);
-					textPassword.setText("Pflichteingabe");
-				}
-
-				
-				User user = new User(textFirstName.getText(), textLastName.getText(),
-						Integer.parseInt(textAge.getText()), Integer.parseInt(textPhoneNumber.getText()),
-						textEmail.getText(),textPassword.getText(), CheckCanReadAppointments.isSelected(),
-						CheckCanWriteAppointments.isSelected(), CheckCanReadIssues.isSelected(),
-						CheckCanWriteIssues.isSelected(),CheckCanReadUsers.isSelected(),CheckCanWriteUsers.isSelected());
-				try {
-					AppointmentApp.USERS.store(user);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				//labelId.setForeground(Color.BLACK);
-				textFirstName.setForeground(Color.BLACK);
-				textLastName.setForeground(Color.BLACK);
-				textAge.setForeground(Color.BLACK);
-				textPhoneNumber.setForeground(Color.BLACK);
-				textEmail.setForeground(Color.BLACK);
-				
-				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
-				JOptionPane.showMessageDialog(null,"Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
-				textFirstName.setText("");
-				textLastName.setText("");
-				textAge.setText("");
-				textPhoneNumber.setText("");
-				textEmail.setText("");
-				textPassword.setText("");
-			}
-		});
-
 	}
 
-	public static void main(String[] args) {
+	/**
+	 * Methode CreateIcon welche die beiden Icons erstellt
+	 * 
+	 * @author übernommen von Matthias Fernahl
+	 * 
+	 *
+	 */
+	public class CreateIcon extends JPanel {
 
-		new UserPanel();
+		private String s;
 
+		public CreateIcon(String s, boolean access) {
+
+			this.s = s;
+
+			Dimension size = new Dimension(50, 50);
+
+			setPreferredSize(size);
+			setMaximumSize(size);
+
+			if (access) {
+				setBackground(HspvColor.ORANGE);
+			} else {
+				setBackground(HspvColor.SEC_GRAY);
+			}
+		}
+
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			ImageIcon icon = new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/" + s + ".png"));
+			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2),
+					((this.getHeight() - icon.getIconHeight()) / 2));
+		}
 	}
 
 }
+

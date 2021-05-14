@@ -5,7 +5,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import de.nrw.hspv.views.AppointmentApp;
 import de.nrw.hspv.views.DashboardPanel;
-
+/**
+ * Die Klasse User erstellt das Objekt User und die dazugehörigen Daten
+ * @author Dennis Herrndörfer
+ *
+ */
 public class User implements Serializable {
 
 	/**
@@ -13,14 +17,16 @@ public class User implements Serializable {
 	 */
 	private static final long serialVersionUID = -4763035350427944677L;
 
-	// Ale Datenbanken laden, und benötigte Datenbank holen
+	/**
+	 * Alle Variablen
+	 */
 
 	private int id;
 	private String firstName;
 	private String lastName;
 	private int age;
 	private int phoneNumber;
-	// private boolean sachbearbeiter;
+
 	private String email;
 	private boolean canReadAppointments = false;
 	private boolean canWriteAppointments = false;
@@ -31,11 +37,13 @@ public class User implements Serializable {
 	private String password;
 	private String username;
 
-	// Konstruktor
 	public User() {
 
 	}
 
+	/**
+	 * Konstruktor welche im UserPanel übergeben wird
+	 */
 	public User(String firstName, String lastName, int age, int phoneNumber, String email, String password,
 			boolean canReadAppointments, boolean canWriteAppointments, boolean canReadIssues, boolean canWriteIssues,
 			boolean canReadUsers, boolean canWriteUsers) {
@@ -52,9 +60,9 @@ public class User implements Serializable {
 		this.canWriteIssues = canWriteIssues;
 		this.canReadUsers = canReadUsers;
 		this.canWriteUsers = canWriteUsers;
-		this.username = "username"+getId();
+		this.username = "username" + getId();
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("%s, %s (%d)", getLastName(), getFirstName(), getId());
@@ -68,9 +76,11 @@ public class User implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -106,14 +116,6 @@ public class User implements Serializable {
 	public void setPhoneNumber(int phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
-//	public boolean getSachbearbeiter() {
-//		return sachbearbeiter;
-//	}
-//
-//	public void setSachbearbeiter(boolean sachbearbeiter) {
-//		sachbearbeiter = sachbearbeiter;
-//	}
 
 	public String getEmail() {
 		return email;
@@ -179,6 +181,10 @@ public class User implements Serializable {
 		this.canWriteUsers = canWriteUsers;
 	}
 
+	/**
+	 * Main in der User() aufgerufen wird
+	 * 
+	 */
 	public static void main(String[] args) {
 		User user = new User();
 	}

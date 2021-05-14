@@ -53,13 +53,30 @@ import de.nrw.hspv.util.HspvColor;
 import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
-public class UserPanel1 extends JFrame {
+/**
+ * In der Klasse UserFrame wird das Fenster für das erstellen eines neuen Users
+ * erstellt. In dieser Klasse können Name, Alter, Email, Telefonnummer und
+ * Berechtigungen festgelegt werden, die später wichtig sind für die Erstellung
+ * eines Termins.
+ * 
+ * @author Dennis Herrndörfer
+ *
+ */
+public class UserFrame extends JFrame {
+	/**
+	 * Fenster
+	 */
 	private JFrame jFrame;
 	private Container contentPane;
+	/**
+	 * Buttons
+	 */
 	JButton buttonOk;
 	JButton buttonCancel;
 	private static final Logger log = Logger.getLogger(UserPanel.class.getName());
-	//JLabel labelId;
+	/**
+	 * Labels
+	 */
 	JLabel labelFirstName;
 	JLabel labelLastName;
 	JLabel labelAge;
@@ -73,13 +90,18 @@ public class UserPanel1 extends JFrame {
 	JLabel labelCanReadUsers;
 	JLabel labelCanWriteUsers;
 
-	//JTextField textId;
+	/**
+	 * Textfields
+	 */
 	JTextField textFirstName;
 	JTextField textLastName;
 	JTextField textAge;
 	JTextField textPhoneNumber;
 	JTextField textEmail;
 	JTextField textPassword;
+	/**
+	 * CheckBoxen
+	 */
 	JCheckBox CheckCanReadAppointments;
 	JCheckBox CheckCanWriteAppointments;
 	JCheckBox CheckCanReadIssues;
@@ -87,27 +109,45 @@ public class UserPanel1 extends JFrame {
 	JCheckBox CheckCanReadUsers;
 	JCheckBox CheckCanWriteUsers;
 
-	public UserPanel1() {
+	/**
+	 * Konstruktor
+	 */
+	public UserFrame() {
 		initUI();
 		createEvents();
 	}
+
+	/**
+	 * Fenster wird erstellt
+	 */
 	private void initUI() {
 		jFrame = new JFrame("User");
-		jFrame.setSize(800, 600);
-		jFrame.setLocationRelativeTo(null);
+		jFrame.setSize(new Dimension(640, 480));
+
 		jFrame.setDefaultCloseOperation(jFrame.EXIT_ON_CLOSE);
-		jFrame.setResizable(false);
+		/**
+		 * GridLayout
+		 */
 		setLayout(new GridLayout(0, 2));
 		setBackground(Color.WHITE);
+		/**
+		 * Position des Fensters
+		 */
+		int x = (AppointmentApp.screenSize.width - this.getSize().width) / 3;
+		int y = (AppointmentApp.screenSize.height - this.getSize().height) / 3;
+		setLocation(x, y);
 
-		
-
+		/**
+		 * CenterPanel ebenfalls mit GridLayout
+		 */
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(Color.WHITE);
 		GridLayout centerLayout = new GridLayout(2, 0);
 		centerPanel.setLayout(centerLayout);
 
-		
+		/**
+		 * Befüllung der Labels und CheckBoxen und hinzufügen zum centerPanel
+		 */
 		labelFirstName = new JLabel("Vorname:");
 		add(labelFirstName);
 		textFirstName = new JTextField();
@@ -156,21 +196,32 @@ public class UserPanel1 extends JFrame {
 		add(labelCanWriteUsers);
 		CheckCanWriteUsers = new JCheckBox();
 		add(CheckCanWriteUsers);
-		
 
 		buttonCancel = new JButton("Abbruch");
 		buttonCancel.setSize(20, 30);
 		add(buttonCancel);
 		buttonOk = new JButton("Ok");
 		add(buttonOk);
+		/**
+		 * Center Panel zum Frame hinzufügen
+		 */
 		add(centerPanel);
 		pack();
+		/**
+		 * Frame sichtbar machen
+		 */
 		setVisible(true);
 
 	}
 
+	/**
+	 * Event Handling
+	 */
 	public void createEvents() {
-
+		/**
+		 * Bei betätigen des Abbruch Buttons werden die Textfelder gelöscht und das
+		 * Programm schließt sich
+		 */
 		buttonCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -181,31 +232,43 @@ public class UserPanel1 extends JFrame {
 				textPhoneNumber.setText("");
 				textEmail.setText("");
 				textPassword.setText("");
-				
+
+				dispose();
+
 			}
 		});
-
+		/**
+		 * Bei betätigen des Ok Buttons werden die Eingaben geprüft und der User am Ende
+		 * gespeichert
+		 */
 		buttonOk.addActionListener(new ActionListener() {
-			int  age, number;
-			
+			int age, number;
+
 			@Override
 
 			public void actionPerformed(ActionEvent e) {
 
-				
-
+				/**
+				 * Prüfung ob Vorname eingeben wurde
+				 */
 				if (textFirstName.getText().trim().equals("")) {
 					textFirstName.setForeground(Color.RED);
 					textFirstName.setText("Pflichteingabe");
 
 					return;
 				}
+				/**
+				 * Prüfung ob Nachname eingeben wurde
+				 */
 				if (textLastName.getText().trim().equals("")) {
 					textLastName.setForeground(Color.RED);
 					textLastName.setText("Pflichteingabe");
 
 					return;
 				}
+				/**
+				 * Prüfung ob eine Zahl beim Alter eingeben wurde
+				 */
 				try {
 					age = Integer.parseInt(textAge.getText());
 				} catch (NumberFormatException e1) {
@@ -214,17 +277,26 @@ public class UserPanel1 extends JFrame {
 					textAge.setForeground(Color.RED);
 					return;
 				}
+				/**
+				 * Prüfung ob überhaupt etwas beim Alter eingegeben wurde
+				 */
 				if (textAge.getText().trim().equals("")) {
 					textAge.setForeground(Color.RED);
 					textAge.setText("Pflichteingabe");
 
 					return;
 				}
-				if(age >120) {
+				/**
+				 * Prüfung ob das eingegebene Alter unter 120 ist
+				 */
+				if (age > 120) {
 					textAge.setForeground(Color.RED);
 					textAge.setText("Geben sie ein richtiges Alter ein");
 					return;
 				}
+				/**
+				 * Prüfung ob die Telefonnummer eine Zahl ist
+				 */
 				try {
 					number = Integer.parseInt(textPhoneNumber.getText());
 				} catch (NumberFormatException e1) {
@@ -233,44 +305,68 @@ public class UserPanel1 extends JFrame {
 					textPhoneNumber.setForeground(Color.RED);
 					return;
 				}
+				/**
+				 * Prüfung ob überhaupt eine Telefonnummer eingeben wurde
+				 */
 				if (textPhoneNumber.getText().trim().equals("")) {
 					textPhoneNumber.setForeground(Color.RED);
 					textPhoneNumber.setText("Pflichteingabe");
 
 					return;
 				}
+				/**
+				 * Prüfung ob Email eingegeben wurde
+				 */
 				if (textEmail.getText().trim().equals("")) {
 					textEmail.setForeground(Color.RED);
 					textEmail.setText("Pflichteingabe");
 
 					return;
 				}
-				if(textPassword.getText().trim().equals("")) {
+				/**
+				 * Prüfung ob Passwort eingeben wurde
+				 */
+				if (textPassword.getText().trim().equals("")) {
 					textPassword.setForeground(Color.RED);
 					textPassword.setText("Pflichteingabe");
 				}
 
-				
+				/**
+				 * Bei keinem Fehler wird Konstruktor aus Klasse User aufgerufen und befüllt
+				 */
 				User user = new User(textFirstName.getText(), textLastName.getText(),
 						Integer.parseInt(textAge.getText()), Integer.parseInt(textPhoneNumber.getText()),
-						textEmail.getText(),textPassword.getText(), CheckCanReadAppointments.isSelected(),
+						textEmail.getText(), textPassword.getText(), CheckCanReadAppointments.isSelected(),
 						CheckCanWriteAppointments.isSelected(), CheckCanReadIssues.isSelected(),
-						CheckCanWriteIssues.isSelected(),CheckCanReadUsers.isSelected(),CheckCanWriteUsers.isSelected());
+						CheckCanWriteIssues.isSelected(), CheckCanReadUsers.isSelected(),
+						CheckCanWriteUsers.isSelected());
+				/**
+				 * User wird gespeichert
+				 */
 				try {
 					AppointmentApp.USERS.store(user);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				//labelId.setForeground(Color.BLACK);
+				/**
+				 * Schriftfarbe wird wieder auf Schwarz gesetzt
+				 */
 				textFirstName.setForeground(Color.BLACK);
 				textLastName.setForeground(Color.BLACK);
 				textAge.setForeground(Color.BLACK);
 				textPhoneNumber.setForeground(Color.BLACK);
 				textEmail.setForeground(Color.BLACK);
-				
-				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
-				JOptionPane.showMessageDialog(null,"Sie haben einen neuen User angelegt. Ihr neuer Username ist: username"+user.getId());
+
+				/**
+				 * Id wird als neuer Username ausgegeben
+				 */
+				System.out.println("Sie haben einen neuen User angelegt. Ihr neuer Username ist:" + user.getId());
+				JOptionPane.showMessageDialog(null,
+						"Sie haben einen neuen User angelegt. Ihr neuer Username ist: username" + user.getId());
+				/**
+				 * Der Inhalt der Textfelder wird gelöscht
+				 */
 				textFirstName.setText("");
 				textLastName.setText("");
 				textAge.setText("");
@@ -283,13 +379,11 @@ public class UserPanel1 extends JFrame {
 	}
 
 	public static void main(String[] args) {
-
-		new UserPanel1();
-
-	}
-
-
+		/**
+		 * Aufruf des Konstruktors
+		 */
+		new UserFrame();
 
 	}
 
-
+}
