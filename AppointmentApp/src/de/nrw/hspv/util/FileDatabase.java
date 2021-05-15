@@ -19,16 +19,13 @@ import java.util.logging.Level;
 import de.nrw.hspv.views.AppointmentApp;
 
 /**
- * 
- * If a new appointment is created, an object of this class will be generated.
- * An appointment contains a bunch of informations, which are partially given by
- * user input. Other informations will be created by the system.
- * 
+ * A utility for this application allowing you to store 
+ * all kind of serializable object in one or more files 
+ * under a certain key.
  * 
  * @author Mathias Fernahl
  * @version 17 May 2021
  * @see java.io.Serializable
- * @see java.lang.Comparable
  */
 public class FileDatabase<T> implements Serializable {
 	
@@ -120,34 +117,64 @@ public class FileDatabase<T> implements Serializable {
 	  * Stores an Object using a key for later identification.
 	  * 
 	  * @param o The Object to store.
+	  * @throws IOException
 	  */
 	public void store(T o) throws IOException{
+		// we need a key first from getNextId()
 		store(getNextId(), o);
 	}
-
+	
+	/**
+	 * Stores an Object using a key for later identification.
+	 * 
+	 * @param key		Auto generated key.
+	 * @param o			The Object to store.
+	 * @throws IOException
+	 */
 	public void store(int key, T o) throws IOException {
 		if(get(key) != null)
 			throw new IOException("key already exists");
-		
+		// put key and object to HashMap
 		storageMap.put(key, o);
+		// save the file and log
 		save();
-		AppointmentApp.log.log(Level.INFO, o.toString() + " #" + key + " saved.");
+		if (AppointmentApp.logEvents)
+			AppointmentApp.log.log(Level.INFO, o.toString() + " #" + key + " saved.");
 	}
-
+	
+	/**
+	 * Returns an Object by using its key.
+	 * 
+	 * @param key 		The key of the Object to return.
+	 * @return			The Object from storageFile.
+	 */
 	public T get(int key) {
 		return storageMap.get(key);
 	}
 	
+	/**
+	 * Generates automatically the next ID in current storageFile.
+	 * 
+	 * @return 	The next higher ID as last element.
+	 */
 	public int getNextId() {
+		// first id is 0
 		int nextId = 0;
 		Iterator<Entry<Integer, T>> it = storageMap.entrySet().iterator();
+		// go through all elements in storageMap
 	    while (it.hasNext()) {
 	    	Map.Entry<Integer, T> pair = (Map.Entry<Integer, T>)it.next();
+	    	// save last id of this map and add 1
 	        nextId = (pair.getKey()+1);
 	    }
 		return nextId;
 	}
 
+	/**
+	 * Returns all elements from storageMap for further use in the application.
+	 * 
+	 * @return		ArrayList with all elements from storageMap.
+	 */
 	public ArrayList<T> getAllAsArrayList() {
 		ArrayList<T> result = new ArrayList<T>();
 		for (T c : storageMap.values()) {
@@ -156,6 +183,12 @@ public class FileDatabase<T> implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Deletes an Object by using its key.
+	 * 
+	 * @param key				The ID of the Object to delete.
+	 * @throws IOException
+	 */
 	public void remove(int key) throws IOException {
 		if(get(key) == null)
 			throw new IOException("key does not exist");
@@ -164,18 +197,14 @@ public class FileDatabase<T> implements Serializable {
 		save();
 		AppointmentApp.log.log(Level.INFO, o.toString() + " #" + key + " deleted.");
 	}
-
+	
+	/**
+	 * Returns the size of current FileStorage.
+	 * 
+	 * @return 		The size of storageMap as an Integer.
+	 */
 	public int getSize() {
 		return storageMap.size();
-	}
-
-	@Override
-	public String toString() {
-		String result = "FileStorage @ " + storageFile.getAbsolutePath() + "\n";
-		for (int cKey : storageMap.keySet()) {
-			result += "ID: " + cKey + "\n" + storageMap.get(cKey) + "\n\n";
-		}
-		return result.trim();
 	}
 
 }

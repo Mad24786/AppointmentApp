@@ -158,8 +158,6 @@ public class AppointmentApp extends JFrame{
 		// set user
 		AppointmentApp.user = AppointmentApp.USERS.get(userId);
 		
-		
-		
 		// initialize components of this frame
 		initComponents();
 		
@@ -267,22 +265,27 @@ public class AppointmentApp extends JFrame{
 	 */
 	private void createEvents() {
 		
-		// TODO eigenen MouseListener schreiben
-		
-		iconDashboard.addMouseListener(new DashboardMouseListener());
+		iconDashboard.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				revalidateAndRepaint();
+				lblNorth.setText("Dashboard");
+				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+				mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
+				validate();
+			}
+		});
 		
 		/* check for permission before adding MouseListener */
 		if(AppointmentApp.user.isCanWriteAppointments()) {
 			iconAppointment.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					revalidateAndRepaint(centerPanel);
+					revalidateAndRepaint();
 					lblNorth.setText("Terminverwaltung");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
 					mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);
-					centerPanel.revalidate();
-					centerPanel.validate();
-					centerPanel.repaint();
+					validate();
 				}
 			});
 		}
@@ -292,13 +295,11 @@ public class AppointmentApp extends JFrame{
 			iconIssue.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					revalidateAndRepaint(centerPanel);
+					revalidateAndRepaint();
 					lblNorth.setText("Anliegen");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
 					mainPanel.add(new IssuePanel(), BorderLayout.CENTER);
-					centerPanel.validate();
-//					centerPanel.revalidate();
-					centerPanel.repaint();
+					validate();
 				}
 			});
 		}
@@ -307,11 +308,11 @@ public class AppointmentApp extends JFrame{
 			iconUser.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					revalidateAndRepaint(appointmentPanel);
+					revalidateAndRepaint();
 					lblNorth.setText("User");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
 					mainPanel.add(new UserPanel(), BorderLayout.CENTER);
-					centerPanel.validate();
+					validate();
 				}
 			});
 		}
@@ -327,24 +328,14 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
-	public static void revalidateAndRepaint(JPanel panel) {
+	/**
+	 * Removes all components from centerPanel to make sure it is ready for a new panel. 
+	 */
+	public static void revalidateAndRepaint() {
 		centerPanel.removeAll();
 		centerPanel.revalidate();
 		centerPanel.repaint();
 		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));		
-	}
-	
-		
-	private class DashboardMouseListener extends MouseAdapter{
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			revalidateAndRepaint(centerPanel);
-			lblNorth.setText("Dashboard");
-			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
-			mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
-//			centerPanel.revalidate();
-//			centerPanel.repaint();
-		}
 	}
 	
 	/**
@@ -420,9 +411,8 @@ public class AppointmentApp extends JFrame{
 	 */
 	public static void main(String[] args) {
 		
-		
-		
 		new AppointmentApp(4);
+		
 	}
 
 }
