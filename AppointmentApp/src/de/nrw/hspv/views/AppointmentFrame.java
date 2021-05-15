@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 
@@ -311,7 +310,6 @@ public class AppointmentFrame extends JFrame {
 		cbIssue.setSelectedIndex(0);
 		cbUser.setSelectedIndex(0);
 		txtText.setText("");
-		errMsg.setText("");
 		checkDate();
 	}
 	

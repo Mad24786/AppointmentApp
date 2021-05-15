@@ -182,7 +182,7 @@ public class AppointmentPanel extends JPanel {
 				/* first check if an appointment is selected... */
 				if(a != null) {
 					/* if user has selected an appointment and really wants to delete it */
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " l�schen?", "Termin l�schen", JOptionPane.YES_NO_OPTION) == 0) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?", "Termin löschen", JOptionPane.YES_NO_OPTION) == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");

@@ -1,27 +1,57 @@
-<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
+<<<<<<< HEAD
   <date>2021-05-15T12:40:55.974389900Z</date>
   <millis>1621082455974</millis>
   <nanos>389900</nanos>
+=======
+  <date>2021-05-15T09:02:06.011013400Z</date>
+  <millis>1621069326011</millis>
+  <nanos>13400</nanos>
+  <sequence>0</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>1</thread>
+  <message>issues.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-15T09:02:06.058884900Z</date>
+  <millis>1621069326058</millis>
+  <nanos>884900</nanos>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
   <sequence>1</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
+<<<<<<< HEAD
   <thread>19</thread>
   <message>issues.dat loaded successfully</message>
+=======
+  <thread>1</thread>
+  <message>users.dat loaded successfully</message>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
 </record>
 <record>
+<<<<<<< HEAD
   <date>2021-05-15T12:40:55.986933200Z</date>
   <millis>1621082455986</millis>
   <nanos>933200</nanos>
+=======
+  <date>2021-05-15T09:02:06.065866500Z</date>
+  <millis>1621069326065</millis>
+  <nanos>866500</nanos>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
   <sequence>2</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
+<<<<<<< HEAD
   <thread>19</thread>
   <message>users.dat loaded successfully</message>
 </record>
@@ -35,8 +65,12 @@
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
   <thread>19</thread>
+=======
+  <thread>1</thread>
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
   <message>appointments.dat loaded successfully</message>
 </record>
+<<<<<<< HEAD
 <record>
   <date>2021-05-15T12:40:58.046375200Z</date>
   <millis>1621082458046</millis>
@@ -49,4 +83,6 @@
   <thread>19</thread>
   <message>users.dat loaded successfully</message>
 </record>
+=======
+>>>>>>> branch 'master' of https://github.com/Mad24786/AppointmentApp.git
 </log>
