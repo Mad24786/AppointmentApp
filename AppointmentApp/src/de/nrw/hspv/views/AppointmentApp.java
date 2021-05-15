@@ -34,16 +34,15 @@ import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+public class AppointmentApp extends JFrame {
 
-public class AppointmentApp extends JFrame{
-	
 	/**
 	 * A unique serial version identifier.
 	 * 
 	 * @see Serializable#serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Logger
 	 */
@@ -53,20 +52,20 @@ public class AppointmentApp extends JFrame{
 	 * the user, who successfully logged in
 	 */
 	public static User user;
-	
+
 	/*
 	 * user session settings
 	 */
 	public static boolean showUserAppointments = false;
 	public static boolean logEvents = false;
-	
+
 	/*
 	 * FileDatabase for global use
 	 */
 	public static FileDatabase<Appointment> APPOINTMENTS;
 	public static FileDatabase<Issue> ISSUES;
 	public static FileDatabase<User> USERS;
-	
+
 	/*
 	 * calendar variables
 	 */
@@ -80,36 +79,36 @@ public class AppointmentApp extends JFrame{
 	 * put other windows than this here
 	 */
 	public static AppointmentFrame appFrame;
-	
+
 	/*
 	 * get user screen size
 	 */
 	public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	
+
 	/*
 	 * set window size here
 	 */
 	public static final Dimension windowSize = new Dimension(1024, 768);
-	
+
 	/*
 	 * border layout for main panel
 	 */
 	public static BorderLayout mainLayout = new BorderLayout();
-	
+
 	/*
-	 * components of this window for use in this class 
+	 * components of this window for use in this class
 	 */
 	public static JPanel mainPanel = new JPanel(mainLayout);
 	private static JPanel centerPanel;
 	public static JPanel eastPanel;
-	private static JLabel lblNorth = new JLabel(); 
-	
+	private static JLabel lblNorth = new JLabel();
+
 	/*
-	 * content of components 
+	 * content of components
 	 */
 	public static DashboardPanel dashboardPanel;
 	public static AppointmentPanel appointmentPanel;
-	
+
 	// navigation panels
 	private static JPanel iconDashboard;
 	private static JPanel iconAppointment;
@@ -117,14 +116,14 @@ public class AppointmentApp extends JFrame{
 	private static JPanel iconIssue;
 	private static JPanel iconInfo;
 	private static JPanel iconExit;
-	//JPanel[] icons;
-	
+	// JPanel[] icons;
+
 	/**
 	 * getting started with AppointmentApp
 	 */
-	AppointmentApp(int userId){	
+	AppointmentApp(int userId) {
 		super("AppointmentApp v0.1");
-		
+
 		/* load database */
 		try {
 			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
@@ -133,24 +132,25 @@ public class AppointmentApp extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		/*
 		 * set user
 		 */
 		AppointmentApp.user = AppointmentApp.USERS.get(userId);
-		
+
 		/*
 		 * start logging
 		 */
 		try {
 			log.addHandler(new FileHandler("src/de/nrw/hspv/database/log.txt"));
-		} catch (SecurityException | IOException e) {}
-		
+		} catch (SecurityException | IOException e) {
+		}
+
 		/*
 		 * initialize components of this frame
 		 */
 		initComponents();
-		
+
 		/*
 		 * create events for this frame
 		 */
@@ -160,12 +160,13 @@ public class AppointmentApp extends JFrame{
 		// TODO find another place for this
 		appFrame = new AppointmentFrame();
 	}
-	
+
 	/**
-	 * Initializes all needed components in this frame
-	 * and feeds them with data if needed.
+	 * Initializes all needed components in this frame and feeds them with data if
+	 * needed.
 	 */
-	static JLabel lblLogging ;
+	static JLabel lblLogging;
+
 	private void initComponents() {
 		/*
 		 * set default values of this window
@@ -175,19 +176,19 @@ public class AppointmentApp extends JFrame{
 		setResizable(false);
 		mainPanel.setBackground(Color.WHITE);
 		int x = (screenSize.width - this.getSize().width) / 2;
-	    int y = (screenSize.height - this.getSize().height) / 2;
-	    setLocation(x, y);
-		
-	    /* 
-	     * build up navigation panel on the left
-	     */
-	    // set GridLayout with 6 rows in 1 column
-		JPanel navigation = new JPanel(new GridLayout(6,1,5,5));
+		int y = (screenSize.height - this.getSize().height) / 2;
+		setLocation(x, y);
+
+		/*
+		 * build up navigation panel on the left
+		 */
+		// set GridLayout with 6 rows in 1 column
+		JPanel navigation = new JPanel(new GridLayout(6, 1, 5, 5));
 		// set default values for this panel
 		navigation.setBackground(Color.WHITE);
-		navigation.setPreferredSize(new Dimension(125,0));
+		navigation.setPreferredSize(new Dimension(125, 0));
 		navigation.setBorder(new EmptyBorder(0, 15, 0, 15));
-		
+
 		// create and add icons to navigation panel
 		iconDashboard = new IconPanel("dashboard", true);
 		navigation.add(iconDashboard);
@@ -199,39 +200,40 @@ public class AppointmentApp extends JFrame{
 		navigation.add(iconIssue);
 		iconInfo = new IconPanel("info", true);
 		navigation.add(iconInfo);
-		iconExit = new IconPanel("exit", true);		
+		iconExit = new IconPanel("exit", true);
 		navigation.add(iconExit);
-		
+
 		// add navigation to main panel
 		mainPanel.add(navigation, BorderLayout.WEST);
-		
+
 		/*
 		 * build upper panel, just a label to show where the user is moving around
 		 */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
-		northPanel.setPreferredSize(new Dimension(0,50));
+		northPanel.setPreferredSize(new Dimension(0, 50));
 		lblNorth.setText("Dashboard");
-		lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
-        northPanel.add(lblNorth);
-        northPanel.setAlignmentY(LEFT_ALIGNMENT);
-        // add this to main panel
-        mainPanel.add(northPanel, BorderLayout.NORTH);
-        
-        /*
-         * center panel is an instance of DashboardPanel() by default
-         */
+		lblNorth.setIcon(
+				new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+		northPanel.add(lblNorth);
+		northPanel.setAlignmentY(LEFT_ALIGNMENT);
+		// add this to main panel
+		mainPanel.add(northPanel, BorderLayout.NORTH);
+
+		/*
+		 * center panel is an instance of DashboardPanel() by default
+		 */
 		centerPanel = new DashboardPanel();
 		// add center panel to main panel
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		
+
 		/*
 		 * east panel with today appointments
 		 */
 		eastPanel = new DashboardPanel.AppointmentsByDate(cDay, showUserAppointments);
 		// add this panel to main panel
 		mainPanel.add(eastPanel, BorderLayout.EAST);
-		
+
 		/*
 		 * south panel for some system informations about user and logging
 		 */
@@ -243,7 +245,7 @@ public class AppointmentApp extends JFrame{
 		lblLogging = new JLabel("| Logging: " + (logEvents ? "aktiviert" : "deaktiviert"));
 		southPanel.add(lblLogging);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
-		
+
 		/*
 		 * finally add main panel to this frame, pack and make it visible
 		 */
@@ -251,26 +253,27 @@ public class AppointmentApp extends JFrame{
 		pack();
 		setVisible(true);
 	}
-	
+
 	/**
-	 * This method creates all events for the main window. It is
-	 * only controlling the navigation icons so far.
+	 * This method creates all events for the main window. It is only controlling
+	 * the navigation icons so far.
 	 */
 	private void createEvents() {
-		
+
 		// TODO eigenen MouseListener schreiben
-		
+
 		iconDashboard.addMouseListener(new DashboardMouseListener());
 		iconInfo.addMouseListener(new infoMouseListner());
-		
+
 		/* check for permission before adding MouseListener */
-		if(AppointmentApp.user.isCanWriteAppointments()) {
+		if (AppointmentApp.user.isCanWriteAppointments()) {
 			iconAppointment.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					revalidateAndRepaint(centerPanel);
 					lblNorth.setText("Terminverwaltung");
-					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
+					lblNorth.setIcon(new ImageIcon(
+							AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
 					mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);
 					centerPanel.revalidate();
 					centerPanel.validate();
@@ -278,15 +281,15 @@ public class AppointmentApp extends JFrame{
 				}
 			});
 		}
-		
-		
-		if(AppointmentApp.user.isCanWriteIssues()) {
+
+		if (AppointmentApp.user.isCanWriteIssues()) {
 			iconIssue.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					revalidateAndRepaint(centerPanel);
 					lblNorth.setText("Anliegen");
-					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
+					lblNorth.setIcon(
+							new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
 					mainPanel.add(new IssuePanel(), BorderLayout.CENTER);
 					centerPanel.validate();
 //					centerPanel.revalidate();
@@ -294,140 +297,138 @@ public class AppointmentApp extends JFrame{
 				}
 			});
 		}
-		
-		if(AppointmentApp.user.isCanWriteUsers()) {
+
+		if (AppointmentApp.user.isCanWriteUsers()) {
 			iconUser.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					revalidateAndRepaint(appointmentPanel);
 					lblNorth.setText("User");
-					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
+					lblNorth.setIcon(
+							new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
 					mainPanel.add(new UserPanel(), BorderLayout.CENTER);
 					centerPanel.validate();
 				}
 			});
 		}
-		
-		
+
 		iconExit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich beenden?", "Beenden", JOptionPane.YES_NO_OPTION) == 0)
+				if (JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich beenden?", "Beenden",
+						JOptionPane.YES_NO_OPTION) == 0)
 					System.exit(0);
 			}
 		});
-		
+
 	}
-	
+
 	public static void revalidateAndRepaint(JPanel panel) {
 		panel.removeAll();
 		panel.revalidate();
 		panel.repaint();
-		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));		
+		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
 	}
-	
-		
-	private class DashboardMouseListener extends MouseAdapter{
+
+	private class DashboardMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			revalidateAndRepaint(centerPanel);
 			lblNorth.setText("Dashboard");
-			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+			lblNorth.setIcon(
+					new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
 			mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
 //			centerPanel.revalidate();
 //			centerPanel.repaint();
 		}
 	}
-	
-	
-	
-private class infoMouseListner extends MouseAdapter{
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		revalidateAndRepaint(centerPanel);
-		lblNorth.setText("Information");
-		lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/info.png")));
-		mainPanel.add(new InfoPanel(), BorderLayout.CENTER);
+
+	private class infoMouseListner extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			revalidateAndRepaint(centerPanel);
+			lblNorth.setText("Information");
+			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/info_small.png")));
+			mainPanel.add(new InfoPanel(), BorderLayout.CENTER);
 //		centerPanel.revalidate();
 //		centerPanel.repaint();
+		}
 	}
-}
+
 	/**
-	 *  Inner class IconPanel can create icons for main navigation easily.
-	 *  
-	 *  @author Mathias Fernahl
-	 *  @version 17 May 2021
+	 * Inner class IconPanel can create icons for main navigation easily.
+	 * 
+	 * @author Mathias Fernahl
+	 * @version 17 May 2021
 	 */
 	public class IconPanel extends JPanel {
-		
+
 		/**
 		 * A unique serial version identifier.
 		 * 
 		 * @see Serializable#serialVersionUID
 		 */
 		private static final long serialVersionUID = 1L;
-		
-		private String s; 
-			
+
+		private String s;
+
 		/**
-		 * The constructor does all the work by getting a String for the icon 
-		 * and a boolean value to manage access of different users.
+		 * The constructor does all the work by getting a String for the icon and a
+		 * boolean value to manage access of different users.
 		 * 
-		 * @param s			The String for getting the correct icon. 
-		 * @param access	A boolean value from user class to make sure a user
-		 * 					is allowed to get access to this menu item
+		 * @param s      The String for getting the correct icon.
+		 * @param access A boolean value from user class to make sure a user is allowed
+		 *               to get access to this menu item
 		 */
 		public IconPanel(String s, boolean access) {
-			
+
 			this.s = s;
 			// set default layout
-			setPreferredSize(new Dimension(75,75));
-			setMaximumSize(new Dimension(75,75));
+			setPreferredSize(new Dimension(75, 75));
+			setMaximumSize(new Dimension(75, 75));
 			setToolTipText(s);
 			// change color in dependency of user permission
-			if(access) {
+			if (access) {
 				setBackground(HspvColor.ORANGE);
-			}
-			else {
+			} else {
 				setBackground(HspvColor.SEC_GRAY);
 			}
 		}
-		
+
 		/**
-		 * Draws the icon on this panel by reading the given string.
-		 * Make sure the image file exists!
+		 * Draws the icon on this panel by reading the given string. Make sure the image
+		 * file exists!
 		 */
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			ImageIcon icon = new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/" + s + ".png"));
-			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2), ((this.getHeight() - icon.getIconHeight()) / 2));
+			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2),
+					((this.getHeight() - icon.getIconHeight()) / 2));
 		}
-		
+
 		/**
 		 * Customizes the <code>JToolTip</code>.
 		 */
 		@Override
 		public JToolTip createToolTip() {
-		    JToolTip tooltip = super.createToolTip();
-		    tooltip.setBorder(BorderFactory.createLineBorder(HspvColor.GRAY));
-		    tooltip.setBackground(HspvColor.SEC_BROWN);  
-		    tooltip.setForeground(Color.BLACK);
-		    return tooltip;
+			JToolTip tooltip = super.createToolTip();
+			tooltip.setBorder(BorderFactory.createLineBorder(HspvColor.GRAY));
+			tooltip.setBackground(HspvColor.SEC_BROWN);
+			tooltip.setForeground(Color.BLACK);
+			return tooltip;
 		}
 
 	}
-	
+
 	/**
 	 * Starts the program!
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		
-		
-		new AppointmentApp(4);
+
+		new AppointmentApp(2);
 	}
 
 }
