@@ -29,25 +29,12 @@ import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-/**
- * AppointmentApp is a light and simple application for managing appointments in an organization.
- * Users can be created and given different permissions via the user administration. 
- * Issues can be adapted to the organization and created individually. These are given a fixed 
- * processing time in order to avoid overlapping. 
- * 
- * <code>AppointmentApp</code> is the starting point for the entire application. A frame is 
- * generated here and navigation and <code>DashboardPanel</code> are loaded as the main screen.
- * 
- * In addition, various system components are made available here for application-wide use.
- * 
- * @author Mathias Fernahl
- * @version 17 May 2021
- *
- */
+
 public class AppointmentApp extends JFrame{
 	
 	/**
@@ -71,7 +58,7 @@ public class AppointmentApp extends JFrame{
 	 * user session settings
 	 */
 	public static boolean showUserAppointments = false;
-	public static boolean logEvents = true;
+	public static boolean logEvents = false;
 	
 	/*
 	 * FileDatabase for global use
@@ -133,20 +120,12 @@ public class AppointmentApp extends JFrame{
 	//JPanel[] icons;
 	
 	/**
-	 * The actual start of the application is when the Constructor of
-	 * <code>AppointmentApp</code> is called. This happens after a user
-	 * has logged in.
-	 * 
-	 * @param userId 	ID of the user, who logged in before calling this class
+	 * getting started with AppointmentApp
 	 */
 	AppointmentApp(int userId){	
 		super("AppointmentApp v0.1");
-		//start logging
-		try {
-			log.addHandler(new FileHandler("src/de/nrw/hspv/database/log.txt"));
-		} catch (SecurityException | IOException e) {}
 		
-		// load database
+		/* load database */
 		try {
 			ISSUES = new FileDatabase<Issue>(new File("src/de/nrw/hspv/database/issues.dat"));
 			USERS = new FileDatabase<User>(new File("src/de/nrw/hspv/database/users.dat"));
@@ -155,13 +134,26 @@ public class AppointmentApp extends JFrame{
 			e.printStackTrace();
 		}
 		
-		// set user
+		/*
+		 * set user
+		 */
 		AppointmentApp.user = AppointmentApp.USERS.get(userId);
 		
-		// initialize components of this frame
+		/*
+		 * start logging
+		 */
+		try {
+			log.addHandler(new FileHandler("src/de/nrw/hspv/database/log.txt"));
+		} catch (SecurityException | IOException e) {}
+		
+		/*
+		 * initialize components of this frame
+		 */
 		initComponents();
 		
-		// create events for this frame
+		/*
+		 * create events for this frame
+		 */
 		createEvents();
 
 		/* instance of other windows */
@@ -173,6 +165,7 @@ public class AppointmentApp extends JFrame{
 	 * Initializes all needed components in this frame
 	 * and feeds them with data if needed.
 	 */
+	static JLabel lblLogging ;
 	private void initComponents() {
 		/*
 		 * set default values of this window
@@ -186,7 +179,7 @@ public class AppointmentApp extends JFrame{
 	    setLocation(x, y);
 		
 	    /* 
-	     * build navigation panel on the left
+	     * build up navigation panel on the left
 	     */
 	    // set GridLayout with 6 rows in 1 column
 		JPanel navigation = new JPanel(new GridLayout(6,1,5,5));
@@ -213,7 +206,7 @@ public class AppointmentApp extends JFrame{
 		mainPanel.add(navigation, BorderLayout.WEST);
 		
 		/*
-		 * build upper panel, just a labeled icon to show where the user is moving around
+		 * build upper panel, just a label to show where the user is moving around
 		 */
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(Color.WHITE);
@@ -247,7 +240,7 @@ public class AppointmentApp extends JFrame{
 		southPanel.setBackground(Color.WHITE);
 		JLabel lblUser = new JLabel("Benutzer: " + user.getLastName() + ", " + user.getFirstName());
 		southPanel.add(lblUser);
-		JLabel lblLogging = new JLabel("| Logging: " + (logEvents ? "aktiviert" : "deaktiviert"));
+		lblLogging = new JLabel("| Logging: " + (logEvents ? "aktiviert" : "deaktiviert"));
 		southPanel.add(lblLogging);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
@@ -265,27 +258,23 @@ public class AppointmentApp extends JFrame{
 	 */
 	private void createEvents() {
 		
-		iconDashboard.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				revalidateAndRepaint();
-				lblNorth.setText("Dashboard");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
-				mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
-				validate();
-			}
-		});
+		// TODO eigenen MouseListener schreiben
+		
+		iconDashboard.addMouseListener(new DashboardMouseListener());
+		iconInfo.addMouseListener(new infoMouseListner());
 		
 		/* check for permission before adding MouseListener */
 		if(AppointmentApp.user.isCanWriteAppointments()) {
 			iconAppointment.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					revalidateAndRepaint();
+					revalidateAndRepaint(centerPanel);
 					lblNorth.setText("Terminverwaltung");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
 					mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);
-					validate();
+					centerPanel.revalidate();
+					centerPanel.validate();
+					centerPanel.repaint();
 				}
 			});
 		}
@@ -295,11 +284,13 @@ public class AppointmentApp extends JFrame{
 			iconIssue.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					revalidateAndRepaint();
+					revalidateAndRepaint(centerPanel);
 					lblNorth.setText("Anliegen");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
 					mainPanel.add(new IssuePanel(), BorderLayout.CENTER);
-					validate();
+					centerPanel.validate();
+//					centerPanel.revalidate();
+					centerPanel.repaint();
 				}
 			});
 		}
@@ -308,11 +299,11 @@ public class AppointmentApp extends JFrame{
 			iconUser.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					revalidateAndRepaint();
+					revalidateAndRepaint(appointmentPanel);
 					lblNorth.setText("User");
 					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
 					mainPanel.add(new UserPanel(), BorderLayout.CENTER);
-					validate();
+					centerPanel.validate();
 				}
 			});
 		}
@@ -328,16 +319,39 @@ public class AppointmentApp extends JFrame{
 		
 	}
 	
-	/**
-	 * Removes all components from centerPanel to make sure it is ready for a new panel. 
-	 */
-	public static void revalidateAndRepaint() {
-		centerPanel.removeAll();
-		centerPanel.revalidate();
-		centerPanel.repaint();
+	public static void revalidateAndRepaint(JPanel panel) {
+		panel.removeAll();
+		panel.revalidate();
+		panel.repaint();
 		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));		
 	}
 	
+		
+	private class DashboardMouseListener extends MouseAdapter{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			revalidateAndRepaint(centerPanel);
+			lblNorth.setText("Dashboard");
+			lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+			mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
+//			centerPanel.revalidate();
+//			centerPanel.repaint();
+		}
+	}
+	
+	
+	
+private class infoMouseListner extends MouseAdapter{
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		revalidateAndRepaint(centerPanel);
+		lblNorth.setText("Information");
+		lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/info.png")));
+		mainPanel.add(new InfoPanel(), BorderLayout.CENTER);
+//		centerPanel.revalidate();
+//		centerPanel.repaint();
+	}
+}
 	/**
 	 *  Inner class IconPanel can create icons for main navigation easily.
 	 *  
@@ -405,14 +419,15 @@ public class AppointmentApp extends JFrame{
 	}
 	
 	/**
-	 * Starts the application!
+	 * Starts the program!
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
-		new AppointmentApp(4);
 		
+		
+		new AppointmentApp(4);
 	}
 
 }
