@@ -2,63 +2,51 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-14T12:03:26.467378Z</date>
-  <millis>1620993806467</millis>
-  <nanos>378000</nanos>
+  <date>2021-05-15T12:40:55.974389900Z</date>
+  <millis>1621082455974</millis>
+  <nanos>389900</nanos>
   <sequence>1</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
-  <thread>18</thread>
+  <thread>19</thread>
   <message>issues.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-14T12:03:26.474359100Z</date>
-  <millis>1620993806474</millis>
-  <nanos>359100</nanos>
+  <date>2021-05-15T12:40:55.986933200Z</date>
+  <millis>1621082455986</millis>
+  <nanos>933200</nanos>
   <sequence>2</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
-  <thread>18</thread>
+  <thread>19</thread>
   <message>users.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-14T12:03:26.484333900Z</date>
-  <millis>1620993806484</millis>
-  <nanos>333900</nanos>
+  <date>2021-05-15T12:40:55.999966500Z</date>
+  <millis>1621082455999</millis>
+  <nanos>966500</nanos>
   <sequence>3</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
-  <thread>18</thread>
+  <thread>19</thread>
   <message>appointments.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-14T12:03:28.187902200Z</date>
-  <millis>1620993808187</millis>
-  <nanos>902200</nanos>
+  <date>2021-05-15T12:40:58.046375200Z</date>
+  <millis>1621082458046</millis>
+  <nanos>375200</nanos>
   <sequence>4</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
   <class>de.nrw.hspv.util.FileDatabase</class>
   <method>load</method>
-  <thread>18</thread>
-  <message>users.dat loaded successfully</message>
-</record>
-<record>
-  <date>2021-05-14T12:03:32.153212900Z</date>
-  <millis>1620993812153</millis>
-  <nanos>212900</nanos>
-  <sequence>5</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.util.FileDatabase</class>
-  <method>load</method>
-  <thread>18</thread>
+  <thread>19</thread>
   <message>users.dat loaded successfully</message>
 </record>
 </log>

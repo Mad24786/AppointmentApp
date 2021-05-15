@@ -420,9 +420,9 @@ public class AppointmentApp extends JFrame{
 	 */
 	public static void main(String[] args) {
 		
+		new LogInPanel();
 		
-		
-		new AppointmentApp(4);
+		//new AppointmentApp(1);
 	}
 
 }
