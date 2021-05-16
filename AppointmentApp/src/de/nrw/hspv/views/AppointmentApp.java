@@ -424,7 +424,7 @@ public class AppointmentApp extends JFrame{
 	 */
 	public static void main(String[] args) {
 			
-		new AppointmentApp(2);
+		new LogInPanel();
 		
 	}
 
