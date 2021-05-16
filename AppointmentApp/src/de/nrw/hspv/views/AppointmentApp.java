@@ -141,7 +141,7 @@ public class AppointmentApp extends JFrame{
 	 * 
 	 * @param userId 	ID of the user, who logged in before calling this class
 	 */
-	public AppointmentApp(int userId){	
+	AppointmentApp(int userId){	
 		super("AppointmentApp v0.1");
 		//start logging
 		try {
