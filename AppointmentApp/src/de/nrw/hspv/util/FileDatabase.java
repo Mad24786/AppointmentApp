@@ -168,9 +168,9 @@ public class FileDatabase<T> implements Serializable {
 	    	Map.Entry<Integer, T> pair = (Map.Entry<Integer, T>)it.next();
 	    	// save highest id of this map and add 1
 	    	if (pair.getKey() > nextId)
-	    		nextId = (pair.getKey()+1);
+	    		nextId = pair.getKey();
 	    }
-		return nextId;
+		return (nextId+1);
 	}
 
 	/**
