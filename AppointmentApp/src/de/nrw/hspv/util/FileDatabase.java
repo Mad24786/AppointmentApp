@@ -135,7 +135,7 @@ public class FileDatabase<T> implements Serializable {
 	 */
 	public void store(int key, T o) throws IOException {
 		if(get(key) != null)
-			throw new IOException("key already exists");
+			throw new IOException("key " + key + " already exists");
 		// put key and object to HashMap
 		storageMap.put(key, o);
 		// save the file and log
@@ -166,8 +166,9 @@ public class FileDatabase<T> implements Serializable {
 		// go through all elements in storageMap
 	    while (it.hasNext()) {
 	    	Map.Entry<Integer, T> pair = (Map.Entry<Integer, T>)it.next();
-	    	// save last id of this map and add 1
-	        nextId = (pair.getKey()+1);
+	    	// save highest id of this map and add 1
+	    	if (pair.getKey() > nextId)
+	    		nextId = (pair.getKey()+1);
 	    }
 		return nextId;
 	}

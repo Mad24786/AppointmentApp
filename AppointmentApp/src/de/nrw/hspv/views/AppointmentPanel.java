@@ -182,16 +182,17 @@ public class AppointmentPanel extends JPanel {
 				/* first check if an appointment is selected... */
 				if(a != null) {
 					/* if user has selected an appointment and really wants to delete it */
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " lÃ¶schen?", "Termin lÃ¶schen", JOptionPane.YES_NO_OPTION) == 0) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?", "Termin löschen", JOptionPane.YES_NO_OPTION) == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
 							if(AppointmentApp.logEvents)
 								AppointmentApp.log.log(Level.INFO, "Appointment deleted");
 						} catch (IOException ioe) {
-							errMsg.setText("LÃ¶schen nicht mÃ¶glich."); 
+							errMsg.setText("Löschen nicht möglich."); 
 							if(AppointmentApp.logEvents)
 								AppointmentApp.log.log(Level.SEVERE, "Action failed");
 						}
+						@SuppressWarnings("deprecation")
 						int day = a.getStart().getDate();
 						CalendarPanel cp = DashboardPanel.panel[day]; 
 						cp.lblAppCount.setText("Termine: " + Integer.toString(AppointmentsByDate.getCount(day)) + " ");
@@ -202,7 +203,7 @@ public class AppointmentPanel extends JPanel {
 				}
 				/* ...else give a notice to the user */
 				else {
-					errMsg.setText("Bitte wÃ¤hlen Sie den zu lÃ¶schenden Termin aus.");
+					errMsg.setText("Bitte wÃ¤hlen Sie den zu löschenden Termin aus.");
 				}
 			}
 		});

@@ -286,6 +286,7 @@ public class AppointmentFrame extends JFrame {
 					// update appointment list in DashboardPanel
 					DashboardPanel.refreshAppointmentList(AppointmentApp.appointmentListDay);
 				} catch (Exception exception) {
+					exception.printStackTrace();
 					// show error to the user in case of problems
 					errMsg.setText("Es ist ein Fehler aufgetreten.");
 				}
@@ -368,9 +369,6 @@ public class AppointmentFrame extends JFrame {
 				(theAppointmentAfter != null && end.compareTo(theAppointmentAfter.getStart()) > 0 && user.getId() == theAppointmentAfter.getEmployee().getId())) {
 			strErrMsg = "Terminkonflikt";
 			btnOk.setEnabled(false);
-			System.out.println("Start: " + start.toString());
-			System.out.println("< Ende: " + theAppointmentBefore.getEnd().toString());
-			System.out.println("User neu: " + user.getId() + "=" + "User alt: " + theAppointmentBefore.getEmployee().getId());
 		}
 		else {
 			// everything is fine
@@ -398,7 +396,7 @@ public class AppointmentFrame extends JFrame {
 	}
 	
 	/**
-	 * Own FocusListener to check selected date for conflicts when user leaves a field.
+	 * Own FocusListener to check selected date for conflicts when user leaves or enters a field.
 	 * 
 	 * @author Mathias Fernahl
 	 * @version 17 May 2021

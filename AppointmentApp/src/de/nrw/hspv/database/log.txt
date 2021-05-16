@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-16T11:14:12.728257300Z</date>
-  <millis>1621163652728</millis>
-  <nanos>257300</nanos>
+  <date>2021-05-16T11:46:36.157406Z</date>
+  <millis>1621165596157</millis>
+  <nanos>406000</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>issues.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-16T11:14:12.766154Z</date>
-  <millis>1621163652766</millis>
-  <nanos>154000</nanos>
+  <date>2021-05-16T11:46:36.175357900Z</date>
+  <millis>1621165596175</millis>
+  <nanos>357900</nanos>
   <sequence>1</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -26,9 +26,9 @@
   <message>users.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-16T11:14:12.771142300Z</date>
-  <millis>1621163652771</millis>
-  <nanos>142300</nanos>
+  <date>2021-05-16T11:46:36.178349200Z</date>
+  <millis>1621165596178</millis>
+  <nanos>349200</nanos>
   <sequence>2</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -38,9 +38,9 @@
   <message>appointments.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-16T11:14:12.772139600Z</date>
-  <millis>1621163652772</millis>
-  <nanos>139600</nanos>
+  <date>2021-05-16T11:46:36.178349200Z</date>
+  <millis>1621165596178</millis>
+  <nanos>349200</nanos>
   <sequence>3</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -49,4 +49,3 @@
   <thread>1</thread>
   <message>Application launched</message>
 </record>
-</log>

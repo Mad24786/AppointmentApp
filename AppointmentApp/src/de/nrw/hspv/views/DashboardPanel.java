@@ -1,23 +1,16 @@
 package de.nrw.hspv.views;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,29 +18,14 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JToolTip;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import de.nrw.hspv.util.Appointment;
-import de.nrw.hspv.util.FileDatabase;
 import de.nrw.hspv.util.HspvColor;
-import de.nrw.hspv.util.Issue;
 
 /**
  * In this class the dashboard panel (as an instance of JPanel) will be created.
@@ -339,7 +317,7 @@ public class DashboardPanel extends JPanel {
 				setPreferredSize(new Dimension(200, 30));
 				setBackground(HspvColor.SEC_BROWN);
 				// a short ToolTip to show further information
-				setToolTipText("<html>#" + a.getId() + ": " + ((a.getMessage() == "") ? "keine weiteren Angaben" : a.getMessage()) +
+				setToolTipText("<html>#" + a.getId() + ": " + ((a.getMessage().trim() == "") ? "keine weiteren Angaben" : a.getMessage()) +
 						"<br/>Eingetragen von: " + a.getAuthor().getLastName() + ", " + a.getAuthor().getFirstName() + "</html>");
 			}
 			
