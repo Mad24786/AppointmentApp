@@ -103,6 +103,7 @@ public class AppointmentFrame extends JFrame {
 	 * Instantiate the appointment frame with components and events 
 	 */
 	public AppointmentFrame(){
+		super("Neuer Termin");
 		initComponents();
 		createEvents();
 	}
