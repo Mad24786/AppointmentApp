@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-15T09:02:06.011013400Z</date>
-  <millis>1621069326011</millis>
-  <nanos>13400</nanos>
+  <date>2021-05-16T10:59:27.785667800Z</date>
+  <millis>1621162767785</millis>
+  <nanos>667800</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>issues.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-15T09:02:06.058884900Z</date>
-  <millis>1621069326058</millis>
-  <nanos>884900</nanos>
+  <date>2021-05-16T10:59:27.820571700Z</date>
+  <millis>1621162767820</millis>
+  <nanos>571700</nanos>
   <sequence>1</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -26,9 +26,9 @@
   <message>users.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-15T09:02:06.065866500Z</date>
-  <millis>1621069326065</millis>
-  <nanos>866500</nanos>
+  <date>2021-05-16T10:59:27.826524Z</date>
+  <millis>1621162767826</millis>
+  <nanos>524000</nanos>
   <sequence>2</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -36,5 +36,29 @@
   <method>load</method>
   <thread>1</thread>
   <message>appointments.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-16T10:59:29.519296600Z</date>
+  <millis>1621162769519</millis>
+  <nanos>296600</nanos>
+  <sequence>3</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>20</thread>
+  <message>users.dat loaded successfully</message>
+</record>
+<record>
+  <date>2021-05-16T10:59:37.496292400Z</date>
+  <millis>1621162777496</millis>
+  <nanos>292400</nanos>
+  <sequence>4</sequence>
+  <logger>de.nrw.hspv.views.AppointmentApp</logger>
+  <level>INFO</level>
+  <class>de.nrw.hspv.util.FileDatabase</class>
+  <method>load</method>
+  <thread>20</thread>
+  <message>users.dat loaded successfully</message>
 </record>
 </log>

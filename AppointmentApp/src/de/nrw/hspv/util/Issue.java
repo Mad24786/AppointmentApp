@@ -11,10 +11,6 @@ public class Issue implements Serializable, Comparable<Issue>{
 
 	private static final long serialVersionUID = -7500772649592229468L;
 	
-	/** Nur zum Testen */ 
-	//public static Get get = new Get();
-	/*******************/
-	
 	/**
 	 * Objektvariablen
 	 * id: die zu vergebende ID
@@ -28,9 +24,9 @@ public class Issue implements Serializable, Comparable<Issue>{
 	private int scheduledTime;
 	
 	/** 
-	 * Konstruktor bei Übergabe eines Namens und einer Zeit
-	 * (Name und Zeit müssen mindestens übergeben werden)
-	 * ruft den Konstruktor mit Übergabe einer Beschreibung auf
+	 * Konstruktor bei ï¿½bergabe eines Namens und einer Zeit
+	 * (Name und Zeit mï¿½ssen mindestens ï¿½bergeben werden)
+	 * ruft den Konstruktor mit ï¿½bergabe einer Beschreibung auf
 	 * 
 	 * @param id Die ID des Anliegens
 	 * @param n Die Bezeichnung des Anliegens
@@ -41,7 +37,7 @@ public class Issue implements Serializable, Comparable<Issue>{
 	}
 	
 	/**
-	 * Konstruktor bei Übergabe eines Namens, der Zeit sowie 
+	 * Konstruktor bei ï¿½bergabe eines Namens, der Zeit sowie 
 	 * einer Beschreibung
 	 * 
 	 * @param id Die ID des Anliegens
@@ -58,64 +54,20 @@ public class Issue implements Serializable, Comparable<Issue>{
 	
 	/** 
 	 * Main-Methode zum Erzeugen und Speichern von Objekten
-	 * während der Entwicklung
+	 * wï¿½hrend der Entwicklung
 	 *  
 	 * @param args
 	 * @throws IllegalArgumentException
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IllegalArgumentException, IOException {
-		
-		
-//		/** Löschen */
-////		try {
-////			database.remove(2);
-////		} catch (IOException e) {
-////			System.err.println(Tools.getCurrentDateAndTime() + ": Das Objekt existiert nicht -> Löschen nicht möglich!");
-////		}
-//		
-//		/** Anliegen erzeugen und hinzufügen */
-//		new AppointmentApp();
-//		Issue issue = new Issue("Perso_neu", 15);
-//		Issue issue2 = new Issue("Reisepass_neu", 20);
-//		Issue issue3 = new Issue("Perso_Reisepass_neu", 30);
-//		AppointmentApp.ISSUES.store(issue);
-//		AppointmentApp.ISSUES.store(issue2);
-//		AppointmentApp.ISSUES.store(issue3);
-		
-		
-//		ArrayList<Issue> allIssues = Get.issues.getAllAsArrayList();
-//
-//		for(Issue i : allIssues) {
-//			System.out.println(i.getId());
-//		}
-//		
-//		Collections.sort(allIssues);
-//		
-//		for(Issue i : allIssues) {
-//			System.out.println(i.getId());
-//		}
-//				
-//		/** Zieht ein Objekt mittels ID aus der Datenbank */
-//		Issue issue2 = (Issue) database.get(2);
-//		
-//		/** Holt alle Objekte aus der DB ab */
-//		ArrayList<Issue> allIssues = database.getAllAsArrayList();
-//		
-//		for(Issue i : allIssues) {
-////			Hier kann dann eine Operation für alle Objekte ausgeführt werden
-////			z.B. testweise Ausgabe der Objekte:
-////			System.out.println(i.toString());
-//		}
-//			
-//		/** Zeigt den Namen der DB-Datei sowie alle Objekte auf der Konsole an */
-//		System.out.println(database.toString());
+	
 		
 	}
 	
 	/** 
-	 * Überladene toString-Methode, um 
-	 * ein Objekt ausgeben zu können
+	 * ï¿½berladene toString-Methode, um 
+	 * ein Objekt ausgeben zu kï¿½nnen
 	 */
 	@Override
 	public String toString() {

@@ -35,6 +35,7 @@ public class InfoPanel extends JPanel {
 
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Logging-Funktion");
 		chckbxNewCheckBox.setBounds(0, 6, 142, 30);
+		chckbxNewCheckBox.setSelected(AppointmentApp.logEvents);
 		chckbxNewCheckBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {

@@ -154,7 +154,7 @@ public class AppointmentFrame extends JFrame {
 		addComp(gb, lblIssue, 0, 0, 1, 1);
 		
 		ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
-		// TODO sort
+		Collections.sort(allIssues);
 		for(Issue i : allIssues) {
 			vecIssues.add(i);
 		}
@@ -198,7 +198,6 @@ public class AppointmentFrame extends JFrame {
 		addComp(gb, lblEmployee, 0, 2, 1, 1);
 
 		ArrayList<User> allUsers = AppointmentApp.USERS.getAllAsArrayList();
-		// TODO sort
 		for(User u : allUsers) {
 			vecUsers.add(u);
 		}
@@ -393,7 +392,8 @@ public class AppointmentFrame extends JFrame {
 		public void windowClosing(WindowEvent e) {
 			clearFields();
 			setVisible(false);		
-			AppointmentApp.log.log(Level.INFO, "Appointment window set invisible");
+			if (AppointmentApp.logEvents)
+				AppointmentApp.log.log(Level.INFO, "Appointment window set invisible");
 		}
 	}
 	

@@ -107,9 +107,11 @@ public class FileDatabase<T> implements Serializable {
 			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(storageFile)));
 			storageMap = (HashMap<Integer, T>) ois.readObject();
 			ois.close();
-			AppointmentApp.log.log(Level.INFO, storageFile.getName() + " loaded successfully");
+			if (AppointmentApp.logEvents)
+				AppointmentApp.log.log(Level.INFO, storageFile.getName() + " loaded successfully");
 		} catch (Exception e) {
-			AppointmentApp.log.log(Level.SEVERE, "Error while loading data");
+			if (AppointmentApp.logEvents)
+				AppointmentApp.log.log(Level.SEVERE, "Error while loading data");
 		}
 	}
 	

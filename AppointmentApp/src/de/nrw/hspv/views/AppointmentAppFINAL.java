@@ -29,7 +29,6 @@ import de.nrw.hspv.util.Issue;
 import de.nrw.hspv.util.User;
 
 import java.util.Calendar;
-
 import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -49,8 +48,8 @@ import java.util.logging.Logger;
  * @version 17 May 2021
  *
  */
-public class AppointmentApp extends JFrame{
-		
+public class AppointmentAppFINAL extends JFrame{
+	
 	/**
 	 * A unique serial version identifier.
 	 * 
@@ -61,7 +60,7 @@ public class AppointmentApp extends JFrame{
 	/*
 	 * Logger
 	 */
-	public static final Logger log = Logger.getLogger(AppointmentApp.class.getName());
+	public static final Logger log = Logger.getLogger(AppointmentAppFINAL.class.getName());
 
 	/*
 	 * the user, who successfully logged in
@@ -117,7 +116,6 @@ public class AppointmentApp extends JFrame{
 	private static JPanel centerPanel;
 	public static JPanel eastPanel;
 	private static JLabel lblNorth = new JLabel(); 
-	public static JLabel lblLogging;
 	
 	/*
 	 * content of components 
@@ -141,7 +139,7 @@ public class AppointmentApp extends JFrame{
 	 * 
 	 * @param userId 	ID of the user, who logged in before calling this class
 	 */
-	public AppointmentApp(int userId){	
+	AppointmentAppFINAL(int userId){	
 		super("AppointmentApp v0.1");
 		//start logging
 		try {
@@ -158,15 +156,16 @@ public class AppointmentApp extends JFrame{
 		}
 		
 		// set user
-		AppointmentApp.user = AppointmentApp.USERS.get(userId);
-			
-		// initialize components of this frame
+		AppointmentAppFINAL.user = AppointmentAppFINAL.USERS.get(userId);
+				
+		// initialize components of this fram
 		initComponents();
 		
 		// create events for this frame
 		createEvents();
 
-		// instance of other windows
+		/* instance of other windows */
+		// TODO find another place for this
 		appFrame = new AppointmentFrame();
 	}
 	
@@ -199,11 +198,11 @@ public class AppointmentApp extends JFrame{
 		// create and add icons to navigation panel
 		iconDashboard = new IconPanel("dashboard", true);
 		navigation.add(iconDashboard);
-		iconAppointment = new IconPanel("calendar", AppointmentApp.user.isCanWriteAppointments());
+		iconAppointment = new IconPanel("calendar", AppointmentAppFINAL.user.isCanWriteAppointments());
 		navigation.add(iconAppointment);
-		iconUser = new IconPanel("user", AppointmentApp.user.isCanWriteUsers());
+		iconUser = new IconPanel("user", AppointmentAppFINAL.user.isCanWriteUsers());
 		navigation.add(iconUser);
-		iconIssue = new IconPanel("issue", AppointmentApp.user.isCanWriteIssues());
+		iconIssue = new IconPanel("issue", AppointmentAppFINAL.user.isCanWriteIssues());
 		navigation.add(iconIssue);
 		iconInfo = new IconPanel("info", true);
 		navigation.add(iconInfo);
@@ -220,7 +219,7 @@ public class AppointmentApp extends JFrame{
 		northPanel.setBackground(Color.WHITE);
 		northPanel.setPreferredSize(new Dimension(0,50));
 		lblNorth.setText("Dashboard");
-		lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+		lblNorth.setIcon(new ImageIcon(AppointmentAppFINAL.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
         northPanel.add(lblNorth);
         northPanel.setAlignmentY(LEFT_ALIGNMENT);
         // add this to main panel
@@ -248,7 +247,7 @@ public class AppointmentApp extends JFrame{
 		southPanel.setBackground(Color.WHITE);
 		JLabel lblUser = new JLabel("Benutzer: " + user.getLastName() + ", " + user.getFirstName());
 		southPanel.add(lblUser);
-		lblLogging = new JLabel("| Logging: " + (logEvents ? "aktiviert" : "deaktiviert"));
+		JLabel lblLogging = new JLabel("| Logging: " + (logEvents ? "aktiviert" : "deaktiviert"));
 		southPanel.add(lblLogging);
 		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
@@ -271,62 +270,53 @@ public class AppointmentApp extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				revalidateAndRepaint();
 				lblNorth.setText("Dashboard");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
+				lblNorth.setIcon(new ImageIcon(AppointmentAppFINAL.class.getResource("/de/nrw/hspv/ressources/dashboard_small.png")));
 				mainPanel.add(new DashboardPanel(), BorderLayout.CENTER);
 				validate();
 			}
 		});
 		
 		/* check for permission before adding MouseListener */
-		if(AppointmentApp.user.isCanWriteAppointments()) {
+		if(AppointmentAppFINAL.user.isCanWriteAppointments()) {
 			iconAppointment.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					revalidateAndRepaint();
 					lblNorth.setText("Terminverwaltung");
-					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
+					lblNorth.setIcon(new ImageIcon(AppointmentAppFINAL.class.getResource("/de/nrw/hspv/ressources/calendar_small.png")));
 					mainPanel.add(new AppointmentPanel(), BorderLayout.CENTER);
 					validate();
 				}
 			});
 		}
 		
-		if(AppointmentApp.user.isCanWriteIssues()) {
+		
+		if(AppointmentAppFINAL.user.isCanWriteIssues()) {
 			iconIssue.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					revalidateAndRepaint();
 					lblNorth.setText("Anliegen");
-					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
+					lblNorth.setIcon(new ImageIcon(AppointmentAppFINAL.class.getResource("/de/nrw/hspv/ressources/issue_small.png")));
 					mainPanel.add(new IssuePanel(), BorderLayout.CENTER);
 					validate();
 				}
 			});
 		}
 		
-		if(AppointmentApp.user.isCanWriteUsers()) {
+		if(AppointmentAppFINAL.user.isCanWriteUsers()) {
 			iconUser.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					revalidateAndRepaint();
 					lblNorth.setText("User");
-					lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
+					lblNorth.setIcon(new ImageIcon(AppointmentAppFINAL.class.getResource("/de/nrw/hspv/ressources/user_small.png")));
 					mainPanel.add(new UserPanel(), BorderLayout.CENTER);
 					validate();
 				}
 			});
 		}
 		
-		iconInfo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				revalidateAndRepaint();
-				lblNorth.setText("Information");
-				lblNorth.setIcon(new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/info_small.png")));
-				mainPanel.add(new InfoPanel(), BorderLayout.CENTER);
-				validate();
-			}
-		});
 		
 		iconExit.addMouseListener(new MouseAdapter() {
 			@Override
@@ -347,6 +337,7 @@ public class AppointmentApp extends JFrame{
 		centerPanel.repaint();
 		mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));		
 	}
+	
 	/**
 	 *  Inner class IconPanel can create icons for main navigation easily.
 	 *  
@@ -395,7 +386,7 @@ public class AppointmentApp extends JFrame{
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			ImageIcon icon = new ImageIcon(AppointmentApp.class.getResource("/de/nrw/hspv/ressources/" + s + ".png"));
+			ImageIcon icon = new ImageIcon(AppointmentAppFINAL.class.getResource("/de/nrw/hspv/ressources/" + s + ".png"));
 			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2), ((this.getHeight() - icon.getIconHeight()) / 2));
 		}
 		
@@ -419,8 +410,8 @@ public class AppointmentApp extends JFrame{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-			
-		new AppointmentApp(2);
+		
+		new AppointmentAppFINAL(2);
 		
 	}
 

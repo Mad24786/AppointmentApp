@@ -104,6 +104,9 @@ public class DashboardPanel extends JPanel {
 	 * in this panel. 
 	 */
 	public DashboardPanel() {
+		// demo for another month
+		// selectedMonth = 6; // July
+		
 		initComponents();
 		createEvents();
 	}
@@ -130,7 +133,7 @@ public class DashboardPanel extends JPanel {
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		northPanel.setBackground(Color.WHITE);
-		JLabel lblDate = new JLabel(monthToString(cMonth) + " " + cYear);
+		JLabel lblDate = new JLabel(monthToString(selectedMonth) + " " + selectedYear);
 		lblDate.setFont(new Font(lblDate.getFont().toString(), Font.PLAIN, 24));
 		northPanel.add(lblDate);		
 		mainPanel.add(northPanel, BorderLayout.NORTH);
@@ -245,7 +248,7 @@ public class DashboardPanel extends JPanel {
 			setName(Integer.toString(d));
 			
 			// label with selected date as header
-			lblEast = new JLabel("Termine " + d + ". " + monthToString(cMonth) + " " + cYear);
+			lblEast = new JLabel("Termine " + d + ". " + monthToString(selectedMonth) + " " + selectedYear);
 			add(lblEast);
 			
 			// set time to given day 0:00 - 'today'

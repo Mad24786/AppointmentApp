@@ -108,8 +108,6 @@ public class IssuePanel extends JPanel {
 //the three buttons are created
 		addIcon = new CreateIcon("add", true);
 		northPanel.add(addIcon);
-		editIcon = new CreateIcon("edit", false);
-		northPanel.add(editIcon);
 		deleteIcon = new CreateIcon("delete", true);
 		northPanel.add(deleteIcon);
 
@@ -159,21 +157,6 @@ public class IssuePanel extends JPanel {
 
 		});
 
-		editIcon.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Clicked");
-				mainPanel.remove(mainLayout.getLayoutComponent(BorderLayout.CENTER));
-				centerPanel = new JPanel();
-				centerPanel.setBackground(Color.BLACK);
-				centerPanel.validate();
-
-				System.out.println(centerPanel.toString());
-				mainPanel.add(centerPanel, BorderLayout.CENTER);
-			}
-
-		});
-
 //Deletes item from the list, if its clicked and selected
 
 		deleteIcon.addMouseListener(new MouseAdapter() {
@@ -181,7 +164,7 @@ public class IssuePanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				Appointment a = list.getSelectedValue();
 				if (a != null) {
-					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?") == 0) {
+					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " lï¿½schen?") == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
 							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
@@ -191,7 +174,7 @@ public class IssuePanel extends JPanel {
 						}
 					}
 				} else {
-					errMsg.setText("Bitte wählen Sie den zu löschenden Termin aus.");
+					errMsg.setText("Bitte wï¿½hlen Sie den zu lï¿½schenden Termin aus.");
 				}
 			}
 		});
@@ -244,109 +227,6 @@ public class IssuePanel extends JPanel {
 			icon.paintIcon(this, g, ((this.getWidth() - icon.getIconWidth()) / 2),
 					((this.getHeight() - icon.getIconHeight()) / 2));
 		}
-
-	}
-
-	public static class CreateCenterAdd extends JPanel {
-
-		public CreateCenterAdd() {
-
-			GridBagLayout gb = new GridBagLayout();
-			setLayout(gb);
-			setBackground(Color.WHITE);
-
-			JLabel lblId = new JLabel("ID:");
-			addComp(gb, lblId, 0, 0, 1, 1);
-			txtId = new JTextField();
-			txtId.setEnabled(false);
-			addComp(gb, txtId, 1, 0, 1, 1);
-
-			JLabel lblIssue = new JLabel("Anliegen:");
-			addComp(gb, lblIssue, 0, 1, 1, 1);
-
-			@SuppressWarnings("static-access")
-			ArrayList<Issue> allIssues = AppointmentApp.ISSUES.getAllAsArrayList();
-
-			if (vecIssues.isEmpty()) {
-				for (Issue i : allIssues) {
-					vecIssues.add(i);
-				}
-			} else {
-				System.out.println("Steht schon was drin");
-			}
-
-			cbIssue = new JComboBox<Issue>(vecIssues);
-			cbIssue.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					Issue i = (Issue) e.getItem();
-					txtId.setText(String.valueOf(i.getId()));
-				}
-			});
-			addComp(gb, cbIssue, 1, 1, 1, 1);
-
-			JLabel lblDate = new JLabel("Datum:");
-			addComp(gb, lblDate, 0, 2, 1, 1);
-
-			Calendar calendar = Calendar.getInstance();
-
-			// Add the third label-spinner pair.
-//	        Date initDate = calendar.getTime();
-			Date initDate = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-					calendar.get(Calendar.DATE), 8, 0).getTime();
-			calendar.add(Calendar.YEAR, -1);
-			Date earliestDate = calendar.getTime();
-			calendar.add(Calendar.YEAR, 200);
-			Date latestDate = calendar.getTime();
-			SpinnerModel dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
-
-			spinner = new JSpinner(dateModel);
-			spinner.setEditor(new JSpinner.DateEditor(spinner, "dd.MM.yyyy, HH:mm 'Uhr'"));
-			addComp(gb, spinner, 1, 2, 1, 1);
-
-			JLabel lblTime = new JLabel("Uhrzeit:");
-			addComp(gb, lblTime, 0, 3, 1, 1);
-			JTextField txtTime = new JTextField();
-			txtTime.setEnabled(false);
-			addComp(gb, txtTime, 1, 3, 1, 1);
-
-			JLabel lblEmployee = new JLabel("Mitarbeiter:");
-			addComp(gb, lblEmployee, 0, 4, 1, 1);
-			JTextField txtEmployee = new JTextField();
-			addComp(gb, txtEmployee, 1, 4, 1, 1);
-
-			JLabel lblCustomer = new JLabel("Kunde:");
-			addComp(gb, lblCustomer, 0, 5, 1, 1);
-			JTextField txtCustomer = new JTextField();
-			addComp(gb, txtCustomer, 1, 5, 1, 1);
-
-			JLabel lblText = new JLabel("Bemerkung:");
-			addComp(gb, lblText, 0, 6, 1, 1);
-			txtText = new JTextArea();
-			txtText.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			addComp(gb, txtText, 1, 6, 1, 1);
-
-		}
-
-		private void addComp(GridBagLayout gb, Component c, int x, int y, int w, int h) {
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.insets = new Insets(2, 2, 2, 2);
-			gbc.gridx = x;
-			gbc.gridy = y;
-			gbc.gridwidth = w;
-			gbc.gridheight = h;
-			gbc.fill = GridBagConstraints.BOTH;
-			gbc.weightx = gbc.weighty = 1;
-			gb.setConstraints(c, gbc);
-			add(c);
-		}
-
-	}
-
-	public static void main(String[] args) {
-
-		new IssuePanel();
 
 	}
 
