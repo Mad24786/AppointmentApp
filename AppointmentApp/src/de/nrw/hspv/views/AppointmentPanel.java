@@ -185,9 +185,12 @@ public class AppointmentPanel extends JPanel {
 					if (JOptionPane.showConfirmDialog(null, "Wollen Sie den Termin #" + a.getId() + " löschen?", "Termin löschen", JOptionPane.YES_NO_OPTION) == 0) {
 						try {
 							AppointmentApp.APPOINTMENTS.remove(a.getId());
-							AppointmentApp.log.log(Level.INFO, "Appointment deleted");
+							if(AppointmentApp.logEvents)
+								AppointmentApp.log.log(Level.INFO, "Appointment deleted");
 						} catch (IOException ioe) {
-							errMsg.setText("L�schen nicht m�glich."); 
+							errMsg.setText("Löschen nicht möglich."); 
+							if(AppointmentApp.logEvents)
+								AppointmentApp.log.log(Level.SEVERE, "Action failed");
 						}
 						int day = a.getStart().getDate();
 						CalendarPanel cp = DashboardPanel.panel[day]; 
@@ -199,7 +202,7 @@ public class AppointmentPanel extends JPanel {
 				}
 				/* ...else give a notice to the user */
 				else {
-					errMsg.setText("Bitte w�hlen Sie den zu l�schenden Termin aus.");
+					errMsg.setText("Bitte wählen Sie den zu löschenden Termin aus.");
 				}
 			}
 		});

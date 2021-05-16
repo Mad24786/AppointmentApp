@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2021-05-16T10:59:27.785667800Z</date>
-  <millis>1621162767785</millis>
-  <nanos>667800</nanos>
+  <date>2021-05-16T11:14:12.728257300Z</date>
+  <millis>1621163652728</millis>
+  <nanos>257300</nanos>
   <sequence>0</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>issues.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-16T10:59:27.820571700Z</date>
-  <millis>1621162767820</millis>
-  <nanos>571700</nanos>
+  <date>2021-05-16T11:14:12.766154Z</date>
+  <millis>1621163652766</millis>
+  <nanos>154000</nanos>
   <sequence>1</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -26,9 +26,9 @@
   <message>users.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-16T10:59:27.826524Z</date>
-  <millis>1621162767826</millis>
-  <nanos>524000</nanos>
+  <date>2021-05-16T11:14:12.771142300Z</date>
+  <millis>1621163652771</millis>
+  <nanos>142300</nanos>
   <sequence>2</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
@@ -38,27 +38,15 @@
   <message>appointments.dat loaded successfully</message>
 </record>
 <record>
-  <date>2021-05-16T10:59:29.519296600Z</date>
-  <millis>1621162769519</millis>
-  <nanos>296600</nanos>
+  <date>2021-05-16T11:14:12.772139600Z</date>
+  <millis>1621163652772</millis>
+  <nanos>139600</nanos>
   <sequence>3</sequence>
   <logger>de.nrw.hspv.views.AppointmentApp</logger>
   <level>INFO</level>
-  <class>de.nrw.hspv.util.FileDatabase</class>
-  <method>load</method>
-  <thread>20</thread>
-  <message>users.dat loaded successfully</message>
-</record>
-<record>
-  <date>2021-05-16T10:59:37.496292400Z</date>
-  <millis>1621162777496</millis>
-  <nanos>292400</nanos>
-  <sequence>4</sequence>
-  <logger>de.nrw.hspv.views.AppointmentApp</logger>
-  <level>INFO</level>
-  <class>de.nrw.hspv.util.FileDatabase</class>
-  <method>load</method>
-  <thread>20</thread>
-  <message>users.dat loaded successfully</message>
+  <class>de.nrw.hspv.views.AppointmentApp</class>
+  <method>initComponents</method>
+  <thread>1</thread>
+  <message>Application launched</message>
 </record>
 </log>

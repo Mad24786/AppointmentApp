@@ -32,6 +32,7 @@ import java.util.Calendar;
 
 import java.util.GregorianCalendar;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -175,6 +176,9 @@ public class AppointmentApp extends JFrame{
 	 * and feeds them with data if needed.
 	 */
 	private void initComponents() {
+		if(AppointmentApp.logEvents)
+			AppointmentApp.log.log(Level.INFO, "Application launched");
+		
 		/*
 		 * set default values of this window
 		 */
